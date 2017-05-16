@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using ff.vr.annotation;
 
 namespace ff.vr.interaction
 {
@@ -37,6 +38,7 @@ namespace ff.vr.interaction
         void HideHighlight();
     }
 
+
     public class LaserPointer : MonoBehaviour
     {
         public delegate void PointingAtChanged(object sender, PointingAtChangedEventArgs e);
@@ -60,6 +62,8 @@ namespace ff.vr.interaction
         [HideInInspector]
         public bool IsLockedAtTarget;
 
+        public AnnotatableGroup ag;
+
         void Start()
         {
             if (_laserHitSphere == null)
@@ -71,7 +75,6 @@ namespace ff.vr.interaction
             _lineMaterial = GetComponent<Renderer>().material;
         }
 
-
         private void Update()
         {
             if (!_laserIsEnabled)
@@ -81,7 +84,6 @@ namespace ff.vr.interaction
 
             Ray = new Ray(transform.position, transform.forward);
             LayerMask layerMask = LayerMask.GetMask(new[] { "_AnnotationTarget", "_TeleportationTarget" });
-
 
             if (Physics.Raycast(Ray, out HitInfo, 1000, layerMask))
             {
@@ -93,12 +95,9 @@ namespace ff.vr.interaction
                                      ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
                                      : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
                 newTarget = newTargetInterface as ILaserPointerTarget;
-
-                //Debug.Log("raycast hit object:" + newTarget, hitCollider);
             }
             else
             {
-                // FIXME: should we set the newTarget to null here?
                 SetLaserLength(100f);
             }
 
@@ -169,10 +168,6 @@ namespace ff.vr.interaction
         }
 
 
-        // public void SetVisibility(bool visible)
-        // {
-        // }
-
         public void SetLaserLength(float distance)
         {
             _lineRenderer.SetPosition(1, new Vector3(0, 0, distance));
@@ -192,6 +187,7 @@ namespace ff.vr.interaction
             return hitsWithPlacementPlanes.ToArray();
         }
 
+
         public void SetLaserpointerEnabled(bool enabled)
         {
             if (!enabled && PointingAt != null)
@@ -202,6 +198,7 @@ namespace ff.vr.interaction
             SetLaserVisible(enabled);
             _laserIsEnabled = enabled;
         }
+
 
         private void SetLaserVisible(bool visible)
         {

@@ -8,14 +8,18 @@ namespace ff.vr.annotation
     public class AnnotatableNode
     {
         public AnnotatableNode Parent;
-        public AnnotatableNode[] Children;
+
         public Bounds Bounds;
         public bool IsAnnotatable;
+        public bool HasGeometry;
         public string Name;
         public bool HasBounds = false;
 
         [System.NonSerializedAttribute]
-        public GameObject ObjectReference;
+        public AnnotatableNode[] Children;
+
+        [System.NonSerializedAttribute]
+        public GameObject UnityObj;
 
         public void PrintStructure(int level = 0)
         {
@@ -24,6 +28,67 @@ namespace ff.vr.annotation
             {
                 c.PrintStructure(level + 1);
             }
+        }
+
+        // FIXME: this should be the contructor
+        public static AnnotatableNode FindChildNodes(GameObject unityObj)
+        {
+            var newNode = new AnnotatableNode()
+            {
+                Name = unityObj.name,
+                Children = new AnnotatableNode[unityObj.transform.childCount],
+            };
+            newNode.IsAnnotatable = newNode.CheckIfObjectIsAnnotatable();
+
+            var renderer = unityObj.GetComponent<MeshRenderer>();
+            if (renderer)
+            {
+                newNode.Bounds = renderer.bounds;   // in worldspace
+                newNode.HasBounds = true;
+                newNode.HasGeometry = true;
+            }
+
+
+            for (int index = 0; index < unityObj.transform.childCount; index++)
+            {
+                var childObj = unityObj.transform.GetChild(index).gameObject;
+                var childNode = FindChildNodes(childObj);
+                newNode.Children[index] = childNode;
+
+                if (childNode.HasBounds)
+                {
+                    if (newNode.HasBounds)
+                    {
+                        newNode.Bounds.Encapsulate(childNode.Bounds);
+                    }
+                    else
+                    {
+                        newNode.Bounds = childNode.Bounds;
+                    }
+                }
+            }
+            return newNode;
+        }
+
+        public void CollectChildrenIntersectingRay(Ray ray, List<AnnotatableNode> hits)
+        {
+            if (!this.Bounds.IntersectRay(ray))
+                return;
+
+            if (this.HasGeometry)
+                hits.Add(this);
+
+            foreach (var child in Children)
+            {
+                child.CollectChildrenIntersectingRay(ray, hits);
+            }
+        }
+
+
+        public bool CheckIfObjectIsAnnotatable()
+        {
+            //GameObject obj = this.UnityObj;
+            return true;
         }
     }
 }
