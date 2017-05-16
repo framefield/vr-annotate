@@ -4,9 +4,6 @@ namespace ff.vr.interaction
 {
     public class Teleportation : MonoBehaviour
     {
-
-        public ReflectionProbe[] UserReflectionProbes;
-
         void Start()
         {
             Transform eyeCamera = FindObjectOfType<SteamVR_Camera>().GetComponent<Transform>();

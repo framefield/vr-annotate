@@ -9,7 +9,6 @@ namespace ff.vr.interaction
     /// </summary>
 
     [RequireComponent(typeof(SteamVR_TrackedController))]
-    [RequireComponent(typeof(Teleportation))]
     public class InteractiveController : MonoBehaviour
     {
         public GameObject LaserPrefab;

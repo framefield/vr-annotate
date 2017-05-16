@@ -62,7 +62,9 @@ namespace ff.vr.interaction
 
         void Start()
         {
-            _laserHitSphere = this.transform.GetChild(0).gameObject;
+            if (_laserHitSphere == null)
+                _laserHitSphere = this.transform.GetChild(0).gameObject;
+
             _lineRenderer = this.GetComponent<LineRenderer>();
 
             _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
@@ -176,22 +178,6 @@ namespace ff.vr.interaction
             _lineRenderer.SetPosition(1, new Vector3(0, 0, distance));
         }
 
-        // not used at the moment
-        // public void SetLaserStyle(LaserPointerStyle style)
-        // {
-        //     Style = style;
-        //     if (PointingAt is ILaserPointerHighlightable)
-        //     {
-        //         var highlightable = (ILaserPointerHighlightable)PointingAt;
-        //         highlightable.SetHighlightColor(Style.HighlightColor);
-        //     }
-        //     if (PointingAt != null && !(PointingAt is IHoverColor))
-        //     {
-        //         _lineMaterial.color = Style.LaserColor;
-        //         _laserHitSphereMaterial.color = Style.LaserColor;
-        //     }
-        // }
-
         // Note: We have to return a list because RaycastHit is not nullable
         public RaycastHit[] GetRayHitsForComponent<T>()
         {
@@ -223,19 +209,6 @@ namespace ff.vr.interaction
             _laserHitSphere.SetActive(visible);
         }
 
-        // public RaycastHit[] GetHitsWithPlacementPlanes()
-        // {
-        //     var hits = Physics.RaycastAll(Ray, 100f).OrderBy(hit => hit.distance);
-        //     var hitsWithPlacementPlanes = new List<RaycastHit>();
-        //     foreach (RaycastHit hit in hits)
-        //     {
-        //         var hitPlacementPlane = hit.collider.gameObject.GetComponent<PlacementPlane>();
-        //         if (hitPlacementPlane != null)
-        //             hitsWithPlacementPlanes.Add(hit);
-        //     }
-        //     return hitsWithPlacementPlanes.ToArray();
-        // }
-
         private ILaserPointerTarget _pointingAt;
 
         public ILaserPointerTarget PointingAt
@@ -261,7 +234,7 @@ namespace ff.vr.interaction
         const float NON_TARGET_SPOT_SIZE = 0.01f;
 
         private bool _laserIsEnabled = true;
-        private GameObject _laserHitSphere;
+        public GameObject _laserHitSphere;
         private LineRenderer _lineRenderer;
         private Material _lineMaterial;
         private Material _laserHitSphereMaterial;
