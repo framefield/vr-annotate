@@ -90,5 +90,22 @@ namespace ff.vr.annotation
             //GameObject obj = this.UnityObj;
             return true;
         }
+
+        public List<Bounds> CollectGeometryBounds(List<Bounds> result = null)
+        {
+            if (result == null)
+                result = new List<Bounds>();
+
+            if (this.HasGeometry)
+            {
+                result.Add(this.Bounds);
+            }
+
+            foreach (var c in Children)
+            {
+                c.CollectGeometryBounds(result);
+            }
+            return result;
+        }
     }
 }
