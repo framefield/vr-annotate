@@ -5,16 +5,17 @@ using ff.utils;
 
 namespace ff.vr.annotation
 {
-    [RequireComponent(typeof(AnnotatableGroup))]
-    public class GroupHitTester : MonoBehaviour
+    public class AnnotationHighlighter : MonoBehaviour
     {
         void Start()
         {
-            _annotatableGroup = this.GetComponent<AnnotatableGroup>();
+            _annotatableGroups = FindObjectsOfType<AnnotatableGroup>();
             _meshFilter = this.GetComponent<MeshFilter>();
+            _meshRenderer = this.GetComponent<MeshRenderer>();
             _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
         }
 
+        private AnnotatableGroup[] _annotatableGroups;
 
         void Update()
         {
@@ -33,21 +34,38 @@ namespace ff.vr.annotation
         {
             var ray = new Ray(t.position, t.forward);
             var hits = new List<AnnotatableNode>();
-            _annotatableGroup.Node.CollectChildrenIntersectingRay(ray, hits);
+
+            foreach (var ag in _annotatableGroups)
+            {
+                ag.Node.CollectChildrenIntersectingRay(ray, hits);
+            }
+
 
             if (PrintHitsIfChanged(hits))
             {
-                if (_meshFilter && hits.Count > 0)
+                var closestHit = FindClosestHit(hits);
+                var isHittingSomething = (closestHit != null);
+                if (isHittingSomething)
                 {
-                    var node = hits[0];
-
-                    var bounds = node.CollectGeometryBounds().ToArray();
+                    var bounds = closestHit.CollectGeometryBounds().ToArray();
                     _meshFilter.mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
                 }
+                _meshRenderer.enabled = isHittingSomething;
             }
         }
 
-        private MeshFilter _meshFilter;
+        private AnnotatableNode FindClosestHit(List<AnnotatableNode> hits)
+        {
+            hits.Sort((h1, h2) => (h1.HitDistance).CompareTo(h2.HitDistance));
+
+            foreach (var h in hits)
+            {
+                if (h.HitDistance > 0)
+                    return h;
+            }
+            return null;
+        }
+
 
         private bool PrintHitsIfChanged(List<AnnotatableNode> hits)
         {
@@ -56,7 +74,7 @@ namespace ff.vr.annotation
             foreach (var h in hits)
             {
                 sb.Append(separator);
-                sb.Append(h.Name);
+                sb.Append(h.Name + " (" + h.HitDistance + ")  ");
                 separator = ", ";
             }
             var r = sb.ToString();
@@ -65,17 +83,16 @@ namespace ff.vr.annotation
             if (resultChanged)
             {
                 _lastResult = r;
-                Debug.Log(r);
+                //Debug.Log(r);
                 return true;
             }
             return resultChanged;
         }
 
-
-
-
-        private AnnotatableGroup _annotatableGroup;
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
         private SteamVR_TrackedController _controller;
         private string _lastResult;
+        private AnnotationHighlighter _highlighter;
     }
 }

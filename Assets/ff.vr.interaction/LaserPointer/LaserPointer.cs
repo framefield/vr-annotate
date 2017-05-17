@@ -56,22 +56,24 @@ namespace ff.vr.interaction
 
         [HideInInspector]
         public RaycastHit HitInfo;
+
         [HideInInspector]
         public Ray Ray;
 
         [HideInInspector]
         public bool IsLockedAtTarget;
 
-        public AnnotatableGroup ag;
-
         void Start()
         {
             if (_laserHitSphere == null)
                 _laserHitSphere = this.transform.GetChild(0).gameObject;
 
-            _lineRenderer = this.GetComponent<LineRenderer>();
+            if (_laserHitSphere)
+            {
+                _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
+            }
 
-            _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
+            _lineRenderer = this.GetComponent<LineRenderer>();
             _lineMaterial = GetComponent<Renderer>().material;
         }
 
@@ -83,9 +85,9 @@ namespace ff.vr.interaction
             ILaserPointerTarget newTarget = null;
 
             Ray = new Ray(transform.position, transform.forward);
-            LayerMask layerMask = LayerMask.GetMask(new[] { "_AnnotationTarget", "_TeleportationTarget" });
+            //LayerMask layerMask = LayerMask.GetMask(new[] { "_AnnotationTarget", "_TeleportationTarget" });
 
-            if (Physics.Raycast(Ray, out HitInfo, 1000, layerMask))
+            if (Physics.Raycast(Ray, out HitInfo, 1000))
             {
                 var hitCollider = HitInfo.collider;
                 _laserHitSphere.transform.position = HitInfo.point;

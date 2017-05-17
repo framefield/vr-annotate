@@ -49,6 +49,8 @@ namespace ff.utils
         private static void WriteVertices(int index)
         {
             var b = _bounds[index];
+
+
             var sx = b.extents.x;
             var sy = b.extents.y;
             var sz = b.extents.z;
@@ -71,7 +73,7 @@ namespace ff.utils
             _vertices[i + 0] = vertice_0;
             _vertices[i + 1] = vertice_1;
             _vertices[i + 2] = vertice_2;
-            _vertices[i + 3] = vertice_0;
+            _vertices[i + 3] = vertice_3;
             // Left Polygon
             _vertices[i + 4] = vertice_7;
             _vertices[i + 5] = vertice_4;

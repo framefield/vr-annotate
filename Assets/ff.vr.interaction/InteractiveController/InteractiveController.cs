@@ -204,6 +204,7 @@ namespace ff.vr.interaction
                 if (collider.bounds.Contains(position))
                 {
                     newHoverGizmo = collider.gameObject.GetComponent<InteractiveGizmo>();
+                    Debug.Log(">>>> collider under controller:" + collider.gameObject, this);
                     break;
                 }
             }

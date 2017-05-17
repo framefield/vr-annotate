@@ -15,6 +15,9 @@ namespace ff.vr.annotation
         public string Name;
         public bool HasBounds = false;
 
+
+        public float HitDistance;
+
         [System.NonSerializedAttribute]
         public AnnotatableNode[] Children;
 
@@ -33,47 +36,60 @@ namespace ff.vr.annotation
         // FIXME: this should be the contructor
         public static AnnotatableNode FindChildNodes(GameObject unityObj)
         {
-            var newNode = new AnnotatableNode()
+            var node = new AnnotatableNode()
             {
                 Name = unityObj.name,
                 Children = new AnnotatableNode[unityObj.transform.childCount],
             };
-            newNode.IsAnnotatable = newNode.CheckIfObjectIsAnnotatable();
+            node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
             var renderer = unityObj.GetComponent<MeshRenderer>();
-            if (renderer)
+            if (renderer != null)
             {
-                newNode.Bounds = renderer.bounds;   // in worldspace
-                newNode.HasBounds = true;
-                newNode.HasGeometry = true;
+                Debug.Log(renderer.gameObject.name + " > " + renderer.bounds, renderer);
+                node.Bounds = renderer.bounds;   // in worldspace
+                node.HasBounds = true;
+                node.HasGeometry = true;
             }
-
 
             for (int index = 0; index < unityObj.transform.childCount; index++)
             {
                 var childObj = unityObj.transform.GetChild(index).gameObject;
                 var childNode = FindChildNodes(childObj);
-                newNode.Children[index] = childNode;
+
+                node.Children[index] = childNode;
 
                 if (childNode.HasBounds)
                 {
-                    if (newNode.HasBounds)
+                    if (node.HasBounds)
                     {
-                        newNode.Bounds.Encapsulate(childNode.Bounds);
+                        node.Bounds.Encapsulate(childNode.Bounds);
+                        node.HasBounds = true;
                     }
                     else
                     {
-                        newNode.Bounds = childNode.Bounds;
+                        node.Bounds = childNode.Bounds;
+                        node.HasBounds = childNode.HasBounds;
                     }
                 }
             }
-            return newNode;
+            return node;
         }
 
         public void CollectChildrenIntersectingRay(Ray ray, List<AnnotatableNode> hits)
         {
-            if (!this.Bounds.IntersectRay(ray))
+
+            if (!this.Bounds.IntersectRay(ray, out HitDistance))
                 return;
+
+            // Set back distance to favor selection of smaller object
+            if (HitDistance > 0)
+            {
+                var hitPoint = ray.direction * HitDistance;
+                var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.7f);
+                var setBackDistance = Vector3.Distance(ray.origin, backed);
+                HitDistance = setBackDistance;
+            }
 
             if (this.HasGeometry)
                 hits.Add(this);
@@ -83,6 +99,8 @@ namespace ff.vr.annotation
                 child.CollectChildrenIntersectingRay(ray, hits);
             }
         }
+
+
 
 
         public bool CheckIfObjectIsAnnotatable()
