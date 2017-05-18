@@ -149,7 +149,7 @@ namespace ff.vr.interaction
                 }
                 else if (_laserPointer.PointingAt is TeleportationZone)
                 {
-                    _teleportation.JumpToPosition(_laserPointer.HitInfo.point);
+                    _teleportation.JumpToPosition(_laserPointer.LastHitPoint);
                     if (_audioSourceForTeleportation)
                         _audioSourceForTeleportation.Play();
                 }

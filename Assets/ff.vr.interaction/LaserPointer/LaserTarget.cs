@@ -59,7 +59,7 @@ namespace ff.vr.interaction
 
         public void PointerUpdate(LaserPointer pointer)
         {
-            var hitPos = pointer.HitInfo.point;
+            var hitPos = pointer.LastHitPoint;
 
             if (_state == State.PointerCaptured)
             {

@@ -45,7 +45,7 @@ namespace ff.vr.interaction
 
         public void PointerUpdate(LaserPointer pointer)
         {
-            Hightlight.transform.position = pointer.HitInfo.point;
+            Hightlight.transform.position = pointer.LastHitPoint;
         }
 
         public void PointerExit(LaserPointer pointer)

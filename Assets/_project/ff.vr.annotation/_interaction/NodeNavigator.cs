@@ -8,11 +8,6 @@ class NodeNavigator
     public NodeHitTester _hitTester
 }
 
-interface IHitTester
-{
-
-}
-
 interface IInteractiveGizmo
 {
 

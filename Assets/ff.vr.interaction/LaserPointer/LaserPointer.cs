@@ -2,7 +2,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using ff.vr.annotate;
+//using ff.vr.annotate;
+using ff.nodegraph;
+using ff.nodegraph.interaction;
 
 namespace ff.vr.interaction
 {
@@ -55,13 +57,18 @@ namespace ff.vr.interaction
         public InteractiveController Controller;
 
         [HideInInspector]
-        public RaycastHit HitInfo;
+        public Vector3 LastHitPoint;
+
+        [HideInInspector]
+        public float LastHitDistance;
 
         [HideInInspector]
         public Ray Ray;
 
         [HideInInspector]
         public bool IsLockedAtTarget;
+
+        private NodeHitTester _hitTester;
 
         void Start()
         {
@@ -72,8 +79,13 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
+            _hitTester = FindObjectOfType<NodeHitTester>();
+            if (_hitTester == null)
+            {
+                Debug.LogError("NodeHitTester not found in scene");
+            }
 
-            _lineRenderer = this.GetComponent<LineRenderer>();
+            _lineRenderer = GetComponent<LineRenderer>();
             _lineMaterial = GetComponent<Renderer>().material;
         }
 
@@ -82,92 +94,124 @@ namespace ff.vr.interaction
             if (!_laserIsEnabled)
                 return;
 
+            ILaserPointerTarget newTarget = FindHitTarget();
+
+            SetNewHitTarget(newTarget);
+            SetLaserLength(LastHitDistance);
+
+            _laserHitSphere.transform.position = LastHitPoint;
+        }
+
+
+
+        private ILaserPointerTarget FindHitTarget()
+        {
             ILaserPointerTarget newTarget = null;
 
             Ray = new Ray(transform.position, transform.forward);
             //LayerMask layerMask = LayerMask.GetMask(new[] { "_AnnotationTarget", "_TeleportationTarget" });
 
-            if (Physics.Raycast(Ray, out HitInfo, 1000))
-            {
-                var hitCollider = HitInfo.collider;
-                _laserHitSphere.transform.position = HitInfo.point;
-                SetLaserLength(HitInfo.distance);
+            RaycastHit physicsHit = new RaycastHit();
+            var hasPhysicsHit = (Physics.Raycast(Ray, out physicsHit, 1000));
 
+            var nodeHit = (_hitTester != null) ? _hitTester.FindAndRememberHit(Ray) : null;
+            var hasNodeHit = (nodeHit != null);
+
+            // Physics ray wins
+            if (hasPhysicsHit && (!hasNodeHit || nodeHit.HitDistance > physicsHit.distance))
+            {
+                LastHitPoint = physicsHit.point;
+                LastHitDistance = physicsHit.distance;
+
+                var hitCollider = physicsHit.collider;
                 var newTargetInterface = hitCollider.attachedRigidbody
                                      ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
                                      : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
                 newTarget = newTargetInterface as ILaserPointerTarget;
             }
+            // NodeHit wins...
+            else if (hasNodeHit)
+            {
+                LastHitPoint = Ray.origin + Ray.direction * nodeHit.HitDistance;
+                LastHitDistance = nodeHit.HitDistance;
+                newTarget = _hitTester as ILaserPointerTarget;
+            }
+            // Nothing hit
             else
             {
-                SetLaserLength(100f);
+                LastHitDistance = 100;
+                LastHitPoint = Ray.direction * 100;
             }
 
-            if (newTarget == PointingAt || IsLockedAtTarget)
+            return newTarget;
+        }
+
+        private void SetNewHitTarget(ILaserPointerTarget newTarget)
+        {
+            var targetIsSame = (newTarget == PointingAt || IsLockedAtTarget);
+            if (targetIsSame)
             {
                 // Update position on Target
                 if (PointingAt != null)
                 {
                     PointingAt.PointerUpdate(this);
                 }
+                return;
+            }
+
+            if (Controller.ActiveState == InteractiveController.States.PointerCapturedOnClickable)
+                return;
+
+            // Exit old target
+            if (PointingAt != null && !PointingAt.Equals(null)) // Also checking with .Equals because ==Operator is not overridden from MonoBehaviour
+            {
+                PointingAt.PointerExit(this);
+            }
+
+            PointingAt = newTarget;
+            UpdateStyleIfTargetChanged();
+
+            if (NewTargetEnteredEvent != null)
+            {
+                NewTargetEnteredEvent(this, new PointingAtChangedEventArgs(PointingAt, newTarget));
+            }
+
+            if (newTarget != null)
+            {
+                newTarget.PointerEnter(this);
+            }
+        }
+
+
+        private void UpdateStyleIfTargetChanged()
+        {
+            var newColor = _inactiveStyle.LaserColor;
+            var spotSize = NON_TARGET_SPOT_SIZE;
+            var newLineWidth = INVALID_TARGET_LINE_WIDTH;
+
+            newLineWidth = VALID_TARGET_LINE_WIDTH;
+            spotSize = TARGET_SPOT_SIZE;
+
+            var hoverColorProvider = PointingAt as IHoverColor;
+            if (hoverColorProvider != null)
+            {
+                newColor = hoverColorProvider.GetHoverColor();
             }
             else
             {
-                if (Controller.ActiveState == InteractiveController.States.PointerCapturedOnClickable)
-                    return;
-
-                // Exit old target
-                if (PointingAt != null && !PointingAt.Equals(null)) // Also checking with .Equals because ==Operator is not overridden from MonoBehaviour
-                {
-                    PointingAt.PointerExit(this);
-                }
-
-                var newColor = _inactiveStyle.LaserColor;
-                var spotSize = NON_TARGET_SPOT_SIZE;
-                var newLineWidth = INVALID_TARGET_LINE_WIDTH;
-
-                if (!HitInfo.collider)
-                {
-                    // Nothing hit
-                }
-                else if (newTarget != null)
-                {
-                    // New valid target
-                    newTarget.PointerEnter(this);
-
-                    newLineWidth = VALID_TARGET_LINE_WIDTH;
-                    spotSize = TARGET_SPOT_SIZE;
-
-                    var hoverColorProvider = newTarget as IHoverColor;
-                    if (hoverColorProvider != null)
-                    {
-                        newColor = hoverColorProvider.GetHoverColor();
-                    }
-                    else
-                    {
-                        newColor = Style != null ? Style.LaserColor : HoverColor;
-                    }
-
-                    if (NewTargetEnteredEvent != null)
-                        NewTargetEnteredEvent(this, new PointingAtChangedEventArgs(PointingAt, newTarget));
-                }
-                else
-                {
-                    // Hit collider is not a target (but has correct tag?)
-                }
-
-                _lineMaterial.color = newColor;
-                _laserHitSphereMaterial.color = newColor;
-
-                _lineRenderer.startWidth = newLineWidth;
-                _lineRenderer.endWidth = newLineWidth;
-
-                float scaleByDistance = Mathf.Sqrt(HitInfo.distance / 2) * spotSize;
-                _laserHitSphere.transform.localScale = new Vector3(scaleByDistance, scaleByDistance, scaleByDistance);
-
-                PointingAt = newTarget;
+                newColor = Style != null ? Style.LaserColor : HoverColor;
             }
+
+            _lineMaterial.color = newColor;
+            _laserHitSphereMaterial.color = newColor;
+
+            _lineRenderer.startWidth = newLineWidth;
+            _lineRenderer.endWidth = newLineWidth;
+
+            float scaleByDistance = Mathf.Sqrt(LastHitDistance / 2) * spotSize;
+            _laserHitSphere.transform.localScale = new Vector3(scaleByDistance, scaleByDistance, scaleByDistance);
         }
+
 
 
         public void SetLaserLength(float distance)
@@ -188,6 +232,7 @@ namespace ff.vr.interaction
             }
             return hitsWithPlacementPlanes.ToArray();
         }
+
 
 
         public void SetLaserpointerEnabled(bool enabled)

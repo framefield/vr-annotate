@@ -44,9 +44,9 @@ namespace ff.nodegraph
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
             var renderer = unityObj.GetComponent<MeshRenderer>();
-            if (renderer != null)
+            if (renderer != null && unityObj.GetComponent<IgnoreNode>() == null)
             {
-                Debug.Log(renderer.gameObject.name + " > " + renderer.bounds, renderer);
+                //Debug.Log(renderer.gameObject.name + " > " + renderer.bounds, renderer);
                 node.Bounds = renderer.bounds;   // in worldspace
                 node.HasBounds = true;
                 node.HasGeometry = true;
@@ -83,16 +83,19 @@ namespace ff.nodegraph
                 return;
 
             // Set back distance to favor selection of smaller object
-            if (HitDistance > 0)
-            {
-                var hitPoint = ray.direction * HitDistance;
-                var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.3f);
-                var setBackDistance = Vector3.Distance(ray.origin, backed);
-                HitDistance = setBackDistance;
-            }
+            // if (HitDistance > 0)
+            // {
+            //     var hitPoint = ray.origin + ray.direction * HitDistance;
+            //     var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.3f);
+            //     var setBackDistance = Vector3.Distance(ray.origin, backed);
+            //     HitDistance = setBackDistance;
+            // }
 
             if (this.HasGeometry)
                 hits.Add(this);
+
+            if (Children == null)
+                return;
 
             foreach (var child in Children)
             {
