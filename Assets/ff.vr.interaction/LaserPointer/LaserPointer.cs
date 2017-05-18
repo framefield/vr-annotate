@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using ff.vr.annotation;
+using ff.vr.annotate;
 
 namespace ff.vr.interaction
 {

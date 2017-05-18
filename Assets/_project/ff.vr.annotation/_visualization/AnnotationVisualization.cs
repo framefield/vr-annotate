@@ -1,3 +1,8 @@
-class AnnotationVisualization:MonoBehaviour {
+using UnityEngine;
+using ff.vr.annotate;
+using ff.nodegraph;
+
+class AnnotationVisualization : MonoBehaviour
+{
 
 }

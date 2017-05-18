@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ff.vr.annotation
+namespace ff.nodegraph
 {
     [System.Serializable]
-    public class AnnotatableNode
+    public class Node
     {
-        public AnnotatableNode Parent;
+        public Node Parent;
 
         public Bounds Bounds;
         public bool IsAnnotatable;
@@ -19,7 +19,7 @@ namespace ff.vr.annotation
         public float HitDistance;
 
         [System.NonSerializedAttribute]
-        public AnnotatableNode[] Children;
+        public Node[] Children;
 
         [System.NonSerializedAttribute]
         public GameObject UnityObj;
@@ -34,12 +34,12 @@ namespace ff.vr.annotation
         }
 
         // FIXME: this should be the contructor
-        public static AnnotatableNode FindChildNodes(GameObject unityObj)
+        public static Node FindChildNodes(GameObject unityObj)
         {
-            var node = new AnnotatableNode()
+            var node = new Node()
             {
                 Name = unityObj.name,
-                Children = new AnnotatableNode[unityObj.transform.childCount],
+                Children = new Node[unityObj.transform.childCount],
             };
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
@@ -76,7 +76,7 @@ namespace ff.vr.annotation
             return node;
         }
 
-        public void CollectChildrenIntersectingRay(Ray ray, List<AnnotatableNode> hits)
+        public void CollectChildrenIntersectingRay(Ray ray, List<Node> hits)
         {
 
             if (!this.Bounds.IntersectRay(ray, out HitDistance))
@@ -99,8 +99,6 @@ namespace ff.vr.annotation
                 child.CollectChildrenIntersectingRay(ray, hits);
             }
         }
-
-
 
 
         public bool CheckIfObjectIsAnnotatable()

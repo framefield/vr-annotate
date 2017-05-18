@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using ff.utils;
 
-namespace ff.vr.annotation
+namespace ff.nodegraph
 {
-    public class AnnotationHighlighter : MonoBehaviour
+    public class NodeHitTester : MonoBehaviour
     {
         void Start()
         {
-            _annotatableGroups = FindObjectsOfType<AnnotatableGroup>();
+            _annotatableGroups = FindObjectsOfType<NodeGraph>();
             _meshFilter = this.GetComponent<MeshFilter>();
             _meshRenderer = this.GetComponent<MeshRenderer>();
             _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
         }
 
-        private AnnotatableGroup[] _annotatableGroups;
+        private NodeGraph[] _annotatableGroups;
 
         void Update()
         {
@@ -33,7 +33,7 @@ namespace ff.vr.annotation
         private void TestHit(Transform t)
         {
             var ray = new Ray(t.position, t.forward);
-            var hits = new List<AnnotatableNode>();
+            var hits = new List<Node>();
 
             foreach (var ag in _annotatableGroups)
             {
@@ -54,7 +54,7 @@ namespace ff.vr.annotation
             }
         }
 
-        private AnnotatableNode FindClosestHit(List<AnnotatableNode> hits)
+        private Node FindClosestHit(List<Node> hits)
         {
             hits.Sort((h1, h2) => (h1.HitDistance).CompareTo(h2.HitDistance));
 
@@ -67,7 +67,7 @@ namespace ff.vr.annotation
         }
 
 
-        private bool PrintHitsIfChanged(List<AnnotatableNode> hits)
+        private bool PrintHitsIfChanged(List<Node> hits)
         {
             var sb = new System.Text.StringBuilder();
             var separator = "";
@@ -93,6 +93,6 @@ namespace ff.vr.annotation
         private MeshRenderer _meshRenderer;
         private SteamVR_TrackedController _controller;
         private string _lastResult;
-        private AnnotationHighlighter _highlighter;
+        private NodeHitTester _highlighter;
     }
 }

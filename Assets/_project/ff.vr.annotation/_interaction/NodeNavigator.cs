@@ -1,4 +1,6 @@
-class NodeNavigator {
+/* 
+class NodeNavigator
+{
     public Node ContextNode;
     public Node HoveredNode; //  Must be a child of ContxtNode
     public Node SelectedNode;
@@ -6,43 +8,46 @@ class NodeNavigator {
     public NodeHitTester _hitTester
 }
 
-interface IHitTester {
-
-}
-
-interface IInteractiveGizmo 
+interface IHitTester
 {
 
 }
 
-interface IRayHitTester {
-    bool CheckForIntersection(Ray ray);
-}
-
-public NodeHitTester:IInteractiveGizmo {
+interface IInteractiveGizmo
+{
 
 }
+
+// interface IRayHitTester {
+//     bool CheckForIntersection(Ray ray);
+// }
+
+// public NodeHitTester:IInteractiveGizmo {
+
+// }
 
 // Note-To-Self:
-class InteractiveController {
+class InteractiveController
+{
     public IInteractiveGizmo hoveredGizma;
 
 }
 
 // Note-To-Self:
 // - maybe we can reuse hitResult for NodeHitTester
-class LaserPointer 
+class LaserPointer
 {
 
     public IHitTester[] _additionalHitTesters;
 
-    void Update() 
+    void Update()
     {
         Ray ray;
 
         IInteractiveGizmo hitByColliderResult;
 
-        
+
         IInteractiveGizmo
     }
 }
+ */

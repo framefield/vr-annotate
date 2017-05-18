@@ -1,17 +1,16 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ff.vr.annotation;
+using ff.vr.annotate;
 
-namespace ff.vr.annotation
+namespace ff.nodegraph
 {
-    public class AnnotatableGroup : MonoBehaviour
+    public class NodeGraph : MonoBehaviour
     {
         public string DB_ReferenceID;
 
         [HideInInspector]
-        public AnnotatableNode Node;
+        public Node Node;
 
         private void Start()
         {
@@ -24,8 +23,7 @@ namespace ff.vr.annotation
 
         private void CreateNodesFromHierachy()
         {
-            Node = AnnotatableNode.FindChildNodes(this.gameObject);
-            //Node.PrintStructure();
+            Node = Node.FindChildNodes(this.gameObject);
         }
     }
 }
