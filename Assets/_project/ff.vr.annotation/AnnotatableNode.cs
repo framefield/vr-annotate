@@ -86,7 +86,7 @@ namespace ff.vr.annotation
             if (HitDistance > 0)
             {
                 var hitPoint = ray.direction * HitDistance;
-                var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.7f);
+                var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.3f);
                 var setBackDistance = Vector3.Distance(ray.origin, backed);
                 HitDistance = setBackDistance;
             }
