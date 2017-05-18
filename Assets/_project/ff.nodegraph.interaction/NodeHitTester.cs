@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ff.utils;
 using ff.vr.interaction;
+
 using System;
 
 namespace ff.nodegraph.interaction
@@ -11,6 +12,8 @@ namespace ff.nodegraph.interaction
     public class NodeHitTester : MonoBehaviour, ILaserPointerTarget, IHitTester
     {
         private Node ContextNode = null;
+
+        public TMPro.TextMeshPro Label;
 
         void Start()
         {
@@ -92,6 +95,8 @@ namespace ff.nodegraph.interaction
 
         private void UpdateHighlightForNode(Node node)
         {
+            Label.text = node.Name;
+
             _meshRenderer.enabled = false;
             var bounds = node.CollectGeometryBounds().ToArray();
             _meshFilter.mesh.Clear();
@@ -102,6 +107,8 @@ namespace ff.nodegraph.interaction
 
         public void PointerEnter(LaserPointer pointer)
         {
+            Label.gameObject.SetActive(true);
+
             UpdateHighlightForNode(_lastNodeHitByRay);
         }
 
@@ -113,12 +120,16 @@ namespace ff.nodegraph.interaction
 
         public void PointerUpdate(LaserPointer pointer)
         {
-            //var newNode = FindHit(pointer.Ray);
             if (_lastNodeHitByRay != _renderedNode)
             {
                 UpdateHighlightForNode(_lastNodeHitByRay);
                 _renderedNode = _lastNodeHitByRay;
+
             }
+            Label.transform.position = pointer.LastHitPoint;
+
+            Label.transform.LookAt(Label.transform.position - Camera.main.transform.position + Label.transform.position);
+
         }
 
 

@@ -86,9 +86,9 @@ namespace ff.nodegraph
             // if (HitDistance > 0)
             // {
             //     var hitPoint = ray.origin + ray.direction * HitDistance;
-            //     var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.3f);
-            //     var setBackDistance = Vector3.Distance(ray.origin, backed);
-            //     HitDistance = setBackDistance;
+            //     var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.98f);
+            //     var backDistance = Vector3.Distance(ray.origin, backed);
+            //     HitDistance = backDistance;
             // }
 
             if (this.HasGeometry)
