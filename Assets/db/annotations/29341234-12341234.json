@@ -1,0 +1,11 @@
+{
+    "_id": "29341234-12341234",
+    "authorId": "adam",
+    "relatedObjectId": "temple2.columns",
+    "sceneConfiguration": {
+        "settings.renderingOptions.textured": true,
+        "settings.renderingOptions.normalMapped": true,
+        "environment.simulationTime": "300-03-01 12:12:00",
+        "environment.weather": "warm"
+    }
+}

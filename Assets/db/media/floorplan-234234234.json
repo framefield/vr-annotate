@@ -1,0 +1,31 @@
+{
+    "_id": "AN2008.20.0079",
+    "metaData": {
+        "Archive Number": " 2008.20.0079",
+        "Title": "Actual state plan of the Royal Stoa.",
+        "PD Number": "PD1983-2003",
+        "Notes": "English version.",
+        "Bibliography": "AgoraPicBk16 (2003), p.40, fig. 61.",
+        "Rating": "4"
+    },
+    "objectRefereceIds": [
+        "temple2.columns",
+    ],
+    "worldSpaceTransform": {
+        "dimension": [
+            50,
+            50,
+            50
+        ],
+        "orientation": [
+            0,
+            90,
+            0
+        ],
+        "position": [
+            123123,
+            123123123,
+            123123123
+        ],
+    }
+}

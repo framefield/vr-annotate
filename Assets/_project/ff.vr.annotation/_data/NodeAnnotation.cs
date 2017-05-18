@@ -1,0 +1,5 @@
+[Serializable]
+class Annotation 
+{
+
+}
