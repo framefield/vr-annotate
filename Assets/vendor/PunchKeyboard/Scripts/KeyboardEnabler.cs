@@ -18,12 +18,10 @@ namespace ff.vr.interaction
         public KeyboardControllerStick[] _sticks;
 
 
-
-
-
         [Header("--- internal prefab references -----")]
         public GameObject PunchKeyboardObject;
         public InputField _inputField;
+        public GameObject _inputFieldCanvas;
 
         public delegate void OnInputCompleted();
         public OnInputCompleted InputCompleted;
@@ -39,9 +37,15 @@ namespace ff.vr.interaction
 
         public void Show()
         {
-            PositionInFrontOfCamera();
-            EventSystem.current.SetSelectedGameObject(_inputField.gameObject, null);
             IsVisible = true;
+            UpdateKeyboardVisibility();
+            PositionInFrontOfCamera();
+
+            _inputField.text = "annotation";
+
+            // see http://answers.unity3d.com/questions/1159573/
+            _inputField.Select();
+            _inputField.OnSelect(null);
         }
 
 
@@ -75,21 +79,22 @@ namespace ff.vr.interaction
             {
                 _wasEnabled = IsVisible;
                 PunchKeyboardObject.SetActive(IsVisible);
+                _inputFieldCanvas.SetActive(IsVisible);
 
                 foreach (var stick in _sticks)
                 {
                     stick.gameObject.SetActive(IsVisible);
                 }
 
-                if (IsVisible)
-                {
-                    // Focus KeyInput
-                    EventSystem.current.SetSelectedGameObject(_inputField.gameObject, null);
-                }
-                else
-                {
+                // if (IsVisible)
+                // {
+                //     // Focus KeyInput
+                //     EventSystem.current.SetSelectedGameObject(_inputField.gameObject, null);
+                // }
+                // else
+                // {
 
-                }
+                // }
             }
         }
 
