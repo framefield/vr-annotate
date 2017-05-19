@@ -9,6 +9,9 @@ namespace ff.vr.annotate
     {
         public System.Guid Id;
         public Vector3 Position;
-        public System.Guid ContextId;
+        public System.Guid ContextNodeId;
+
+        [System.NonSerializedAttribute]
+        public Node ContextNode;
     }
 }

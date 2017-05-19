@@ -42,6 +42,7 @@ namespace ff.nodegraph
             {
                 Name = unityObj.name,
                 Children = new Node[unityObj.transform.childCount],
+                Id = new System.Guid(),
             };
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 

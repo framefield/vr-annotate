@@ -81,7 +81,7 @@ GameObject:
   - component: {fileID: 434694}
   - component: {fileID: 11401442}
   m_Layer: 12
-  m_Name: TrackpadUI
+  m_Name: TrackpadButtonUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -672,7 +672,7 @@ MonoBehaviour:
     Icon: {fileID: 104410}
   ActiveModePlane: {fileID: 159698}
   ActiveTutorialQuad: {fileID: 0}
-  CurrentEditMode: 0
+  CurrentlyPressedButton: 0
 --- !u!114 &11406342
 MonoBehaviour:
   m_ObjectHideFlags: 1

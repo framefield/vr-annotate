@@ -10,11 +10,17 @@ using ff.vr.annotate;
 
 namespace ff.nodegraph.interaction
 {
+    /* A singleton that handles hit-detection with a node-structure.
+     */
     public class NodeHitTester : MonoBehaviour, IClickableLaserPointerTarget, IHitTester
     {
         private Node ContextNode = null;
         private Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
+
+        [HideInInspector]
+        [NonSerializedAttribute]
+        public Dictionary<System.Guid, Node> NodesByGuid = new Dictionary<System.Guid, Node>();
 
         public TMPro.TextMeshPro Label;
 
