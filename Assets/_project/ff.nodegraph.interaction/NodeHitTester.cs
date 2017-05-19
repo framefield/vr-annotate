@@ -22,23 +22,22 @@ namespace ff.nodegraph.interaction
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
             _collider = GetComponent<BoxCollider>();
-            _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
-
+            // _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
         }
 
         private NodeGraph[] _annotatableGroups;
         private BoxCollider _collider;
 
-        void Update()
-        {
-            if (_controller == null)
-            {
-                _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
-            }
+        // void Update()
+        // {
+        //     if (_controller == null)
+        //     {
+        //         _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
+        //     }
 
-            if (_controller == null)
-                return;
-        }
+        //     if (_controller == null)
+        //         return;
+        // }
 
         /*
         Read carefully! This part is tricky...
@@ -128,11 +127,36 @@ namespace ff.nodegraph.interaction
 
         public void PointerEnter(LaserPointer pointer)
         {
+            _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
+            if (_trackpadButtonUI)
+            {
+                Debug.Log("attached handler");
+                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedhandler;
+            }
             Label.gameObject.SetActive(true);
             HoveredNode = _lastNodeHitByRay;
             UpdateHoverHighlight();
         }
 
+        private void UiButtonClickedhandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
+        {
+            Debug.Log("pressed: " + buttonPressed, this);
+            switch (buttonPressed)
+            {
+                case TrackpadButtonUI.ControllerButtons.Down:
+                    this.ContextNode = this.HoveredNode;
+                    break;
+
+                case TrackpadButtonUI.ControllerButtons.Up:
+                    if (this.ContextNode != null)
+                    {
+                        this.ContextNode = this.ContextNode.Parent;
+                    }
+                    break;
+            }
+        }
+
+        private TrackpadButtonUI _trackpadButtonUI;
 
         public void PointerUpdate(LaserPointer pointer)
         {
@@ -150,6 +174,10 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
+            if (_trackpadButtonUI)
+            {
+                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedhandler;
+            }
             HoveredNode = null;
             _meshRenderer.enabled = false;
             _lastNodeHitByRay = null;    // really?
@@ -158,8 +186,6 @@ namespace ff.nodegraph.interaction
 
         public void PointerTriggered(LaserPointer pointer)
         {
-            Debug.Log("NodeHitTester.PointerTriggered()");
-            this.ContextNode = this.HoveredNode;
         }
 
         public void PointerUntriggered(LaserPointer pointer)

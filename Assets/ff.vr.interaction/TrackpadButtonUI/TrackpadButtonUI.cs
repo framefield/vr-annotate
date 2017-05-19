@@ -22,7 +22,7 @@ public class TrackpadButtonUI : MonoBehaviour
     }
 
     public delegate void TrackpadUIButtonClicked(object s, ControllerButtons buttonPressed);
-    public event TrackpadUIButtonClicked TrackpadUIButtonClickedEvent;
+    public event TrackpadUIButtonClicked UIButtonClickedEvent;
 
     public SteamVR_TrackedController Controller;
 
@@ -131,9 +131,9 @@ public class TrackpadButtonUI : MonoBehaviour
         if (pressedButton == CurrentlyPressedButton)
             return;
 
-        if (TrackpadUIButtonClickedEvent != null)
+        if (UIButtonClickedEvent != null)
         {
-            TrackpadUIButtonClickedEvent(this, pressedButton);
+            UIButtonClickedEvent(this, pressedButton);
         }
         CurrentlyPressedButton = pressedButton;
     }
