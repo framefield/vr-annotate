@@ -6,8 +6,12 @@ using ff.utils;
 /*
     connects a series of Annotations in guided flow
 */
-class AnnotationSeries
+namespace ff.vr.annotate
 {
-    public string Title;
-    public Annotation[] Annotations;
+    public class AnnotationSeries
+    {
+        public string Title;
+        public Annotation[] Annotations;
+    }
 }
+

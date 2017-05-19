@@ -13,6 +13,8 @@ namespace ff.nodegraph
         public string Name;
         public bool HasBounds = false;
 
+        public System.Guid Id;
+
         public float HitDistance;
 
         [System.NonSerializedAttribute]

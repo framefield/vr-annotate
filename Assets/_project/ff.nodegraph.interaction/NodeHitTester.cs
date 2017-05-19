@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using ff.utils;
 using ff.vr.interaction;
+using ff.vr.annotate.viz;
 
-using System;
+using ff.vr.annotate;
 
 namespace ff.nodegraph.interaction
 {
@@ -21,23 +23,9 @@ namespace ff.nodegraph.interaction
             _annotatableGroups = FindObjectsOfType<NodeGraph>();
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
-            _collider = GetComponent<BoxCollider>();
-            // _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
+            _annotationManager = FindObjectOfType<AnnotationManager>();
         }
 
-        private NodeGraph[] _annotatableGroups;
-        private BoxCollider _collider;
-
-        // void Update()
-        // {
-        //     if (_controller == null)
-        //     {
-        //         _controller = GameObject.FindObjectOfType<SteamVR_TrackedController>();
-        //     }
-
-        //     if (_controller == null)
-        //         return;
-        // }
 
         /*
         Read carefully! This part is tricky...
@@ -130,7 +118,6 @@ namespace ff.nodegraph.interaction
             _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
             if (_trackpadButtonUI)
             {
-                Debug.Log("attached handler");
                 _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedhandler;
             }
             Label.gameObject.SetActive(true);
@@ -156,7 +143,6 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        private TrackpadButtonUI _trackpadButtonUI;
 
         public void PointerUpdate(LaserPointer pointer)
         {
@@ -167,6 +153,7 @@ namespace ff.nodegraph.interaction
                 _renderedNode = _lastNodeHitByRay;
 
             }
+            LastHoverPoint = pointer.LastHitPoint;
             Label.transform.position = pointer.LastHitPoint;
             Label.transform.LookAt(Label.transform.position - Camera.main.transform.position + Label.transform.position);
         }
@@ -186,6 +173,7 @@ namespace ff.nodegraph.interaction
 
         public void PointerTriggered(LaserPointer pointer)
         {
+            _annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
         }
 
         public void PointerUntriggered(LaserPointer pointer)
@@ -193,6 +181,9 @@ namespace ff.nodegraph.interaction
 
         }
 
+        private Vector3 LastHoverPoint;
+
+        private TrackpadButtonUI _trackpadButtonUI;
         private Node _lastNodeHitByRay;
         private Node _renderedNode;
         private MeshFilter _meshFilter;
@@ -200,5 +191,7 @@ namespace ff.nodegraph.interaction
         private SteamVR_TrackedController _controller;
         private string _lastResult;
         private NodeHitTester _highlighter;
+        private NodeGraph[] _annotatableGroups;
+        private AnnotationManager _annotationManager;
     }
 }

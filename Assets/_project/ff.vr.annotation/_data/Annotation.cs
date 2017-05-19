@@ -1,17 +1,14 @@
+using System.Collections.Generic;
+using ff.nodegraph;
+using UnityEngine;
 
-
-
-
-
-
-
-
-
-
-/*
-[ ] is there only one NodeDescriptor (o)
-
- */
-
-
-
+namespace ff.vr.annotate
+{
+    [System.Serializable]
+    public class Annotation
+    {
+        public System.Guid Id;
+        public Vector3 Position;
+        public System.Guid ContextId;
+    }
+}
