@@ -8,7 +8,7 @@ using System;
 
 namespace ff.nodegraph.interaction
 {
-    public class NodeHitTester : MonoBehaviour, ILaserPointerTarget, IHitTester
+    public class NodeHitTester : MonoBehaviour, IClickableLaserPointerTarget, IHitTester
     {
         private Node ContextNode = null;
         private Node HoveredNode = null;
@@ -110,36 +110,36 @@ namespace ff.nodegraph.interaction
             return null;
         }
 
-        private void UpdateHighlightForNode(Node node)
+        private void UpdateHoverHighlight()
         {
-            Label.text = node.Name;
-
-            _meshRenderer.enabled = false;
-            var bounds = node.CollectGeometryBounds().ToArray();
-            _meshFilter.mesh.Clear();
-            _meshFilter.mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
-            _meshFilter.mesh.RecalculateBounds();
-            _meshRenderer.enabled = true;
+            if (HoveredNode == null)
+            {
+                Label.gameObject.SetActive(false);
+                _meshRenderer.enabled = false;
+            }
+            else
+            {
+                Label.text = HoveredNode.Name;
+                var bounds = HoveredNode.CollectGeometryBounds().ToArray();
+                _meshFilter.mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                _meshRenderer.enabled = true;
+            }
         }
 
         public void PointerEnter(LaserPointer pointer)
         {
             Label.gameObject.SetActive(true);
-            UpdateHighlightForNode(_lastNodeHitByRay);
+            HoveredNode = _lastNodeHitByRay;
+            UpdateHoverHighlight();
         }
 
-        public void PointerExit(LaserPointer pointer)
-        {
-            _meshRenderer.enabled = false;
-            _lastNodeHitByRay = null;    // really?
-            Label.gameObject.SetActive(false);
-        }
 
         public void PointerUpdate(LaserPointer pointer)
         {
             if (_lastNodeHitByRay != _renderedNode)
             {
-                UpdateHighlightForNode(_lastNodeHitByRay);
+                HoveredNode = _lastNodeHitByRay;
+                UpdateHoverHighlight();
                 _renderedNode = _lastNodeHitByRay;
 
             }
@@ -147,6 +147,25 @@ namespace ff.nodegraph.interaction
             Label.transform.LookAt(Label.transform.position - Camera.main.transform.position + Label.transform.position);
         }
 
+
+        public void PointerExit(LaserPointer pointer)
+        {
+            HoveredNode = null;
+            _meshRenderer.enabled = false;
+            _lastNodeHitByRay = null;    // really?
+            Label.gameObject.SetActive(false);
+        }
+
+        public void PointerTriggered(LaserPointer pointer)
+        {
+            Debug.Log("NodeHitTester.PointerTriggered()");
+            this.ContextNode = this.HoveredNode;
+        }
+
+        public void PointerUntriggered(LaserPointer pointer)
+        {
+
+        }
 
         private Node _lastNodeHitByRay;
         private Node _renderedNode;
