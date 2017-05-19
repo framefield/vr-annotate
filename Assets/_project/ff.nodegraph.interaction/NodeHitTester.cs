@@ -8,10 +8,11 @@ using System;
 
 namespace ff.nodegraph.interaction
 {
-    [RequireComponent(typeof(BoxCollider))]
     public class NodeHitTester : MonoBehaviour, ILaserPointerTarget, IHitTester
     {
         private Node ContextNode = null;
+        private Node HoveredNode = null;
+        public bool DeepPickingEnabled = false;
 
         public TMPro.TextMeshPro Label;
 
@@ -37,8 +38,6 @@ namespace ff.nodegraph.interaction
 
             if (_controller == null)
                 return;
-
-            //TestHit(_controller.transform);
         }
 
         /*
@@ -46,14 +45,10 @@ namespace ff.nodegraph.interaction
 
         This method is called from LaserPointer on Update() additional to
         a normal Physics.RayCast. If both return hitResults the one with the
-        smaller distances will be used. In this case NodeHitTest is called
-        with IInteractiveGizmo.PointerEnter(). We then can use the _lastNodeHitByRay.
-
-        To pass as a RayHitresult, NodeHitTester also requires a collider *SIC* 
-        To prevent this collider from interfering with other things it should 
-        have zero dimension.
-         */
-
+        smaller distance will be used. In this case NodeHitTest is called
+        with IInteractiveGizmo.PointerEnter(). We then can use the _lastNodeHitByRay
+        to update the visualization respectively.
+        */
         public Node FindAndRememberHit(Ray ray)
         {
             _lastNodeHitByRay = FindHit(ray);
@@ -76,7 +71,29 @@ namespace ff.nodegraph.interaction
                     ag.Node.CollectChildrenIntersectingRay(ray, hits);
                 }
             }
-            return FindClosestHit(hits); ;
+            if (hits.Count == 0)
+                return null;
+
+            var closestHitNode = FindClosestHit(hits);
+
+            if (closestHitNode == null)
+            {
+                return null;
+            }
+
+            if (DeepPickingEnabled)
+            {
+                return closestHitNode;
+            }
+
+            // Walk up to find child of context
+            var n = closestHitNode;
+            while (n.Parent != ContextNode && n.Parent != null)
+            {
+                n = n.Parent;
+            }
+            n.HitDistance = closestHitNode.HitDistance;
+            return n;
         }
 
         private Node FindClosestHit(List<Node> hits)
@@ -108,7 +125,6 @@ namespace ff.nodegraph.interaction
         public void PointerEnter(LaserPointer pointer)
         {
             Label.gameObject.SetActive(true);
-
             UpdateHighlightForNode(_lastNodeHitByRay);
         }
 
@@ -116,6 +132,7 @@ namespace ff.nodegraph.interaction
         {
             _meshRenderer.enabled = false;
             _lastNodeHitByRay = null;    // really?
+            Label.gameObject.SetActive(false);
         }
 
         public void PointerUpdate(LaserPointer pointer)
@@ -127,9 +144,7 @@ namespace ff.nodegraph.interaction
 
             }
             Label.transform.position = pointer.LastHitPoint;
-
             Label.transform.LookAt(Label.transform.position - Camera.main.transform.position + Label.transform.position);
-
         }
 
 

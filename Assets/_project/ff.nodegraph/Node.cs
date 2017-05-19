@@ -7,16 +7,16 @@ namespace ff.nodegraph
     [System.Serializable]
     public class Node
     {
-        public Node Parent;
-
         public Bounds Bounds;
         public bool IsAnnotatable;
         public bool HasGeometry;
         public string Name;
         public bool HasBounds = false;
 
-
         public float HitDistance;
+
+        [System.NonSerializedAttribute]
+        public Node Parent;
 
         [System.NonSerializedAttribute]
         public Node[] Children;
@@ -56,6 +56,7 @@ namespace ff.nodegraph
             {
                 var childObj = unityObj.transform.GetChild(index).gameObject;
                 var childNode = FindChildNodes(childObj);
+                childNode.Parent = node;
 
                 node.Children[index] = childNode;
 

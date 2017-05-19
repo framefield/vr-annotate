@@ -59,8 +59,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public Vector3 LastHitPoint;
 
-        [HideInInspector]
-        public float LastHitDistance;
+        private float LastHitDistance = 100;
 
         [HideInInspector]
         public Ray Ray;
@@ -208,7 +207,8 @@ namespace ff.vr.interaction
             _lineRenderer.startWidth = newLineWidth;
             _lineRenderer.endWidth = newLineWidth;
 
-            float scaleByDistance = Mathf.Sqrt(LastHitDistance / 2) * spotSize;
+            var positiveDistance = Mathf.Abs(LastHitDistance);  // Can be negative inside bounding boxes
+            float scaleByDistance = Mathf.Sqrt(positiveDistance / 2) * spotSize;
             _laserHitSphere.transform.localScale = new Vector3(scaleByDistance, scaleByDistance, scaleByDistance);
         }
 
