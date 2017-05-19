@@ -133,7 +133,6 @@ namespace ff.nodegraph.interaction
 
         private void UiButtonClickedhandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
         {
-            Debug.Log("pressed: " + buttonPressed, this);
             switch (buttonPressed)
             {
                 case TrackpadButtonUI.ControllerButtons.Down:
