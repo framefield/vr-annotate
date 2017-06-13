@@ -1,0 +1,76 @@
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/<GUID>",
+    "type": "Annotation",
+    "creator": {
+        "id": "http://annotator/people/johndoe",
+        "type": "Person",
+        "name": "John Doe",
+        "nickname": "john"
+    },
+    "created": "2015-10-13T13:00:00Z",
+    "generator": {
+        "id": "http://annotator/v/01",
+        "type": "Software",
+        "name": "Code v0.1"
+    },
+    "generated": "2015-10-14T15:13:28Z",
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "This column is interesting"
+        }
+    ],
+    "target": {
+        "type": "AnnotatableFeature",
+        "source": "http://example.com/document1",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "300BC"
+                }
+            },
+            {
+                "type": "GeoCoordinates",
+                "coordinateSystem": "Unity.WorldSpace",
+                "Position": {
+                    "x": 213,
+                    "y": 213,
+                    "z": 213
+                },
+                "Rotation": {
+                    "x": 213,
+                    "y": 213,
+                    "z": 213
+                },
+                "latitude": "2342.23",
+                "longitude": "2342.23",
+                "elevation": "2342.23"
+            }
+        ],
+        "selector": {
+            "type": "SceneGraphSelector",
+            "value": "name1/name2/name3",
+            "refinedBy": {
+                "type": "GeoCoordinates",
+                "coordinateSystem": "Unity.WorldSpace",
+                "Position": {
+                    "x": 213,
+                    "y": 213,
+                    "z": 213
+                },
+                "Rotation": {
+                    "x": 213,
+                    "y": 213,
+                    "z": 213
+                },
+                "latitude": "2342.23",
+                "longitude": "2342.23",
+                "elevation": "2342.23"
+            }
+        }
+    }
+}

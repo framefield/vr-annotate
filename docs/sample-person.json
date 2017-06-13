@@ -1,0 +1,6 @@
+{
+    "@id": "http://annotator/people/johndoe",
+    "type": "Person",
+    "name": "John Doe",
+    "nickname": "john"
+}
