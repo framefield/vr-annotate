@@ -21,12 +21,12 @@ namespace ff.vr.annotate
                 {
                     LabelText.text = "";
                 }
-                else
+                else if (Annotation.ContextNode != null)
                 {
                     _startTime = Time.time;
                     LabelText.text = Annotation.ContextNode.Name;
-                    _lastAnnotation = Annotation;
                 }
+                _lastAnnotation = Annotation;
             }
 
             var s = ScaleUpOverTime.Evaluate(Time.time - _startTime);

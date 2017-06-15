@@ -35,5 +35,12 @@ namespace ff.location
             latitude = inRotatedObjectSpace.z / GeoCoordinateTransformer._metersPerLat + GeoCoordinateTransformer._referenceLat;
             elevation = inRotatedObjectSpace.y;
         }
+
+        // These values will be serialized but not directly used
+        private void DummyToAvoidNeverUsedWarning()
+        {
+            Debug.Log("" + type);
+            Debug.Log("" + coordinateSystem);
+        }
     }
 }

@@ -6,12 +6,19 @@ using ff.nodegraph;
 using ff.vr.annotate.viz;
 using UnityEngine;
 using ff.utils;
+using System.Text.RegularExpressions;
 
 namespace ff.vr.annotate
 {
     [System.Serializable]
     public class Annotation
     {
+        public Annotation() { }
+        public Annotation(string jsonString)
+        {
+            InitFromJson(jsonString);
+        }
+
         const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
 
         public Guid GUID;
@@ -50,9 +57,23 @@ namespace ff.vr.annotate
             });
         }
 
-        public void InitFromJson()
+        public void InitFromJson(string jsonString)
         {
+            JSONObject j = new JSONObject(jsonString);
+            var result = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["id"].ToString());
+            if (result.Success)
+            {
+                GUID = new Guid(result.Groups[1].Value);
+            }
+            var dateTimeString = j["created"].ToString();
+            Debug.Log("DateTimeString:" + dateTimeString);
+            //CreatedAt = DateTime.Parse(dateTimeString);
+            Text = j["body"][0]["value"].ToString();
+            Debug.Log("Text:" + Text);
 
+            ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
+            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
+            Position = AnnotationPosition.position;
         }
         private string JSONTemplate = @"
 {
@@ -92,7 +113,7 @@ namespace ff.vr.annotate
         ],
         'selector': {
                 'type': 'SceneGraphSelector',
-                'value': '{sceneGraphPath}',
+                'value': '{sceneGraphPath}'
         },
         'position': {
             'type':'AnnotationLocation',
