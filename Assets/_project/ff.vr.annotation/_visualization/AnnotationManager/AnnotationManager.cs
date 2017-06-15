@@ -4,6 +4,8 @@ using ff.vr.annotate;
 using ff.nodegraph;
 using ff.vr.interaction;
 using System;
+using System.IO;
+using ff.location;
 
 namespace ff.vr.annotate.viz
 {
@@ -16,15 +18,24 @@ namespace ff.vr.annotate.viz
     */
     public class AnnotationManager : MonoBehaviour
     {
-
+        public string SimulatedYear = "300 BC";
+        public string SimulatedTimeOfDay = "18:23:12";
 
         private List<Annotation> AllAnnotations = new List<Annotation>();
         private List<AnnotationGizmo> AllAnnotationGizmos = new List<AnnotationGizmo>();
 
         public AnnotationGizmo _annotationGizmoPrefab;
 
+        public static AnnotationManager _instance;
+
         void Awake()
         {
+            if (_instance != null)
+            {
+                Debug.LogError("Only one instance of " + this + " allowed", this);
+            }
+            _instance = this;
+
             _gizmoContainer = new GameObject();
             _gizmoContainer.name = "GizmoContainer";
             _gizmoContainer.transform.SetParent(this.transform, false);
@@ -37,6 +48,10 @@ namespace ff.vr.annotate.viz
         private void HandleInputCompleted()
         {
             _keyboardEnabler.Hide();
+            _currentAnnotation.Text = _keyboardEnabler._inputField.text;
+            _currentAnnotation.ToJson();
+
+            File.WriteAllText(Application.dataPath + "/db/annotations/" + _currentAnnotation.GUID, _currentAnnotation.ToJson());
         }
 
         private void HandleInputChanged(string newText)
@@ -53,10 +68,18 @@ namespace ff.vr.annotate.viz
                 Position = position,
                 ContextNodeId = contextNode.Id,
                 ContextNode = contextNode,
-                Id = System.Guid.NewGuid(),
+                GUID = System.Guid.NewGuid(),
+                ViewPointPosition = new GeoCoordinate()
+                {
+                    position = Camera.main.transform.position,
+                    rotation = Camera.main.transform.eulerAngles,
+                },
+                AnnotationPosition = new GeoCoordinate() { position = position },
             };
 
             AllAnnotations.Add(newAnnotation);
+            _currentAnnotation = newAnnotation;
+
 
             var newGizmo = Instantiate(_annotationGizmoPrefab);
             newGizmo.transform.position = position;
@@ -66,6 +89,7 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.Show();
         }
 
+        private Annotation _currentAnnotation;
         private AnnotationGizmo _focusedAnnotationGizmo;
         private GameObject _gizmoContainer;
         private KeyboardEnabler _keyboardEnabler;

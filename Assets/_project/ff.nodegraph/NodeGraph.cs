@@ -8,6 +8,7 @@ namespace ff.nodegraph
     public class NodeGraph : MonoBehaviour
     {
         public string DB_ReferenceID;
+        public string objStateDescription = "";
 
         [HideInInspector]
         public Node Node;

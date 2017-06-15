@@ -10,11 +10,10 @@
     },
     "created": "2015-10-13T13:00:00Z",
     "generator": {
-        "id": "http://annotator/v/01",
+        "id": "http://vr-annotator/v/01",
         "type": "Software",
-        "name": "Code v0.1"
+        "name": "VR-Annotator v0.1"
     },
-    "generated": "2015-10-14T15:13:28Z",
     "body": [
         {
             "type": "TextualBody",
@@ -24,31 +23,41 @@
     ],
     "target": {
         "type": "AnnotatableFeature",
-        "source": "http://example.com/document1",
+        "source": "http://hu-berlin.de/aa/a3125122",
         "state": [
             {
                 "type": "VRSimulation",
                 "refinedBy": {
                     "type": "SimulationTime",
-                    "sourceDate": "300BC"
+                    "sourceDate": "300BC",
+                    "timeOfDay": "123"
                 }
             },
             {
-                "type": "GeoCoordinates",
-                "coordinateSystem": "Unity.WorldSpace",
-                "Position": {
-                    "x": 213,
-                    "y": 213,
-                    "z": 213
-                },
-                "Rotation": {
-                    "x": 213,
-                    "y": 213,
-                    "z": 213
-                },
-                "latitude": "2342.23",
-                "longitude": "2342.23",
-                "elevation": "2342.23"
+                "type": "ViewPoint",
+                "position": {
+                    "type": "GeoCoordinates",
+                    "coordinateSystem": "Unity.WorldSpace",
+                    "Position": {
+                        "x": 213,
+                        "y": 213,
+                        "z": 213
+                    },
+                    "Rotation": {
+                        "x": 213,
+                        "y": 213,
+                        "z": 213
+                    },
+                    "latitude": "2342.23",
+                    "longitude": "2342.23",
+                    "elevation": "2342.23"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {
+                    "author": "https://www.wikidata.org/wiki/Q338100"
+                }
             }
         ],
         "selector": {
