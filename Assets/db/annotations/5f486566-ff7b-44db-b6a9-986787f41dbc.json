@@ -1,0 +1,47 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/http://annotator/anno/5f486566-ff7b-44db-b6a9-986787f41dbc",
+    "type": "Annotation",
+    "creator": ,
+    "created": "1/1/0001 12:00:00 AM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": ""
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "target": "00000000-0000-0000-0000-000000000000",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "18:23:12",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "to be implemented"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":-1.627492904663086,"y":0.8021451234817505,"z":11.0989408493042},"rotation":{"x":0.1442885398864746,"y":250.7366485595703,"z":2.220033884048462},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.976073858241608,"longitude":23.722389914705727,"elevation":0.8021451234817505},
+            "AnnotationCoordinates" : {"position":{"x":-16.092029571533204,"y":-0.050065040588378909,"z":9.564861297607422},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97616683968539,"longitude":23.722506576005196,"elevation":-0.050065040588378909}
+        }
+    }
+}

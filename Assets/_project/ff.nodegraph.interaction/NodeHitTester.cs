@@ -22,16 +22,20 @@ namespace ff.nodegraph.interaction
         [NonSerializedAttribute]
         public Dictionary<System.Guid, Node> NodesByGuid = new Dictionary<System.Guid, Node>();
 
-        public TMPro.TextMeshPro Label;
+        [Header("--- prefab references ----")]
+
+        [SerializeField]
+        TMPro.TextMeshPro _hoverLabel;
+        [SerializeField] Renderer _highlightContextRenderer;
+        [SerializeField] Renderer _highlightHoverRenderer;
 
         void Start()
         {
             _annotatableGroups = FindObjectsOfType<NodeGraph>();
-            _meshFilter = GetComponent<MeshFilter>();
-            _meshRenderer = GetComponent<MeshRenderer>();
+            //_meshFilter = GetComponent<MeshFilter>();
+            //_meshRenderer = GetComponent<MeshRenderer>();
             _annotationManager = FindObjectOfType<AnnotationManager>();
         }
-
 
         /*
         Read carefully! This part is tricky...
@@ -48,6 +52,77 @@ namespace ff.nodegraph.interaction
             return _lastNodeHitByRay;
         }
 
+
+        #region implement LaserInterface
+        public void PointerEnter(LaserPointer pointer)
+        {
+            _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
+            if (_trackpadButtonUI)
+            {
+                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
+            }
+            _hoverLabel.gameObject.SetActive(true);
+            HoveredNode = _lastNodeHitByRay;
+            UpdateHoverHighlight();
+        }
+
+        public void PointerUpdate(LaserPointer pointer)
+        {
+            if (_lastNodeHitByRay != _renderedNode)
+            {
+                HoveredNode = _lastNodeHitByRay;
+                UpdateHoverHighlight();
+                _renderedNode = _lastNodeHitByRay;
+
+            }
+            LastHoverPoint = pointer.LastHitPoint;
+            _hoverLabel.transform.position = pointer.LastHitPoint;
+            _hoverLabel.transform.LookAt(_hoverLabel.transform.position - Camera.main.transform.position + _hoverLabel.transform.position);
+        }
+
+
+        public void PointerExit(LaserPointer pointer)
+        {
+            if (_trackpadButtonUI)
+            {
+                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
+            }
+            HoveredNode = null;
+            UpdateHoverHighlight();
+            _lastNodeHitByRay = null;    // really?
+            _hoverLabel.gameObject.SetActive(false);
+        }
+
+        public void PointerTriggered(LaserPointer pointer)
+        {
+            _annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
+        }
+
+        public void PointerUntriggered(LaserPointer pointer)
+        {
+
+        }
+        #endregion implement LaserInterface
+
+
+
+        /** A dummy implementation to simulate entering and exiting hierarchy */
+        private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
+        {
+            switch (buttonPressed)
+            {
+                case TrackpadButtonUI.ControllerButtons.Down:
+                    SetContextNode(HoveredNode);
+                    break;
+
+                case TrackpadButtonUI.ControllerButtons.Up:
+                    if (this.ContextNode != null)
+                    {
+                        SetContextNode(ContextNode.Parent);
+                    }
+                    break;
+            }
+        }
 
         private Node FindHit(Ray ray)
         {
@@ -89,6 +164,7 @@ namespace ff.nodegraph.interaction
             return n;
         }
 
+
         private Node FindClosestHit(List<Node> hits)
         {
             hits.Sort((h1, h2) => (h1.HitDistance).CompareTo(h2.HitDistance));
@@ -103,90 +179,45 @@ namespace ff.nodegraph.interaction
             return null;
         }
 
+
         private void UpdateHoverHighlight()
         {
             if (HoveredNode == null)
             {
-                Label.gameObject.SetActive(false);
-                _meshRenderer.enabled = false;
+                _hoverLabel.gameObject.SetActive(false);
+                _highlightHoverRenderer.enabled = false;
+                //_meshRenderer.enabled = false;
             }
             else
             {
-                Label.text = HoveredNode.Name;
+                _hoverLabel.text = HoveredNode.Name;
                 var bounds = HoveredNode.CollectGeometryBounds().ToArray();
-                _meshFilter.mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
-                _meshRenderer.enabled = true;
+                _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                _highlightHoverRenderer.enabled = true;
             }
         }
 
-        #region implement LaserInterface
-        public void PointerEnter(LaserPointer pointer)
+
+        private void SetContextNode(Node newContextNode)
         {
-            _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
-            if (_trackpadButtonUI)
+            if (newContextNode == ContextNode)
+                return;
+
+            ContextNode = newContextNode;
+
+            if (ContextNode == null)
             {
-                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
+                _highlightContextRenderer.enabled = false;
             }
-            Label.gameObject.SetActive(true);
-            HoveredNode = _lastNodeHitByRay;
-            UpdateHoverHighlight();
-        }
-
-        public void PointerUpdate(LaserPointer pointer)
-        {
-            if (_lastNodeHitByRay != _renderedNode)
+            else
             {
-                HoveredNode = _lastNodeHitByRay;
-                UpdateHoverHighlight();
-                _renderedNode = _lastNodeHitByRay;
-
-            }
-            LastHoverPoint = pointer.LastHitPoint;
-            Label.transform.position = pointer.LastHitPoint;
-            Label.transform.LookAt(Label.transform.position - Camera.main.transform.position + Label.transform.position);
-        }
-
-
-        public void PointerExit(LaserPointer pointer)
-        {
-            if (_trackpadButtonUI)
-            {
-                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
-            }
-            HoveredNode = null;
-            _meshRenderer.enabled = false;
-            _lastNodeHitByRay = null;    // really?
-            Label.gameObject.SetActive(false);
-        }
-
-        public void PointerTriggered(LaserPointer pointer)
-        {
-            _annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
-        }
-
-        public void PointerUntriggered(LaserPointer pointer)
-        {
-
-        }
-        #endregion
-
-        /** A dummy implementation to simulate entering and exiting hierarchy */
-        private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
-        {
-            switch (buttonPressed)
-            {
-                case TrackpadButtonUI.ControllerButtons.Down:
-                    this.ContextNode = this.HoveredNode;
-                    break;
-
-                case TrackpadButtonUI.ControllerButtons.Up:
-                    if (this.ContextNode != null)
-                    {
-                        this.ContextNode = this.ContextNode.Parent;
-                    }
-                    break;
+                _hoverLabel.text = HoveredNode.Name;
+                var bounds = ContextNode.CollectGeometryBounds().ToArray();
+                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                _highlightContextRenderer.enabled = true;
             }
         }
+
 
 
         private Vector3 LastHoverPoint;
@@ -194,11 +225,11 @@ namespace ff.nodegraph.interaction
         private TrackpadButtonUI _trackpadButtonUI;
         private Node _lastNodeHitByRay;
         private Node _renderedNode;
-        private MeshFilter _meshFilter;
-        private MeshRenderer _meshRenderer;
+        //private MeshFilter _meshFilter;
+        //private MeshRenderer _meshRenderer;
         private SteamVR_TrackedController _controller;
         private string _lastResult;
-        private NodeHitTester _highlighter;
+        private NodeHitTester _nodeHitTester;
         private NodeGraph[] _annotatableGroups;
         private AnnotationManager _annotationManager;
     }
