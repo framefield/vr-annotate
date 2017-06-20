@@ -94,18 +94,6 @@ namespace ff.vr.interaction
                     SetState(States.Opening);
                     break;
 
-                case States.Opening:
-                case States.Open:
-                case States.MovingIntoView:
-                    if (toggle)
-                    {
-                        SetState(States.Closing);
-                    }
-                    else
-                    {
-                        SetState(States.MovingIntoView);
-                    }
-                    break;
             }
         }
 
@@ -122,6 +110,26 @@ namespace ff.vr.interaction
                 Debug.LogWarning("Ignoring inconsistent menu button release", this);
                 return;
             }
+
+
+            var distanceToCurrentPos = Vector3.Distance(PositionFromController, transform.position);
+            var toggle = (distanceToCurrentPos < CLOSE_MENU_THRESHOLD_DISTANCE);
+            switch (_state)
+            {
+                case States.Opening:
+                case States.Open:
+                case States.MovingIntoView:
+                    if (toggle)
+                    {
+                        SetState(States.Closing);
+                    }
+                    else
+                    {
+                        SetState(States.MovingIntoView);
+                    }
+                    break;
+            }
+
             _pressedMenuButtonController = null;
         }
 
@@ -132,11 +140,10 @@ namespace ff.vr.interaction
             if (newState == _state)
                 return;
 
-            Debug.Log("set new state:" + _state + " -> " + newState);
+            //Debug.Log("set new state:" + _state + " -> " + newState);
 
             var transitionActive = TransitionProgress > 0.1f && TransitionProgress < 0.9f;
             var startNewTransition = false;
-
 
             switch (newState)
             {
@@ -175,12 +182,32 @@ namespace ff.vr.interaction
 
         private Vector3 PositionFromController
         {
-            get { return _pressedMenuButtonController.transform.position + _pressedMenuButtonController.transform.forward; }
+            get
+            {
+                if (_pressedMenuButtonController != null)
+                    _lastValidPosition = _pressedMenuButtonController.transform.position + _pressedMenuButtonController.transform.forward;
+
+                return _lastValidPosition;
+            }
         }
 
+        private Vector3 _lastValidPosition;
+        private Quaternion _lastValidRotation;
         private Quaternion RotationFromController
         {
-            get { return _pressedMenuButtonController.transform.rotation; }
+            get
+            {
+                if (_pressedMenuButtonController != null)
+                {
+
+                    var ea = _pressedMenuButtonController.transform.eulerAngles;
+                    ea.z = 0;
+                    ea.x += 30;
+                    var rot = Quaternion.Euler(ea);
+                    _lastValidRotation = _pressedMenuButtonController.transform.rotation = rot;
+                }
+                return _lastValidRotation;
+            }
         }
 
         private float TransitionProgress
@@ -204,7 +231,7 @@ namespace ff.vr.interaction
 
         SteamVR_TrackedController _pressedMenuButtonController;
 
-        private const float TRANSITION_DURATION = 0.2f;
+        private const float TRANSITION_DURATION = 0.15f;
         private float _interactionStartTime = 0;
     }
 }
