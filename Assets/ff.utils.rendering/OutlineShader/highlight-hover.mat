@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: hover-context
+  m_Name: highlight-hover
   m_Shader: {fileID: 4800000, guid: 6370e2d7b2719462b832fcfe1dd9f93c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
@@ -59,7 +59,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Glossiness: 0.5
-    - _LineWidth: 0.28
+    - _LineWidth: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -70,5 +70,5 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 0.4638841, g: 0.5689924, b: 0.5735294, a: 0.159}
-    - _LineColor: {r: 0.3406142, g: 0.66176474, b: 0.48900786, a: 1}
+    - _FillColor: {r: 0.2923875, g: 0.4519983, b: 0.7647059, a: 0.497}
+    - _LineColor: {r: 0.18247189, g: 0.67526233, b: 0.9191176, a: 1}

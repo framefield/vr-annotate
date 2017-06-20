@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: hover-context
+  m_Name: highlight-context
   m_Shader: {fileID: 4800000, guid: 6370e2d7b2719462b832fcfe1dd9f93c, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
