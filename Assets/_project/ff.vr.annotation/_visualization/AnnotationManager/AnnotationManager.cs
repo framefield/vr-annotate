@@ -69,7 +69,7 @@ namespace ff.vr.annotate.viz
             _currentAnnotation.Text = _keyboardEnabler._inputField.text;
             _currentAnnotation.ToJson();
 
-            File.WriteAllText(AnnotationDirectory + _currentAnnotation.GUID, _currentAnnotation.ToJson());
+            File.WriteAllText(AnnotationDirectory + _currentAnnotation.GUID + ".json", _currentAnnotation.ToJson());
         }
 
         private void HandleInputChanged(string newText)

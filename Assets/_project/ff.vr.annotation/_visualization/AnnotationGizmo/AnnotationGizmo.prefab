@@ -307,6 +307,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Annotation:
     Position: {x: 0, y: 0, z: 0}
+    Text: 
+    ViewPointPosition:
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      type: GeoCoordinates
+      coordinateSystem: Unity.WorldSpace
+      latitude: 37.97587766222286
+      longitude: 23.72266528902746
+      elevation: 0
+    AnnotationPosition:
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0}
+      type: GeoCoordinates
+      coordinateSystem: Unity.WorldSpace
+      latitude: 37.97587766222286
+      longitude: 23.72266528902746
+      elevation: 0
   LabelText: {fileID: 114241940169004964}
   ScaleUpOverTime:
     serializedVersion: 2

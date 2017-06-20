@@ -35,6 +35,7 @@ namespace ff.vr.annotate
 
         [System.NonSerializedAttribute]
         public Node ContextNode;
+
         public Person Author;
         public GeoCoordinate ViewPointPosition;
         public GeoCoordinate AnnotationPosition;

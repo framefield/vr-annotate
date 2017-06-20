@@ -49,7 +49,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        public Node FindHit(Ray ray)
+        private Node FindHit(Ray ray)
         {
             var hits = new List<Node>();
 
@@ -119,35 +119,18 @@ namespace ff.nodegraph.interaction
             }
         }
 
+        #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
             _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
             if (_trackpadButtonUI)
             {
-                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedhandler;
+                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
             }
             Label.gameObject.SetActive(true);
             HoveredNode = _lastNodeHitByRay;
             UpdateHoverHighlight();
         }
-
-        private void UiButtonClickedhandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
-        {
-            switch (buttonPressed)
-            {
-                case TrackpadButtonUI.ControllerButtons.Down:
-                    this.ContextNode = this.HoveredNode;
-                    break;
-
-                case TrackpadButtonUI.ControllerButtons.Up:
-                    if (this.ContextNode != null)
-                    {
-                        this.ContextNode = this.ContextNode.Parent;
-                    }
-                    break;
-            }
-        }
-
 
         public void PointerUpdate(LaserPointer pointer)
         {
@@ -168,7 +151,7 @@ namespace ff.nodegraph.interaction
         {
             if (_trackpadButtonUI)
             {
-                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedhandler;
+                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
             }
             HoveredNode = null;
             _meshRenderer.enabled = false;
@@ -185,6 +168,26 @@ namespace ff.nodegraph.interaction
         {
 
         }
+        #endregion
+
+        /** A dummy implementation to simulate entering and exiting hierarchy */
+        private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
+        {
+            switch (buttonPressed)
+            {
+                case TrackpadButtonUI.ControllerButtons.Down:
+                    this.ContextNode = this.HoveredNode;
+                    break;
+
+                case TrackpadButtonUI.ControllerButtons.Up:
+                    if (this.ContextNode != null)
+                    {
+                        this.ContextNode = this.ContextNode.Parent;
+                    }
+                    break;
+            }
+        }
+
 
         private Vector3 LastHoverPoint;
 
