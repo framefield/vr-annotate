@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4871644851891142}
   - component: {fileID: 114350361259618600}
   m_Layer: 0
-  m_Name: NodeHitTester
+  m_Name: NodeSelectionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeepPickingEnabled: 0
+  _selectionMarker: {fileID: 0}
   _hoverLabel: {fileID: 114657717022001420}
   _highlightContextRenderer: {fileID: 23832558667708668}
   _highlightHoverRenderer: {fileID: 23430075444149644}

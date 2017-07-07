@@ -84,8 +84,8 @@ namespace ff.vr.interaction
 
             _pressedMenuButtonController = controller;
 
-            var distanceToCurrentPos = Vector3.Distance(PositionFromController, transform.position);
-            var toggle = (distanceToCurrentPos < CLOSE_MENU_THRESHOLD_DISTANCE);
+            //var distanceToCurrentPos = Vector3.Distance(PositionFromController, transform.position);
+            //var toggle = (distanceToCurrentPos < CLOSE_MENU_THRESHOLD_DISTANCE);
             switch (_state)
             {
                 case States.Undefined:

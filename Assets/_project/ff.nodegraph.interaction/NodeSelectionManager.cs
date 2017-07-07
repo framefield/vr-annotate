@@ -10,13 +10,15 @@ using ff.vr.annotate;
 
 namespace ff.nodegraph.interaction
 {
-    /* A singleton that handles hit-detection with a node-structure.
-     */
-    public class NodeHitTester : MonoBehaviour, IClickableLaserPointerTarget, IHitTester
+    /** A singleton that handles hit-detection within a node-structure.  */
+    public class NodeSelectionManager : MonoBehaviour, IClickableLaserPointerTarget, IHitTester
     {
-        private Node ContextNode = null;
+        private Node SelectedNode = null;
+        //private List<Node> SelectedNodes = new List<Node>();
         private Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
+
+        public NodeSelectionMarker _selectionMarker;
 
         [HideInInspector]
         [NonSerializedAttribute]
@@ -29,8 +31,16 @@ namespace ff.nodegraph.interaction
         [SerializeField] Renderer _highlightContextRenderer;
         [SerializeField] Renderer _highlightHoverRenderer;
 
+        static NodeSelectionManager _instance = null;
+
         void Start()
         {
+            if (_instance != null)
+            {
+                throw new UnityException("NodeSelectionManager can only be added once");
+            }
+            _instance = this;
+
             _annotatableGroups = FindObjectsOfType<NodeGraph>();
             //_meshFilter = GetComponent<MeshFilter>();
             //_meshRenderer = GetComponent<MeshRenderer>();
@@ -42,9 +52,8 @@ namespace ff.nodegraph.interaction
 
         This method is called from LaserPointer on Update() additional to
         a normal Physics.RayCast. If both return hitResults the one with the
-        smaller distance will be used. In this case NodeHitTest is called
-        with IInteractiveGizmo.PointerEnter(). We then can use the _lastNodeHitByRay
-        to update the visualization respectively.
+        smaller distance will be used. If this wins, NodeHitTester.PointerEnter(). 
+        We then can use the _lastNodeHitByRay to update the visualization respectively.
         */
         public Node FindAndRememberHit(Ray ray)
         {
@@ -75,7 +84,7 @@ namespace ff.nodegraph.interaction
                 _renderedNode = _lastNodeHitByRay;
 
             }
-            LastHoverPoint = pointer.LastHitPoint;
+            _lastHoverPosition = pointer.LastHitPoint;
             _hoverLabel.transform.position = pointer.LastHitPoint;
             _hoverLabel.transform.LookAt(_hoverLabel.transform.position - Camera.main.transform.position + _hoverLabel.transform.position);
         }
@@ -93,10 +102,18 @@ namespace ff.nodegraph.interaction
             _hoverLabel.gameObject.SetActive(false);
         }
 
+
         public void PointerTriggered(LaserPointer pointer)
         {
-            _annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
+            if (HoveredNode != null)
+            {
+                //_annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
+                Debug.Log("Clicked!!!");
+                SetSelection(_lastNodeHitByRay);
+                _selectionMarker.SetPosition(_lastHoverPosition);
+            }
         }
+
 
         public void PointerUntriggered(LaserPointer pointer)
         {
@@ -112,25 +129,32 @@ namespace ff.nodegraph.interaction
             switch (buttonPressed)
             {
                 case TrackpadButtonUI.ControllerButtons.Down:
-                    SetContextNode(HoveredNode);
+                    SetSelection(HoveredNode);
                     break;
 
                 case TrackpadButtonUI.ControllerButtons.Up:
-                    if (this.ContextNode != null)
-                    {
-                        SetContextNode(ContextNode.Parent);
-                    }
+                    SelectParent();
                     break;
             }
         }
+
+
+        public void SelectParent()
+        {
+            if (this.SelectedNode != null)
+            {
+                SetSelection(SelectedNode.Parent);
+            }
+        }
+
 
         private Node FindHit(Ray ray)
         {
             var hits = new List<Node>();
 
-            if (ContextNode != null)
+            if (SelectedNode != null)
             {
-                ContextNode.CollectChildrenIntersectingRay(ray, hits);
+                SelectedNode.CollectChildrenIntersectingRay(ray, hits);
             }
             else
             {
@@ -156,13 +180,14 @@ namespace ff.nodegraph.interaction
 
             // Walk up to find child of context
             var n = closestHitNode;
-            while (n.Parent != ContextNode && n.Parent != null)
+            while (n.Parent != SelectedNode && n.Parent != null)
             {
                 n = n.Parent;
             }
             n.HitDistance = closestHitNode.HitDistance;
             return n;
         }
+
 
 
         private Node FindClosestHit(List<Node> hits)
@@ -186,7 +211,6 @@ namespace ff.nodegraph.interaction
             {
                 _hoverLabel.gameObject.SetActive(false);
                 _highlightHoverRenderer.enabled = false;
-                //_meshRenderer.enabled = false;
             }
             else
             {
@@ -198,38 +222,45 @@ namespace ff.nodegraph.interaction
         }
 
 
-        private void SetContextNode(Node newContextNode)
+        public void SetSelection(Node newSelectedNode)
         {
-            if (newContextNode == ContextNode)
+            if (newSelectedNode == SelectedNode)
                 return;
 
-            ContextNode = newContextNode;
+            SelectedNode = newSelectedNode;
 
-            if (ContextNode == null)
+            if (SelectedNode == null)
             {
                 _highlightContextRenderer.enabled = false;
             }
             else
             {
-                _hoverLabel.text = HoveredNode.Name;
-                var bounds = ContextNode.CollectGeometryBounds().ToArray();
+                //_hoverLabel.text = HoveredNode.Name;
+                var bounds = SelectedNode.CollectGeometryBounds().ToArray();
                 _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
                 _highlightContextRenderer.enabled = true;
             }
+
+            if (_selectionMarker)
+            {
+                //_selectionMarker.transform.position = _lastHoverPosition;
+                _selectionMarker.SetCurrent(newSelectedNode);
+            }
         }
 
+        public void SelectNode(Node newSelection, Vector3 markerPosition)
+        {
+            _selectionMarker.SetCurrent(newSelection);
+        }
 
-
-        private Vector3 LastHoverPoint;
+        private Vector3 _lastHoverPosition;
 
         private TrackpadButtonUI _trackpadButtonUI;
         private Node _lastNodeHitByRay;
         private Node _renderedNode;
-        //private MeshFilter _meshFilter;
-        //private MeshRenderer _meshRenderer;
         private SteamVR_TrackedController _controller;
         private string _lastResult;
-        private NodeHitTester _nodeHitTester;
+        private NodeSelectionManager _nodeHitTester;
         private NodeGraph[] _annotatableGroups;
         private AnnotationManager _annotationManager;
     }

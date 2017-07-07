@@ -67,7 +67,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public bool IsLockedAtTarget;
 
-        private NodeHitTester _hitTester;
+        private NodeSelectionManager _hitTester;
 
         void Start()
         {
@@ -78,7 +78,7 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
-            _hitTester = FindObjectOfType<NodeHitTester>();
+            _hitTester = FindObjectOfType<NodeSelectionManager>();
             if (_hitTester == null)
             {
                 Debug.LogError("NodeHitTester not found in scene");
@@ -117,7 +117,7 @@ namespace ff.vr.interaction
             var hasNodeHit = (nodeHit != null);
 
             // Physics ray wins
-            if (hasPhysicsHit && (!hasNodeHit || nodeHit.HitDistance > physicsHit.distance))
+            if (hasPhysicsHit && (!hasNodeHit || nodeHit.HitDistance > physicsHit.distance - 0.5f))
             {
                 LastHitPoint = physicsHit.point;
                 LastHitDistance = physicsHit.distance;
