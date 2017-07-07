@@ -80,7 +80,7 @@ namespace ff.nodegraph
             return node;
         }
 
-        public void CollectChildrenIntersectingRay(Ray ray, List<Node> hits)
+        public void CollectLeafesIntersectingRay(Ray ray, List<Node> hits)
         {
 
             if (!this.Bounds.IntersectRay(ray, out HitDistance))
@@ -103,7 +103,7 @@ namespace ff.nodegraph
 
             foreach (var child in Children)
             {
-                child.CollectChildrenIntersectingRay(ray, hits);
+                child.CollectLeafesIntersectingRay(ray, hits);
             }
         }
 

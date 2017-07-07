@@ -13,38 +13,72 @@ namespace ff.nodegraph.interaction
         [SerializeField] TMPro.TextMeshPro _selectionLabel;
         [SerializeField] TMPro.TextMeshPro _parentLabel;
         [SerializeField] LaserPointerButton _exitButton;
+        [SerializeField] Transform _markerQuad;
 
         void Awake()
         {
             _nodeSelectionManager = FindObjectOfType<NodeSelectionManager>();
         }
 
+
         void Update()
         {
-            _dampedSize = Mathf.Lerp(_targetSize, _dampedSize, 0.9f);
-            this.transform.position = Vector3.Lerp(_targetPosition, transform.position, 0.7f);
+            // Blend Parent/Selection labels for in/out transitions
+            _dampedParentLabelPositionY = Mathf.Lerp(_dampedParentLabelPositionY, PARENT_LABEL_POS_Y, 0.1f);
+            _dampedParentLabelSize = Mathf.Lerp(_dampedParentLabelSize, PARENT_LABEL_SIZE, 0.1f);
+            _dampedSelectionLabelPositionY = Mathf.Lerp(_dampedSelectionLabelPositionY, SELECTION_LABEL_POS_Y, 0.1f);
+            _dampedSelectionLabelSize = Mathf.Lerp(_dampedSelectionLabelSize, SELECTION_LABEL_SIZE, 0.1f);
 
+            _parentLabel.transform.localPosition = new Vector3(0, _dampedParentLabelPositionY, 0);
+            _parentLabel.transform.localScale = Vector3.one * _dampedParentLabelSize;
+            _selectionLabel.transform.localPosition = new Vector3(0, _dampedSelectionLabelPositionY, 0);
+            _selectionLabel.transform.localScale = Vector3.one * _dampedSelectionLabelSize;
+
+            _dampedMarkerSize = Mathf.Lerp(_dampedMarkerSize, DEFAULT_MARKER_SIZE, 0.1f);
+            _markerQuad.transform.localScale = Vector3.one * _dampedMarkerSize;
+            _markerQuad.transform.Rotate(Vector3.forward, 1f);
+
+            // Scale and orient for camera
+            transform.position = Vector3.Lerp(transform.position, _targetPosition, 0.3f);
             var distance = Vector3.Distance(transform.position, Camera.main.transform.position);
-            var scaleByDistance = Mathf.Sqrt(distance / 2) * _dampedSize * 0.1f;
+            var scaleByDistance = Mathf.Sqrt(distance / 2) * DEFAULT_SIZE;
             transform.localScale = Vector3.one * scaleByDistance;
 
-            // Face camera;
             var d = transform.position - (Camera.main.transform.position - transform.position);
             this.transform.LookAt(d);
         }
-
-        float _dampedSize = 0;
 
 
         /** Called from SelectionManager */
         public void SetCurrent(Node newNode)
         {
-            var hasParent = newNode != null && newNode.Parent != null;
+            if (newNode == _currentNode.Parent)
+            {
+                _dampedParentLabelPositionY = 2 * PARENT_LABEL_POS_Y;
+                _dampedParentLabelSize = 0;
+
+                _dampedSelectionLabelPositionY = PARENT_LABEL_POS_Y;
+                _dampedSelectionLabelSize = PARENT_LABEL_SIZE;
+            }
+            else if (_currentNode != null && _currentNode.Children != null)
+            {
+                foreach (var child in _currentNode.Children)
+                {
+                    if (newNode == child)
+                    {
+                        _dampedParentLabelPositionY = SELECTION_LABEL_POS_Y;
+                        _dampedParentLabelSize = SELECTION_LABEL_SIZE;
+
+                        _dampedSelectionLabelPositionY = -PARENT_LABEL_POS_Y;
+                        _dampedSelectionLabelSize = 0;
+                        break;
+                    }
+                }
+            }
 
             var isValid = newNode != null;
+            var hasParent = newNode != null && newNode.Parent != null;
 
-
-            _targetSize = isValid ? 0.4f : 0.01f;
             transform.localScale = Vector3.zero;
 
             _selectionLabel.text = isValid ? newNode.Name : "";
@@ -58,11 +92,8 @@ namespace ff.nodegraph.interaction
 
         public void SetPosition(Vector3 newPosition)
         {
-
-
-
             _targetPosition = newPosition;
-            _targetSize = 2;
+            _dampedMarkerSize = 2;
         }
 
 
@@ -76,6 +107,23 @@ namespace ff.nodegraph.interaction
         }
 
         private Vector3 _targetPosition;
-        private float _targetSize;
+
+        float _dampedMarkerSize = 0;
+
+        const float SELECTION_LABEL_POS_Y = 0f;
+        const float SELECTION_LABEL_SIZE = 1f;
+
+        const float PARENT_LABEL_POS_Y = 1f;
+        const float PARENT_LABEL_SIZE = 0.5f;
+
+        float _dampedParentLabelPositionY = PARENT_LABEL_POS_Y;
+        float _dampedParentLabelSize = PARENT_LABEL_SIZE;
+
+        float _dampedSelectionLabelPositionY = SELECTION_LABEL_POS_Y;
+        float _dampedSelectionLabelSize = SELECTION_LABEL_SIZE;
+
+        const float DEFAULT_SIZE = 0.3f;
+        const float DEFAULT_MARKER_SIZE = 1;
+
     }
 }

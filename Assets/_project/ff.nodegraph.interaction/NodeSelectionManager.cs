@@ -109,7 +109,7 @@ namespace ff.nodegraph.interaction
             {
                 //_annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
                 Debug.Log("Clicked!!!");
-                SetSelection(_lastNodeHitByRay);
+                SetSelection(HoveredNode);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
@@ -147,20 +147,19 @@ namespace ff.nodegraph.interaction
             }
         }
 
-
+        #region Hit Detection
         private Node FindHit(Ray ray)
         {
             var hits = new List<Node>();
-
             if (SelectedNode != null)
             {
-                SelectedNode.CollectChildrenIntersectingRay(ray, hits);
+                SelectedNode.CollectLeafesIntersectingRay(ray, hits);
             }
             else
             {
                 foreach (var ag in _annotatableGroups)
                 {
-                    ag.Node.CollectChildrenIntersectingRay(ray, hits);
+                    ag.Node.CollectLeafesIntersectingRay(ray, hits);
                 }
             }
             if (hits.Count == 0)
@@ -178,6 +177,11 @@ namespace ff.nodegraph.interaction
                 return closestHitNode;
             }
 
+            if (closestHitNode == SelectedNode)
+            {
+                return null;
+            }
+
             // Walk up to find child of context
             var n = closestHitNode;
             while (n.Parent != SelectedNode && n.Parent != null)
@@ -185,9 +189,13 @@ namespace ff.nodegraph.interaction
                 n = n.Parent;
             }
             n.HitDistance = closestHitNode.HitDistance;
+
+            if (n == SelectedNode)
+            {
+                Debug.Log("self selection!");
+            }
             return n;
         }
-
 
 
         private Node FindClosestHit(List<Node> hits)
@@ -203,6 +211,7 @@ namespace ff.nodegraph.interaction
             }
             return null;
         }
+        #endregion
 
 
         private void UpdateHoverHighlight()
@@ -222,7 +231,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        public void SetSelection(Node newSelectedNode)
+        private void SetSelection(Node newSelectedNode)
         {
             if (newSelectedNode == SelectedNode)
                 return;
@@ -248,10 +257,10 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        public void SelectNode(Node newSelection, Vector3 markerPosition)
-        {
-            _selectionMarker.SetCurrent(newSelection);
-        }
+        // public void SelectNode(Node newSelection, Vector3 markerPosition)
+        // {
+        //     _selectionMarker.SetCurrent(newSelection);
+        // }
 
         private Vector3 _lastHoverPosition;
 

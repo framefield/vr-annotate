@@ -126,8 +126,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4699824779062824}
-  - {fileID: 224294037838703888}
   - {fileID: 224437813710272076}
+  - {fileID: 224294037838703888}
   - {fileID: 4231771013676896}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -309,7 +309,7 @@ MeshCollider:
   m_GameObject: {fileID: 1973806290824382}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Convex: 0
   m_InflateMesh: 0
@@ -375,8 +375,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 4.29
-  m_fontSizeBase: 4.29
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -468,6 +468,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  HighlightColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &114766742625459346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -492,6 +493,7 @@ MonoBehaviour:
   _selectionLabel: {fileID: 114992232210495910}
   _parentLabel: {fileID: 114715788283695396}
   _exitButton: {fileID: 114747702228664118}
+  _markerQuad: {fileID: 4699824779062824}
 --- !u!114 &114992232210495910
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -511,7 +513,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Object Title
+  m_text: "S\xE4ulen_3"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
@@ -538,8 +540,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 6.19
-  m_fontSizeBase: 6.19
+  m_fontSize: 6
+  m_fontSizeBase: 6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -578,9 +580,9 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 114992232210495910}
-    characterCount: 12
+    characterCount: 8
     spriteCount: 0
-    spaceCount: 1
+    spaceCount: 0
     wordCount: 2
     linkCount: 0
     lineCount: 1
@@ -627,7 +629,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4288288712279694}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -642,10 +644,10 @@ RectTransform:
   m_GameObject: {fileID: 1668283371307984}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6600001, y: 0.6600001, z: 0.6600001}
   m_Children: []
   m_Father: {fileID: 4288288712279694}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
