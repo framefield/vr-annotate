@@ -114,6 +114,14 @@ namespace ff.nodegraph.interaction
             }
         }
 
+        public void CreateAnnotation()
+        {
+            if (SelectedNode != null)
+            {
+                _annotationManager.CreateAnnotation(SelectedNode, _lastHoverPosition);
+            }
+        }
+
 
         public void PointerUntriggered(LaserPointer pointer)
         {

@@ -86,7 +86,9 @@ public class Key : MonoBehaviour
                 {
                     keycodeAdder.SimulateKeyPress();
                 }
-                keySoundController.StartKeySound(this.gameObject.transform);
+                if (keySoundController != null)
+                    keySoundController.StartKeySound(this.gameObject.transform);
+
                 checkForButton = false;
             }
         }
