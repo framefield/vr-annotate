@@ -6,39 +6,58 @@ namespace ff.vr.annotate
 {
     public class AnnotationGizmo : MonoBehaviour
     {
-        public Annotation Annotation;
 
-        [Header("--- internal prefab references-----")]
-        public TMPro.TextMeshPro LabelText;
-
-        public AnimationCurve ScaleUpOverTime;
+        [Header("--- internal prefab references-----------")]
+        [SerializeField]
+        TMPro.TextMeshPro _annotationObjectLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _annotationBodyLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _authorLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _annotationDateLabel;
 
         void Update()
         {
-            if (_lastAnnotation != Annotation)
-            {
-                if (Annotation == null)
-                {
-                    LabelText.text = "";
-                }
-                else if (Annotation.ContextNode != null)
-                {
-                    _startTime = Time.time;
-                    LabelText.text = Annotation.ContextNode.Name;
-                }
-                _lastAnnotation = Annotation;
-            }
-
-            var s = ScaleUpOverTime.Evaluate(Time.time - _startTime);
-            this.transform.localScale = new Vector3(s, s, s);
-
-            // Face towards camera
-            LabelText.transform.LookAt(LabelText.transform.position - Camera.main.transform.position + LabelText.transform.position);
+            utils.Helpers.FaceCameraAndKeepSize(this.transform, DEFAULT_SIZE);
         }
 
-        private Annotation _lastAnnotation;
+        /** Called from annotation manager */
+        public void SetAnnotation(Annotation newAnnotation)
+        {
+            _annotation = newAnnotation;
+            UpdateVisibility();
+        }
+
+        private void UpdateVisibility()
+        {
+            _annotationObjectLabel.text = _annotation.TargetNode != null ? _annotation.TargetNode.Name : "<Without Object>"; // FIXME: Needs to be implemented
+            _annotationBodyLabel.text = _annotation.Text;
+            _authorLabel.text = _annotation.Author.name;
+            _annotationDateLabel.text = _annotation.CreatedAt.ToString("yyyy/MM/dd");
+        }
+
+        public void UpdateBodyText(string newText)
+        {
+            _annotationBodyLabel.text = newText;
+        }
+
+
+        public void OnHover()
+        {
+            _isHovered = true;
+            UpdateVisibility();
+        }
+
+        public void OnUnhover()
+        {
+            _isHovered = false;
+            UpdateVisibility();
+        }
+
+        private bool _isHovered = false;
         private float _startTime;
+        private Annotation _annotation;
+        private const float DEFAULT_SIZE = 0.3f;
     }
-
-
 }

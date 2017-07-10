@@ -7,6 +7,7 @@ using ff.vr.annotate.viz;
 using UnityEngine;
 using ff.utils;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace ff.vr.annotate
 {
@@ -16,7 +17,7 @@ namespace ff.vr.annotate
         public Annotation() { }
         public Annotation(string jsonString)
         {
-            InitFromJson(jsonString);
+            DeserializeFromJson(jsonString);
         }
 
         const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
@@ -24,17 +25,17 @@ namespace ff.vr.annotate
         public Guid GUID;
         public string ID
         {
-            // Return short version as base64 string
-            // see https://stackoverflow.com/a/9279005
             get { return GUID.ToString(); }
         }
         public string JsonLdId { get { return ANNOTATION_ID_PREFIX + ID; } }
         public Vector3 Position;
-        public System.Guid ContextNodeId;
         public string Text;
 
         [System.NonSerializedAttribute]
-        public Node ContextNode;
+        public Node TargetNode;
+        public System.Guid TargetNodeId;
+        public string TargetNodeName;
+        public string RootNodeId;
 
         public Person Author;
         public GeoCoordinate ViewPointPosition;
@@ -48,38 +49,63 @@ namespace ff.vr.annotate
                 {"authorJSON", JsonUtility.ToJson(Author)},
                 {"createdTimestamp", CreatedAt.ToString()},
                 {"annotationText", Text},
-                {"annotationTargetId", ContextNodeId.ToString()},
+                {"rootNodeId", TargetNode.NodeGraphRoot.RootNodeId},
+                {"targetNodeId", TargetNodeId.ToString()},
+                {"targetNodeName", TargetNode.Name},
                 {"simulatedTime", AnnotationManager._instance.SimulatedTimeOfDay},
                 {"simulatedTimeofDay", AnnotationManager._instance.SimulatedTimeOfDay},
                 {"interpretationStateJSON", "{}"},
-                {"sceneGraphPath", "to be implemented"},
+                {"sceneGraphPath", TargetNode.NodePath},
                 {"viewPointPositionJSON", JsonUtility.ToJson(ViewPointPosition)},
                 {"annotationPositionJSON", JsonUtility.ToJson(AnnotationPosition)},
             });
         }
 
-        public void InitFromJson(string jsonString)
+        public void DeserializeFromJson(string jsonString)
         {
             JSONObject j = new JSONObject(jsonString);
-            var result = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["id"].ToString());
-            if (result.Success)
+
+            var uidMatchResult = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["id"].ToString());
+            if (uidMatchResult.Success)
             {
-                GUID = new Guid(result.Groups[1].Value);
+                GUID = new Guid(uidMatchResult.Groups[1].Value);
             }
-            var dateTimeString = j["created"].ToString();
-            Debug.Log("DateTimeString:" + dateTimeString);
-            //CreatedAt = DateTime.Parse(dateTimeString);
-            Text = j["body"][0]["value"].ToString();
-            Debug.Log("Text:" + Text);
+
+            DateTime.TryParse(j["created"].str, out CreatedAt);
+            Text = j["body"][0]["value"].str;
+
+            // Initialize Target Object
+            RootNodeId = j["target"]["rootNodeId"].str;
 
             ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
             AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
             Position = AnnotationPosition.position;
+
+            // Initialize Author
+            var authorId = j["creator"]["id"].str;
+            if (Person.PeopleById.ContainsKey(authorId))
+            {
+                Author = Person.PeopleById[authorId];
+            }
+            else
+            {
+                Author = new Person()
+                {
+                    id = authorId,
+                    name = j["creator"]["name"].str,
+                    email = j["creator"]["email"].str,
+                };
+                Person.PeopleById[authorId] = Author;
+            }
         }
+
+
+        private const string DateTimeFormat = "yyyy-MM-dd hh:mm:ss";
+
         private string JSONTemplate = @"
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
-    'id': 'http://annotator/anno/{annotationGUID}',
+    'id': '{annotationGUID}',
     'type': 'Annotation',
     'creator': {authorJSON},
     'created': '{createdTimestamp}',
@@ -97,7 +123,9 @@ namespace ff.vr.annotate
     ],
     'target': {
         'type': 'http://vr-annotator/feature/',
-        'target': '{annotationTargetId}',
+        'rootNodeId': '{rootNodeId}',
+        'targetNodeId': '{targetNodeId}',
+        'targetNodeName': '{targetNodeName}',
         'state': [
             {
                 'type': 'VRSimulation',

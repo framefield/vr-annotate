@@ -72,10 +72,11 @@ namespace ff.vr.annotate.viz
             File.WriteAllText(AnnotationDirectory + _currentAnnotation.GUID + ".json", _currentAnnotation.ToJson());
         }
 
+
         private void HandleInputChanged(string newText)
         {
             if (_focusedAnnotationGizmo)
-                _focusedAnnotationGizmo.LabelText.text = newText;
+                _focusedAnnotationGizmo.UpdateBodyText(newText);
         }
 
 
@@ -84,8 +85,8 @@ namespace ff.vr.annotate.viz
             var newAnnotation = new Annotation()
             {
                 Position = position,
-                ContextNodeId = contextNode.Id,
-                ContextNode = contextNode,
+                TargetNodeId = contextNode.Id,
+                TargetNode = contextNode,
                 GUID = System.Guid.NewGuid(),
                 ViewPointPosition = new GeoCoordinate()
                 {
@@ -93,6 +94,10 @@ namespace ff.vr.annotate.viz
                     rotation = Camera.main.transform.eulerAngles,
                 },
                 AnnotationPosition = new GeoCoordinate() { position = position },
+                Author = CurrentUserDefinition._instance != null
+                        ? CurrentUserDefinition._instance.CurrentUser
+                        : Person.AnonymousUser,
+                CreatedAt = DateTime.Now,
             };
 
             AllAnnotations.Add(newAnnotation);
@@ -101,14 +106,15 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.Show();
         }
 
+
         private AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
         {
-            var newGizmo = Instantiate(_annotationGizmoPrefab);
-            newGizmo.transform.position = annotation.Position;
-            newGizmo.transform.SetParent(_gizmoContainer.transform, false);
-            newGizmo.Annotation = annotation;
-            AllAnnotationGizmos.Add(newGizmo);
-            return newGizmo;
+            var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
+            newAnnotationGizmo.transform.position = annotation.Position;
+            newAnnotationGizmo.transform.SetParent(_gizmoContainer.transform, false);
+            newAnnotationGizmo.SetAnnotation(annotation);
+            AllAnnotationGizmos.Add(newAnnotationGizmo);
+            return newAnnotationGizmo;
         }
 
 

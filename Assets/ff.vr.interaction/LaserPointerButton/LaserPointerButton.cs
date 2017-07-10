@@ -9,7 +9,10 @@ namespace ff.vr.interaction
     public class LaserPointerButton : MonoBehaviour, IClickableLaserPointerTarget
     {
         public UnityEvent OnClick;
-        [SerializeField] Color HighlightColor;
+        public UnityEvent OnHover;
+        public UnityEvent OnUnhover;
+
+        [SerializeField] Color HighlightColor = Color.blue;
 
         private Color _defaultColor;
         private Renderer _renderer;
@@ -32,18 +35,19 @@ namespace ff.vr.interaction
         {
             hitByLaser = true;
             _renderer.material.SetColor("_tintColor", HighlightColor);
+            OnHover.Invoke();
         }
 
         public void PointerExit(LaserPointer pointer)
         {
             hitByLaser = false;
             _renderer.material.SetColor("_tintColor", _defaultColor);
+            OnUnhover.Invoke();
         }
 
         public void PointerTriggered(LaserPointer pointer)
         {
 
-            //throw new NotImplementedException();
         }
 
         public void PointerUntriggered(LaserPointer pointer)
@@ -57,7 +61,7 @@ namespace ff.vr.interaction
 
         public void PointerUpdate(LaserPointer pointer)
         {
-            //throw new NotImplementedException();
+
         }
         #endregion Clickable
     }

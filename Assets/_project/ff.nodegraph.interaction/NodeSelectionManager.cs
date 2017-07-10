@@ -107,8 +107,6 @@ namespace ff.nodegraph.interaction
         {
             if (HoveredNode != null)
             {
-                //_annotationManager.CreateAnnotation(HoveredNode, LastHoverPoint);
-                Debug.Log("Clicked!!!");
                 SetSelection(HoveredNode);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }

@@ -40,12 +40,8 @@ namespace ff.nodegraph.interaction
 
             // Scale and orient for camera
             transform.position = Vector3.Lerp(transform.position, _targetPosition, 0.3f);
-            var distance = Vector3.Distance(transform.position, Camera.main.transform.position);
-            var scaleByDistance = Mathf.Sqrt(distance / 2) * DEFAULT_SIZE;
-            transform.localScale = Vector3.one * scaleByDistance;
 
-            var d = transform.position - (Camera.main.transform.position - transform.position);
-            this.transform.LookAt(d);
+            utils.Helpers.FaceCameraAndKeepSize(this.transform, DEFAULT_SIZE);
         }
 
 

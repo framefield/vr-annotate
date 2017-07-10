@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 namespace ff.nodegraph
@@ -35,6 +36,49 @@ namespace ff.nodegraph
             }
         }
 
+        public Node RootNode
+        {
+            get
+            {
+                var root = this;
+                while (root.Parent != null)
+                {
+                    root = root.Parent;
+                }
+                return root;
+            }
+        }
+
+        public NodeGraph NodeGraphRoot
+        {
+            get
+            {
+                if (RootNode == null || RootNode.UnityObj == null)
+                    return null;
+
+                return RootNode.UnityObj.GetComponent<NodeGraph>();
+            }
+        }
+
+        public string NodePath
+        {
+            get
+            {
+                var sb = new StringBuilder();
+
+                var n = this;
+                sb.Append(n.Name);
+                while (n.Parent != null)
+                {
+                    n = n.Parent;
+                    sb.Insert(0, "/");
+                    sb.Insert(0, n.Name);
+                }
+
+                return sb.ToString();
+            }
+        }
+
         // FIXME: this should be the contructor
         public static Node FindChildNodes(GameObject unityObj)
         {
@@ -43,6 +87,7 @@ namespace ff.nodegraph
                 Name = unityObj.name,
                 Children = new Node[unityObj.transform.childCount],
                 Id = new System.Guid(),
+                UnityObj = unityObj,
             };
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
