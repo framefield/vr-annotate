@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/0273d87b-e2e2-4a10-8d29-6053d75fa7d3",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/10/2017 6:50:57 PM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "annotation"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "https://www.wikidata.org/wiki/Q1670679",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "Stoa_komplett_low",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "18:23:12",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "Stoa_komplett_low"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":-8.108373641967774,"y":1.2579233646392823,"z":11.952942848205567},"rotation":{"x":15.442898750305176,"y":188.27655029296876,"z":0.250571072101593},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97610474874635,"longitude":23.72245325926617,"elevation":1.2579233646392823},
+            "AnnotationCoordinates" : {"position":{"x":-7.904637813568115,"y":-0.03444051742553711,"z":8.446428298950196},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.976128091634759,"longitude":23.722426267673624,"elevation":-0.03444051742553711}
+        }
+    }
+}

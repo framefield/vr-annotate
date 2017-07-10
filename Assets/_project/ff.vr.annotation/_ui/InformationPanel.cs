@@ -21,8 +21,8 @@ namespace ff.vr.interaction
 
             foreach (SteamVR_TrackedController controller in Resources.FindObjectsOfTypeAll(typeof(SteamVR_TrackedController)))
             {
-                controller.MenuButtonClicked += TriggerClickedHandler;
-                controller.MenuButtonUnclicked += TriggerUnclickedHandler;
+                controller.MenuButtonClicked += MenuButtonClickedHandler;
+                controller.MenuButtonUnclicked += MenuButtonUnclickedHandler;
             }
         }
 
@@ -31,6 +31,8 @@ namespace ff.vr.interaction
         {
             _selectedItem = item;
             item.OnSelected();
+            MoveIntoView();
+
             SetState(States.MovingIntoView);
         }
 
@@ -94,7 +96,7 @@ namespace ff.vr.interaction
         }
 
 
-        private void TriggerClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
+        private void MenuButtonClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
             var controller = sender as SteamVR_TrackedController;
             if (controller == null)
@@ -122,7 +124,7 @@ namespace ff.vr.interaction
 
         private const float CLOSE_MENU_THRESHOLD_DISTANCE = 0.3f;
 
-        private void TriggerUnclickedHandler(object sender, ClickedEventArgs clickedEventArgs)
+        private void MenuButtonUnclickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
             var controller = sender as SteamVR_TrackedController;
             if (controller == null)
@@ -205,6 +207,19 @@ namespace ff.vr.interaction
         }
 
 
+        private void MoveIntoView()
+        {
+            _lastValidPosition = Camera.main.transform.position + Camera.main.transform.forward + Camera.main.transform.right * 0.7f;
+            var ea = Camera.main.transform.eulerAngles;
+            ea.z = 0;
+            ea.y += 30;
+            //ea.x += 10;
+            var rot = Quaternion.Euler(ea);
+            _lastValidRotation = rot;
+
+        }
+
+
         private Vector3 PositionFromController
         {
             get
@@ -258,7 +273,7 @@ namespace ff.vr.interaction
 
         private ISelectable _selectedItem;
 
-        private const float TRANSITION_DURATION = 0.15f;
+        private const float TRANSITION_DURATION = 0.35f;
         private float _interactionStartTime = 0;
 
         public static InformationPanel _instance;

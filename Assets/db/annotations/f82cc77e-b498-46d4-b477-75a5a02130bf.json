@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/f82cc77e-b498-46d4-b477-75a5a02130bf",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/10/2017 6:42:31 PM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "annotationfdcx"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "https://www.wikidata.org/wiki/Q1670679",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "Zierleiste_Aussen",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "18:23:12",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "Stoa_komplett_low/Zierleiste_Aussen"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":-2.492250442504883,"y":1.131359338760376,"z":0.7253076434135437},"rotation":{"x":333.63262939453127,"y":242.51492309570313,"z":348.93231201171877},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97615126139495,"longitude":23.72232301710491,"elevation":1.131359338760376},
+            "AnnotationCoordinates" : {"position":{"x":-42.65896224975586,"y":74.41243743896485,"z":-51.41015625},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97674398932887,"longitude":23.722303005899766,"elevation":74.41243743896485}
+        }
+    }
+}
