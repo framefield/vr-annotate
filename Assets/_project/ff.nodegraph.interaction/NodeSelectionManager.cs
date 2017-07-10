@@ -61,6 +61,8 @@ namespace ff.nodegraph.interaction
                     if (node.Name == nodeNames[0])
                     {
                         nodeNames.RemoveAt(0);
+                        if (nodeNames.Count == 0)
+                            return node;
                     }
 
                     var stillSearching = true;
@@ -69,16 +71,16 @@ namespace ff.nodegraph.interaction
                         stillSearching = false;
                         foreach (var child in node.Children)
                         {
-                            if (child.Name != nodeNames[0])
-                                continue;
+                            if (child.Name == nodeNames[0])
+                            {
+                                nodeNames.RemoveAt(0);
+                                if (nodeNames.Count == 0)
+                                    return child;
 
-                            nodeNames.RemoveAt(0);
-                            if (nodeNames.Count == 0)
-                                return child;
-
-                            node = child;
-                            stillSearching = true;
-                            break;
+                                node = child;
+                                stillSearching = true;
+                                break;
+                            }
                         }
                     }
                 }

@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace ff.vr.interaction
 {
     public class InformationPanel : MonoBehaviour
     {
+        [Header("--- internal prefab references -----")]
+        [SerializeField]
+        LineRenderer _connectionLine;
+
         void Start()
         {
+            if (_instance != null)
+            {
+                throw new UnityException("" + this + " can only be added once");
+            }
+            _instance = this;
+
             foreach (SteamVR_TrackedController controller in Resources.FindObjectsOfTypeAll(typeof(SteamVR_TrackedController)))
             {
                 controller.MenuButtonClicked += TriggerClickedHandler;
@@ -15,9 +26,23 @@ namespace ff.vr.interaction
             }
         }
 
+
+        public void SetSelection(ISelectable item)
+        {
+            _selectedItem = item;
+            item.OnSelected();
+            SetState(States.MovingIntoView);
+        }
+
+
         void Update()
         {
             var transitionComplete = TransitionProgress == 1;
+            if (_selectedItem != null)
+            {
+                _connectionLine.SetPosition(0, _connectionLine.transform.TransformPoint(Vector3.zero));
+                _connectionLine.SetPosition(1, _selectedItem.GetPosition());
+            }
 
             switch (_state)
             {
@@ -69,7 +94,6 @@ namespace ff.vr.interaction
         }
 
 
-
         private void TriggerClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
             var controller = sender as SteamVR_TrackedController;
@@ -93,7 +117,6 @@ namespace ff.vr.interaction
                 case States.Closed:
                     SetState(States.Opening);
                     break;
-
             }
         }
 
@@ -155,6 +178,7 @@ namespace ff.vr.interaction
                     break;
 
                 case States.Closed:
+                    _connectionLine.gameObject.SetActive(false);
                     break;
 
                 case States.Opening:
@@ -162,6 +186,7 @@ namespace ff.vr.interaction
                     break;
 
                 case States.Open:
+                    _connectionLine.gameObject.SetActive(true);
                     break;
 
                 case States.MovingIntoView:
@@ -231,7 +256,11 @@ namespace ff.vr.interaction
 
         SteamVR_TrackedController _pressedMenuButtonController;
 
+        private ISelectable _selectedItem;
+
         private const float TRANSITION_DURATION = 0.15f;
         private float _interactionStartTime = 0;
+
+        public static InformationPanel _instance;
     }
 }

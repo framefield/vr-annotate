@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 23598172056981904}
   - component: {fileID: 114562836399293544}
   m_Layer: 0
-  m_Name: Quad - Button
+  m_Name: AnnotationIcon - Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1228771406140438
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -67,7 +67,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1383913056050192
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -86,7 +86,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1635612102002134
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -105,7 +105,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1706072860033026
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -115,7 +115,22 @@ GameObject:
   - component: {fileID: 64073252112431568}
   - component: {fileID: 23934071757152074}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Background-top - Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1801136722934438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4710290621884406}
+  m_Layer: 0
+  m_Name: '[Hover]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +138,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1945625839901826
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -142,7 +157,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1978309521803642
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -152,7 +167,7 @@ GameObject:
   - component: {fileID: 64476005268672048}
   - component: {fileID: 23941818162616364}
   m_Layer: 0
-  m_Name: Quad (1)
+  m_Name: Background-bottom - Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,13 +183,8 @@ Transform:
   m_LocalPosition: {x: 20, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4421681360354256}
-  - {fileID: 4907742607840568}
-  - {fileID: 224506632123913598}
-  - {fileID: 224050342656767246}
-  - {fileID: 224236650341290440}
-  - {fileID: 224106609699675958}
   - {fileID: 4859873296939198}
+  - {fileID: 4710290621884406}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -185,11 +195,30 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1706072860033026}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6, y: -0.3079996, z: 0}
+  m_LocalPosition: {x: 1.6000004, y: -0.3079996, z: 0}
   m_LocalScale: {x: 2.5876355, y: 0.98462033, z: 1}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4710290621884406
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1801136722934438}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4421681360354256}
+  - {fileID: 4907742607840568}
+  - {fileID: 224506632123913598}
+  - {fileID: 224050342656767246}
+  - {fileID: 224236650341290440}
+  - {fileID: 224106609699675958}
+  m_Father: {fileID: 4047206846907438}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4859873296939198
 Transform:
@@ -202,7 +231,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4047206846907438}
-  m_RootOrder: 6
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4907742607840568
 Transform:
@@ -211,10 +240,10 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1978309521803642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.6, y: -0.9569998, z: 0}
+  m_LocalPosition: {x: 1.6000004, y: -0.9569998, z: 0}
   m_LocalScale: {x: 2.5876498, y: 0.2826653, z: 1}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23104045538751474
@@ -657,7 +686,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114672977400686654}
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnHover:
@@ -932,31 +972,7 @@ MonoBehaviour:
   _annotationBodyLabel: {fileID: 114179781073288426}
   _authorLabel: {fileID: 114566145360807084}
   _annotationDateLabel: {fileID: 114872869318626702}
-  ScaleUpOverTime:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  Annotation:
-    Position: {x: 0, y: 0, z: 0}
-    Text: 
-    ViewPointPosition:
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      type: GeoCoordinates
-      coordinateSystem: Unity.WorldSpace
-      latitude: 0
-      longitude: 0
-      elevation: 0
-    AnnotationPosition:
-      position: {x: 0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 0}
-      type: GeoCoordinates
-      coordinateSystem: Unity.WorldSpace
-      latitude: 0
-      longitude: 0
-      elevation: 0
+  _hoverGroup: {fileID: 1801136722934438}
 --- !u!114 &114872869318626702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1103,7 +1119,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.41228, y: 0.41228, z: 0.41228}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1121,7 +1137,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4123, y: 0.4123, z: 0.4123}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1139,7 +1155,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4123, y: 0.4123, z: 0.4123}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1157,7 +1173,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.41227332, y: 0.4122734, z: 0.4122734}
   m_Children: []
-  m_Father: {fileID: 4047206846907438}
+  m_Father: {fileID: 4710290621884406}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
