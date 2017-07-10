@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/fb22cdac-dfee-4bf3-b39d-6c44525339e9",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/10/2017 5:15:29 PM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "annotationcxc"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "https://www.wikidata.org/wiki/Q1670679",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "Säulen_innen",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "18:23:12",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "Stoa_komplett_low/Säulen_3/Säulen_innen"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":1.0607001781463624,"y":1.1591416597366334,"z":0.7142640352249146},"rotation":{"x":0.564217209815979,"y":276.177001953125,"z":356.54034423828127},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97613113236742,"longitude":23.72229157470891,"elevation":1.1591416597366334},
+            "AnnotationCoordinates" : {"position":{"x":-4.319761753082275,"y":1.6099369525909424,"z":1.2854481935501099},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97615774078881,"longitude":23.72234317358464,"elevation":1.6099369525909424}
+        }
+    }
+}

@@ -31,9 +31,9 @@ namespace ff.nodegraph.interaction
         [SerializeField] Renderer _highlightContextRenderer;
         [SerializeField] Renderer _highlightHoverRenderer;
 
-        static NodeSelectionManager _instance = null;
+        static public NodeSelectionManager _instance = null;
 
-        void Start()
+        void Awake()
         {
             if (_instance != null)
             {
@@ -46,6 +46,48 @@ namespace ff.nodegraph.interaction
             //_meshRenderer = GetComponent<MeshRenderer>();
             _annotationManager = FindObjectOfType<AnnotationManager>();
         }
+
+
+        public Node FindNodeFromPath(string rootNodeId, string nodePath)
+        {
+            foreach (var ag in _annotatableGroups)
+            {
+                if (ag.RootNodeId == rootNodeId)
+                {
+                    var nodeNames = new List<string>(nodePath.Split('/'));
+                    var node = ag.Node;
+
+                    // remove rootnode
+                    if (node.Name == nodeNames[0])
+                    {
+                        nodeNames.RemoveAt(0);
+                    }
+
+                    var stillSearching = true;
+                    while (stillSearching)
+                    {
+                        stillSearching = false;
+                        foreach (var child in node.Children)
+                        {
+                            if (child.Name != nodeNames[0])
+                                continue;
+
+                            nodeNames.RemoveAt(0);
+                            if (nodeNames.Count == 0)
+                                return child;
+
+                            node = child;
+                            stillSearching = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            Debug.LogWarningFormat("Scene does not contain reference to: {0} -> {1}", rootNodeId, nodePath);
+
+            return null;
+        }
+
 
         /*
         Read carefully! This part is tricky...
@@ -250,7 +292,6 @@ namespace ff.nodegraph.interaction
             }
             else
             {
-                //_hoverLabel.text = HoveredNode.Name;
                 var bounds = SelectedNode.CollectGeometryBounds().ToArray();
                 _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
                 _highlightContextRenderer.enabled = true;
@@ -258,15 +299,10 @@ namespace ff.nodegraph.interaction
 
             if (_selectionMarker)
             {
-                //_selectionMarker.transform.position = _lastHoverPosition;
                 _selectionMarker.SetCurrent(newSelectedNode);
             }
         }
 
-        // public void SelectNode(Node newSelection, Vector3 markerPosition)
-        // {
-        //     _selectionMarker.SetCurrent(newSelection);
-        // }
 
         private Vector3 _lastHoverPosition;
 

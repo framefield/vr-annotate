@@ -40,7 +40,7 @@
         ],
         "selector": {
             "type": "SceneGraphSelector",
-            "value": "to be implemented"
+            "value": "Stoa_komplett_low/Stoa_komplett_low (1)/Dach"
         },
         "position": {
             "type": "AnnotationLocation",

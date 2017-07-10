@@ -28,7 +28,7 @@ namespace ff.vr.annotate.viz
 
         public static AnnotationManager _instance;
 
-        void Awake()
+        void Start()
         {
             if (_instance != null)
             {

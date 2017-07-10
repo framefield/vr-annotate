@@ -8,6 +8,7 @@ using UnityEngine;
 using ff.utils;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using ff.nodegraph.interaction;
 
 namespace ff.vr.annotate
 {
@@ -61,6 +62,8 @@ namespace ff.vr.annotate
             });
         }
 
+
+
         public void DeserializeFromJson(string jsonString)
         {
             JSONObject j = new JSONObject(jsonString);
@@ -76,6 +79,8 @@ namespace ff.vr.annotate
 
             // Initialize Target Object
             RootNodeId = j["target"]["rootNodeId"].str;
+            var nodePath = j["target"]["selector"]["value"].str;
+            TargetNode = NodeSelectionManager._instance.FindNodeFromPath(RootNodeId, nodePath);
 
             ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
             AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
@@ -97,6 +102,9 @@ namespace ff.vr.annotate
                 };
                 Person.PeopleById[authorId] = Author;
             }
+
+            // Find Object Reference 
+
         }
 
 
