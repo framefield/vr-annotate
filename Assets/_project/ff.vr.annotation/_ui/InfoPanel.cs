@@ -1,15 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ff.nodegraph.interaction;
+using ff.vr.annotate;
 using UnityEngine;
 
 
 namespace ff.vr.interaction
 {
-    public class InformationPanel : MonoBehaviour
+
+    public interface IInfoPanelContent
     {
+        void SetSelection(ISelectable newSelection);
+    }
+
+    public class InfoPanel : MonoBehaviour
+    {
+        [SerializeField]
+        InfoPanelContentForNodes _contentForNodes;
+
+        [SerializeField]
+        InfoPanelContentForAnnotations _contentForAnnotations;
+
+
         [Header("--- internal prefab references -----")]
         [SerializeField]
         LineRenderer _connectionLine;
+
+        private IInfoPanelContent _content;
 
         void Start()
         {
@@ -26,14 +43,35 @@ namespace ff.vr.interaction
             }
         }
 
-
-        public void SetSelection(ISelectable item)
+        public void SetSelection(ISelectable newItem)
         {
-            _selectedItem = item;
-            item.OnSelected();
+            _selectedItem = newItem;
+            newItem.OnSelected();
             MoveIntoView();
 
             SetState(States.MovingIntoView);
+            UpdateContentVisibility();
+        }
+
+        void UpdateContentVisibility()
+        {
+            // Hide all by default
+            _contentForNodes.gameObject.SetActive(false);
+            _contentForAnnotations.gameObject.SetActive(false);
+
+
+            if (_selectedItem is NodeSelectionMarker)
+            {
+                var marker = _selectedItem as NodeSelectionMarker;
+
+                _contentForNodes.gameObject.SetActive(true);
+                _contentForNodes.SetSelectedNode(marker._currentNode);
+            }
+            else if (_selectedItem is AnnotationGizmo)
+            {
+                _contentForAnnotations.gameObject.SetActive(true);
+                _contentForAnnotations.SetSelection(_selectedItem);
+            }
         }
 
 
@@ -276,6 +314,6 @@ namespace ff.vr.interaction
         private const float TRANSITION_DURATION = 0.35f;
         private float _interactionStartTime = 0;
 
-        public static InformationPanel _instance;
+        public static InfoPanel _instance;
     }
 }

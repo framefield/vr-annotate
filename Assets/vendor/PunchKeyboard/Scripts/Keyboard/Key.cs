@@ -163,7 +163,6 @@ public class Key : MonoBehaviour
         }
     }
 
-    bool _queueHasBeenSet = false;
 
     Renderer _renderer;
     private void SetRenderQueueOnce(int queue = 3010)
@@ -179,7 +178,6 @@ public class Key : MonoBehaviour
         {
             if (m.renderQueue != queue)
             {
-                _queueHasBeenSet = false;
                 m.renderQueue = queue;
             }
         }

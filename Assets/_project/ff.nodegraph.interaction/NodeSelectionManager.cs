@@ -14,7 +14,7 @@ namespace ff.nodegraph.interaction
     public class NodeSelectionManager : MonoBehaviour, IClickableLaserPointerTarget, IHitTester
     {
         private Node SelectedNode = null;
-        //private List<Node> SelectedNodes = new List<Node>();
+
         private Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
 
@@ -35,22 +35,25 @@ namespace ff.nodegraph.interaction
 
         void Awake()
         {
+            SelectedNode = null;
             if (_instance != null)
             {
                 throw new UnityException("NodeSelectionManager can only be added once");
             }
             _instance = this;
 
-            _annotatableGroups = FindObjectsOfType<NodeGraph>();
-            //_meshFilter = GetComponent<MeshFilter>();
-            //_meshRenderer = GetComponent<MeshRenderer>();
+            NodeGraphs = FindObjectsOfType<NodeGraph>();
+            foreach (var ng in NodeGraphs)
+            {
+                Debug.Log(ng.name);
+            }
             _annotationManager = FindObjectOfType<AnnotationManager>();
         }
 
 
         public Node FindNodeFromPath(string rootNodeId, string nodePath)
         {
-            foreach (var ag in _annotatableGroups)
+            foreach (var ag in NodeGraphs)
             {
                 if (ag.RootNodeId == rootNodeId)
                 {
@@ -207,7 +210,7 @@ namespace ff.nodegraph.interaction
             }
             else
             {
-                foreach (var ag in _annotatableGroups)
+                foreach (var ag in NodeGraphs)
                 {
                     ag.Node.CollectLeafesIntersectingRay(ray, hits);
                 }
@@ -314,7 +317,9 @@ namespace ff.nodegraph.interaction
         private SteamVR_TrackedController _controller;
         private string _lastResult;
         private NodeSelectionManager _nodeHitTester;
-        private NodeGraph[] _annotatableGroups;
+
+        [HideInInspector]
+        public NodeGraph[] NodeGraphs;
         private AnnotationManager _annotationManager;
 
     }

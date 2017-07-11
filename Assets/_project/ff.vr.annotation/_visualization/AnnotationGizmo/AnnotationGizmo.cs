@@ -69,8 +69,8 @@ namespace ff.vr.annotate
 
         public void Select()
         {
-            _isSelected = true;
-            InformationPanel._instance.SetSelection(this);
+            //_isSelected = true;
+            InfoPanel._instance.SetSelection(this);
         }
 
         #region implemented ISelectable
@@ -86,7 +86,7 @@ namespace ff.vr.annotate
         #endregion
 
         private bool _isHovered = false;
-        private bool _isSelected = false;
+        //private bool _isSelected = false;
         private float _startTime;
         private Annotation _annotation;
         private const float DEFAULT_SIZE = 0.3f;

@@ -20,10 +20,10 @@ namespace ff.nodegraph.interaction
         void Awake()
         {
             _nodeSelectionManager = FindObjectOfType<NodeSelectionManager>();
-            _infoPanel = FindObjectOfType<InformationPanel>();
+            _infoPanel = FindObjectOfType<InfoPanel>();
         }
 
-        private InformationPanel _infoPanel;
+        private InfoPanel _infoPanel;
 
         const float BLEND_SPEED = 0.08f;
 
@@ -136,7 +136,7 @@ namespace ff.nodegraph.interaction
 
         public void OnSelected()
         {
-            Debug.LogWarning("NodeSelectionMarker should be be selectable", this);
+            Debug.LogWarning("NodeSelectionMarker should not be selectable", this);
             return;
         }
 

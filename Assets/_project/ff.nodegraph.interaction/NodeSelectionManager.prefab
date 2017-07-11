@@ -250,12 +250,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 313f8b6dd66d5894a87114b6206c94bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectedNode:
+    Bounds:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+    IsAnnotatable: 0
+    HasGeometry: 0
+    Name: 
+    HasBounds: 0
+    HitDistance: 0
   DeepPickingEnabled: 0
   _selectionMarker: {fileID: 0}
   _hoverLabel: {fileID: 114657717022001420}
   _highlightContextRenderer: {fileID: 23832558667708668}
   _highlightHoverRenderer: {fileID: 23430075444149644}
-  _laserColor: {r: 0, g: 0, b: 1, a: 1}
+  NodeGraphs: []
 --- !u!114 &114657717022001420
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -389,6 +398,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.1679, y: 0.31647003}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2.29, y: 0.411}
   m_Pivot: {x: 0.5, y: 1.27}
