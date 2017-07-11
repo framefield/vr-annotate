@@ -80,10 +80,12 @@ namespace ff.nodegraph.interaction
         {
             var newItem = GameObject.Instantiate(_itemPrefab);
             _items.Add(newItem);
-            newItem.text = node.Name;
+            newItem.Text = node.Name;
+            newItem.Indentation = indentation;
+
             newItem.name += "-" + node.Name;
             newItem.transform.localPosition = new Vector3(
-                INDENTATION_WIDHT * indentation,
+                0,
                 -LINE_HEIGHT * _itemsContainer.transform.childCount,
                 0);
 
@@ -102,7 +104,6 @@ namespace ff.nodegraph.interaction
         }
 
         private float LINE_HEIGHT = 0.2f;
-        private float INDENTATION_WIDHT = 0.1f;
 
         private List<SceneGraphItem> _items = new List<SceneGraphItem>();
         private NodeSelectionManager _nodeSelectionManager;

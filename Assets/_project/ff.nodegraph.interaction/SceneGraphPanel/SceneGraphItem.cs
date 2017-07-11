@@ -7,25 +7,20 @@ namespace ff.nodegraph.interaction
 {
     public class SceneGraphItem : MonoBehaviour
     {
-        void Awake()
+        [SerializeField]
+        TMPro.TextMeshPro _label;
+
+        public string Text
         {
-            _textMeshPro = GetComponent<TMPro.TextMeshPro>();
+            get { return _label.text; }
+            set { _label.text = value; }
         }
 
-        public int Indentation = 0;
-
-        public string text
+        public int Indentation
         {
-            get { return _textMeshPro.text; }
-            set { _textMeshPro.text = value; }
+            set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
         }
 
-        public string indentation
-        {
-            get { return _textMeshPro.text; }
-            set { _textMeshPro.text = value; }
-        }
-
-        private TMPro.TextMeshPro _textMeshPro;
+        private float INDENTATION_WIDHT = 0.1f;
     }
 }
