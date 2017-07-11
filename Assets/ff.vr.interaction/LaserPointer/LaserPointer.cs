@@ -29,7 +29,6 @@ namespace ff.vr.interaction
     public interface ILaserPointerAppearance
     {
         Color LaserColor { get; }
-        Color HighlightColor { get; }
         GameObject HitIndicator { get; }
     }
 

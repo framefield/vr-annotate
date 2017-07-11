@@ -14,13 +14,6 @@ namespace ff.vr.interaction
             }
         }
 
-        public Color HighlightColor
-        {
-            get
-            {
-                return _highlightColor;
-            }
-        }
 
         public GameObject HitIndicator
         {

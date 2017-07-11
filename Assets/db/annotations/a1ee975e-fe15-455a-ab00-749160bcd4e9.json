@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/a1ee975e-fe15-455a-ab00-749160bcd4e9",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/11/2017 2:26:10 PM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "annotation"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "https://www.wikidata.org/wiki/Q1670679",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "Kapitell_groß_2",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "18:23:12",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "Stoa_komplett_low/Säulen_3/Säulen_innen/Kapitell_groß_2"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":2.3250632286071779,"y":1.2111515998840333,"z":4.915082931518555},"rotation":{"x":10.392776489257813,"y":193.66970825195313,"z":3.789132833480835},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.976094588741428,"longitude":23.722310595259477,"elevation":1.2111515998840333},
+            "AnnotationCoordinates" : {"position":{"x":-0.036726951599121097,"y":-0.4299999475479126,"z":-19.96207618713379},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97628184831198,"longitude":23.72215270952843,"elevation":-0.4299999475479126}
+        }
+    }
+}

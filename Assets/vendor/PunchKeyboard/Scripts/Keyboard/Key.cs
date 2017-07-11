@@ -54,7 +54,6 @@ public class Key : MonoBehaviour
         constrainedRotation = initialLocalRotation;
 
         keySoundController = transform.parent.root.gameObject.GetComponent<KeySoundController>();
-
         SwitchKeycapCharCase();
     }
 
@@ -67,8 +66,11 @@ public class Key : MonoBehaviour
         this.Rigidbody.velocity = PositionDelta * KeyBounceBackMultiplier * Time.deltaTime;
     }
 
+
     void Update()
     {
+        SetRenderQueueOnce();
+
         if (checkForButton)
         {
             if (currentDistance > DistanceToBePressed)
@@ -160,4 +162,27 @@ public class Key : MonoBehaviour
             symbolSwitch = false;
         }
     }
+
+    bool _queueHasBeenSet = false;
+
+    Renderer _renderer;
+    private void SetRenderQueueOnce(int queue = 3010)
+    {
+        //if (_queueHasBeenSet)
+        //    return;
+
+        if (!_renderer)
+            _renderer = this.gameObject.GetComponent<Renderer>();
+
+        //_queueHasBeenSet = true;
+        foreach (var m in _renderer.sharedMaterials)
+        {
+            if (m.renderQueue != queue)
+            {
+                _queueHasBeenSet = false;
+                m.renderQueue = queue;
+            }
+        }
+    }
+
 }

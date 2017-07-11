@@ -63,6 +63,8 @@ SubShader {
             float v = i.uv.y;
             float4 c =tex2D(_MainTex, float2(u,v)).rgba;
             
+            //return float4(_tintColor.rgb, c.a);
+
             return _tintAmount <= 0 
                     ? c.rgba * lerp(  _tintColor.rgba, float4(1,1,1,1), _tintAmount + 1)
                     : lerp( c.rgba, _tintColor, _tintAmount);

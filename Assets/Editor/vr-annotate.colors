@@ -14,3 +14,7 @@ MonoBehaviour:
   m_Presets:
   - m_Name: CI-Blue
     m_Color: {r: 0.5411765, g: 0.8156863, b: 0.90588236, a: 1}
+  - m_Name: Interaction-Blue
+    m_Color: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
+  - m_Name: Highlight blue
+    m_Color: {r: 0, g: 0.75268817, b: 1, a: 1}

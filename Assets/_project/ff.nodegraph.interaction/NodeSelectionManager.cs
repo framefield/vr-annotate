@@ -316,5 +316,6 @@ namespace ff.nodegraph.interaction
         private NodeSelectionManager _nodeHitTester;
         private NodeGraph[] _annotatableGroups;
         private AnnotationManager _annotationManager;
+
     }
 }
