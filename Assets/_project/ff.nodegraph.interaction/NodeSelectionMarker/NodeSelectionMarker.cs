@@ -20,10 +20,7 @@ namespace ff.nodegraph.interaction
         void Awake()
         {
             _nodeSelectionManager = FindObjectOfType<NodeSelectionManager>();
-            _infoPanel = FindObjectOfType<InfoPanel>();
         }
-
-
 
         void Start()
         {
@@ -135,12 +132,6 @@ namespace ff.nodegraph.interaction
         }
 
 
-        public void OnShowInfoIconClicked()
-        {
-            if (_infoPanel)
-                _infoPanel.MoveIntoView();
-        }
-
         public void SetPosition(Vector3 newPosition)
         {
             _targetPosition = newPosition;
@@ -174,8 +165,6 @@ namespace ff.nodegraph.interaction
         private float _selectionTime;
         private const float TRANSITION_DURATION = 0.5f;
 
-        private InfoPanel _infoPanel;
         const float BLEND_SPEED = 0.08f;
-
     }
 }

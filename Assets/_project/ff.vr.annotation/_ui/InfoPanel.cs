@@ -43,6 +43,12 @@ namespace ff.vr.interaction
                 controller.MenuButtonUnclicked += MenuButtonUnclickedHandler;
             }
 
+            _selectionMarker = GameObject.FindObjectOfType<NodeSelectionMarker>();
+            if (_selectionMarker == null)
+            {
+                Debug.LogWarning("" + this + " requires an instance of NodeSelectionMarker within the scene to render connection line.", this);
+            }
+
             if (SelectionManager.Instance == null)
             {
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
@@ -102,10 +108,23 @@ namespace ff.vr.interaction
         void Update()
         {
             var transitionComplete = TransitionProgress == 1;
-            if (_selectedItem != null)
+
+            var selectionLineVisible = _selectedItem != null;
+
+            _connectionLine.gameObject.SetActive(selectionLineVisible);
+            if (selectionLineVisible)
             {
                 _connectionLine.SetPosition(0, _connectionLine.transform.TransformPoint(Vector3.zero));
-                _connectionLine.SetPosition(1, _selectedItem.GetPosition());
+
+
+                if (_selectedItem is Node && _selectionMarker != null)
+                {
+                    _connectionLine.SetPosition(1, _selectionMarker.transform.position);
+                }
+                else
+                {
+                    _connectionLine.SetPosition(1, _selectedItem.GetPosition());
+                }
             }
 
             switch (_state)
@@ -238,8 +257,6 @@ namespace ff.vr.interaction
             if (newState == _state)
                 return;
 
-            //Debug.Log("set new state:" + _state + " -> " + newState);
-
             var transitionActive = TransitionProgress > 0.1f && TransitionProgress < 0.9f;
             var startNewTransition = false;
 
@@ -353,6 +370,7 @@ namespace ff.vr.interaction
         private const float TRANSITION_DURATION = 0.35f;
         private float _interactionStartTime = 0;
 
+        private NodeSelectionMarker _selectionMarker;
         public static InfoPanel _instance;
     }
 }

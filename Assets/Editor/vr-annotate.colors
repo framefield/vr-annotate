@@ -20,3 +20,5 @@ MonoBehaviour:
     m_Color: {r: 0, g: 0.75268817, b: 1, a: 1}
   - m_Name: UI-Background
     m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.397}
+  - m_Name: Icon
+    m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}

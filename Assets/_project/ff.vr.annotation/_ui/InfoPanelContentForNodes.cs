@@ -20,11 +20,9 @@ namespace ff.nodegraph.interaction
 
         private void SetSelectedNode(Node newNode)
         {
-            _selectedNode = newNode;
             _sceneGraphPanel.SetSelectedNode(newNode);
         }
 
         private InfoPanel _infoPanel;
-        private Node _selectedNode;
     }
 }
