@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 64828983847405272}
   - component: {fileID: 23994186939050266}
   m_Layer: 0
-  m_Name: ExitIcon - Quad
+  m_Name: ParentIcon - Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -666,7 +666,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114766742625459346}
-        m_MethodName: ExitToParent
+        m_MethodName: OnParentClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

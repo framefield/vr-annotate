@@ -23,9 +23,24 @@ namespace ff.nodegraph.interaction
             _infoPanel = FindObjectOfType<InfoPanel>();
         }
 
-        private InfoPanel _infoPanel;
 
-        const float BLEND_SPEED = 0.08f;
+
+        void Start()
+        {
+            if (SelectionManager.Instance == null)
+            {
+                throw new UnityException("NodeSelectManager Requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
+            }
+            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
+        }
+
+
+        private void SelectionChangedHander(List<ISelectable> newSelection)
+        {
+            var nodeOrNull = (newSelection.Count == 1) ? newSelection[0] as Node : null;
+            SetSelectedNode(nodeOrNull);
+        }
+
 
         void Update()
         {
@@ -67,12 +82,25 @@ namespace ff.nodegraph.interaction
             }
         }
 
+        private void SetSelectedNode(Node newNode)
+        {
+            PrepareLabelTransition(newNode);
 
-        /** Called from SelectionManager */
-        public void SetCurrent(Node newNode)
+            var isValid = newNode != null;
+            var hasParent = newNode != null && newNode.Parent != null;
+
+            _selectionLabel.text = isValid ? newNode.Name : "";
+            _parentLabel.text = hasParent ? newNode.Parent.Name + " /" : "";
+            _exitButton.gameObject.SetActive(hasParent);
+
+            _currentNode = newNode;
+        }
+
+
+        private void PrepareLabelTransition(Node newNode)
         {
             _selectionTime = Time.time;
-            if (newNode == _currentNode.Parent)
+            if (_currentNode != null && newNode == _currentNode.Parent)
             {
                 _dampedParentLabelPositionY = 2 * PARENT_LABEL_POS_Y;
                 _dampedParentLabelSize = 0;
@@ -95,49 +123,26 @@ namespace ff.nodegraph.interaction
                     }
                 }
             }
-
-            var isValid = newNode != null;
-            var hasParent = newNode != null && newNode.Parent != null;
-
             transform.localScale = Vector3.zero;
-
-            _selectionLabel.text = isValid ? newNode.Name : "";
-            _parentLabel.text = hasParent ? newNode.Parent.Name + " /" : "";
-            _exitButton.gameObject.SetActive(hasParent);
-
-            _currentNode = newNode;
         }
 
 
+        public void OnParentClicked()
+        {
+            _nodeSelectionManager.SelectParentNode();
+        }
+
+
+        public void OnShowInfoIconClicked()
+        {
+            if (_infoPanel)
+                _infoPanel.MoveIntoView();
+        }
 
         public void SetPosition(Vector3 newPosition)
         {
             _targetPosition = newPosition;
             _dampedMarkerSize = 2;
-        }
-
-
-        /** 
-            Called when clicking icon 
-            SelectionManager will then call SetCurrent()
-        */
-        public void ExitToParent()
-        {
-            _nodeSelectionManager.SelectParent();
-        }
-
-
-
-        public void OnShowInformation()
-        {
-            if (_infoPanel)
-                _infoPanel.SetSelection(this);
-        }
-
-        public void OnSelected()
-        {
-            Debug.LogWarning("NodeSelectionMarker should not be selectable", this);
-            return;
         }
 
         public Vector3 GetPosition()
@@ -166,5 +171,9 @@ namespace ff.nodegraph.interaction
         const float DEFAULT_ICON_SIZE = 0.75f;
         private float _selectionTime;
         private const float TRANSITION_DURATION = 0.5f;
+
+        private InfoPanel _infoPanel;
+        const float BLEND_SPEED = 0.08f;
+
     }
 }

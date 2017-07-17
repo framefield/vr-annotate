@@ -6,7 +6,7 @@ namespace ff.vr.interaction
 {
     public interface ISelectable
     {
-        void OnSelected();
+        //void OnSelected();
         Vector3 GetPosition();
     }
 }

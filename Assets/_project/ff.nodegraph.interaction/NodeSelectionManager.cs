@@ -50,6 +50,22 @@ namespace ff.nodegraph.interaction
             _annotationManager = FindObjectOfType<AnnotationManager>();
         }
 
+        void Start()
+        {
+            if (SelectionManager.Instance == null)
+            {
+                throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
+            }
+            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
+        }
+
+
+        private void SelectionChangedHander(List<ISelectable> newSelection)
+        {
+            var nodeOrNull = (newSelection.Count == 1) ? newSelection[0] as Node : null;
+            SetSelectedNode(nodeOrNull);
+        }
+
 
         public Node FindNodeFromPath(string rootNodeId, string nodePath)
         {
@@ -112,11 +128,11 @@ namespace ff.nodegraph.interaction
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
-            _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
-            if (_trackpadButtonUI)
-            {
-                _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
-            }
+            // _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
+            // if (_trackpadButtonUI)
+            // {
+            //     _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
+            // }
             _hoverLabel.gameObject.SetActive(true);
             HoveredNode = _lastNodeHitByRay;
             UpdateHoverHighlight();
@@ -139,22 +155,24 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
-            if (_trackpadButtonUI)
-            {
-                _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
-            }
+            // if (_trackpadButtonUI)
+            // {
+            //     _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
+            // }
             HoveredNode = null;
             UpdateHoverHighlight();
             _lastNodeHitByRay = null;    // really?
             _hoverLabel.gameObject.SetActive(false);
         }
+        #endregion implement LaserInterface
 
 
         public void PointerTriggered(LaserPointer pointer)
         {
             if (HoveredNode != null)
             {
-                SetSelection(HoveredNode);
+                SelectionManager.Instance.SelectItem(HoveredNode);
+                //SetSelectedNode(HoveredNode);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
@@ -172,33 +190,64 @@ namespace ff.nodegraph.interaction
         {
 
         }
-        #endregion implement LaserInterface
+
+        // /** A dummy implementation to simulate entering and exiting hierarchy */
+        // private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
+        // {
+        //     switch (buttonPressed)
+        //     {
+        //         case TrackpadButtonUI.ControllerButtons.Down:
+        //             SetSelectedNode(HoveredNode);
+        //             break;
+
+        //         case TrackpadButtonUI.ControllerButtons.Up:
+        //             SelectParent();
+        //             break;
+        //     }
+        // }
 
 
-
-        /** A dummy implementation to simulate entering and exiting hierarchy */
-        private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
+        public void SelectParentNode()
         {
-            switch (buttonPressed)
+            if (this.SelectedNode == null)
             {
-                case TrackpadButtonUI.ControllerButtons.Down:
-                    SetSelection(HoveredNode);
-                    break;
-
-                case TrackpadButtonUI.ControllerButtons.Up:
-                    SelectParent();
-                    break;
+                Debug.LogWarning("Tried to select parent when no selected?");
+                return;
             }
+
+            if (this.SelectedNode.Parent == null)
+            {
+                Debug.LogWarning("Tried to select parent when current selection had no parent?");
+                return;
+            }
+            SelectionManager.Instance.SelectItem(SelectedNode.Parent);
         }
 
 
-        public void SelectParent()
+        private void SetSelectedNode(Node newSelectedNode)
         {
-            if (this.SelectedNode != null)
+            if (newSelectedNode == SelectedNode)
+                return;
+
+            SelectedNode = newSelectedNode;
+
+            if (SelectedNode == null)
             {
-                SetSelection(SelectedNode.Parent);
+                _highlightContextRenderer.enabled = false;
             }
+            else
+            {
+                var bounds = SelectedNode.CollectGeometryBounds().ToArray();
+                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                _highlightContextRenderer.enabled = true;
+            }
+
+            // if (_selectionMarker)
+            // {
+            //     _selectionMarker.SetCurrentNode(newSelectedNode);
+            // }
         }
+
 
         #region Hit Detection
         private Node FindHit(Ray ray)
@@ -267,6 +316,7 @@ namespace ff.nodegraph.interaction
         #endregion
 
 
+
         private void UpdateHoverHighlight()
         {
             if (HoveredNode == null)
@@ -284,33 +334,10 @@ namespace ff.nodegraph.interaction
         }
 
 
-        private void SetSelection(Node newSelectedNode)
-        {
-            if (newSelectedNode == SelectedNode)
-                return;
 
-            SelectedNode = newSelectedNode;
-
-            if (SelectedNode == null)
-            {
-                _highlightContextRenderer.enabled = false;
-            }
-            else
-            {
-                var bounds = SelectedNode.CollectGeometryBounds().ToArray();
-                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
-                _highlightContextRenderer.enabled = true;
-            }
-
-            if (_selectionMarker)
-            {
-                _selectionMarker.SetCurrent(newSelectedNode);
-            }
-        }
 
 
         private Vector3 _lastHoverPosition;
-
         private TrackpadButtonUI _trackpadButtonUI;
         private Node _lastNodeHitByRay;
         private Node _renderedNode;

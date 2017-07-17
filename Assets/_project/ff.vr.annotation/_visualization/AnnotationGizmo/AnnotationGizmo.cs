@@ -67,17 +67,12 @@ namespace ff.vr.annotate
             UpdateVisibility();
         }
 
-        public void Select()
+        public void OnClicked()
         {
-            //_isSelected = true;
-            InfoPanel._instance.SetSelection(this);
+            SelectionManager.Instance.SelectItem(this);
         }
-
         #region implemented ISelectable
-        public void OnSelected()
-        {
-            UpdateVisibility();
-        }
+
 
         public Vector3 GetPosition()
         {

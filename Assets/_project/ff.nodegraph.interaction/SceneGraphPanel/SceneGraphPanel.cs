@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ff.vr.interaction;
 using UnityEngine;
 
 namespace ff.nodegraph.interaction
@@ -84,13 +85,24 @@ namespace ff.nodegraph.interaction
             newItem.Indentation = indentation;
 
             newItem.name += "-" + node.Name;
+            newItem.Node = node;
+
             newItem.transform.localPosition = new Vector3(
                 0,
                 -LINE_HEIGHT * _itemsContainer.transform.childCount,
                 0);
 
             newItem.transform.SetParent(_itemsContainer, false);
+            newItem.SceneGraphPanel = this;
             return newItem;
+        }
+
+
+        internal void OnItemClicked(SceneGraphItem item)
+        {
+            SelectionManager.Instance.SelectItem(item.Node);
+            //_nodeSelectionManager.SetSelectedNode(item.Node);
+            SetSelectedNode(item.Node);
         }
 
 
@@ -103,8 +115,8 @@ namespace ff.nodegraph.interaction
             _items.Clear();
         }
 
-        private float LINE_HEIGHT = 0.2f;
 
+        private float LINE_HEIGHT = 0.2f;
         private List<SceneGraphItem> _items = new List<SceneGraphItem>();
         private NodeSelectionManager _nodeSelectionManager;
     }

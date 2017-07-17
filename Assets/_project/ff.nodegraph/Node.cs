@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using ff.vr.interaction;
 using UnityEngine;
 
 namespace ff.nodegraph
 {
     [System.Serializable]
-    public class Node
+    public class Node : ISelectable
     {
         public Bounds Bounds;
         public bool IsAnnotatable;
@@ -174,6 +176,12 @@ namespace ff.nodegraph
                 c.CollectGeometryBounds(result);
             }
             return result;
+        }
+
+
+        public Vector3 GetPosition()
+        {
+            return this.Bounds.center;
         }
     }
 }

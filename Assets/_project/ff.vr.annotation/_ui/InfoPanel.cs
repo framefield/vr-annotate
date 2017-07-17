@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ff.nodegraph;
 using ff.nodegraph.interaction;
 using ff.vr.annotate;
 using UnityEngine;
@@ -41,17 +42,39 @@ namespace ff.vr.interaction
                 controller.MenuButtonClicked += MenuButtonClickedHandler;
                 controller.MenuButtonUnclicked += MenuButtonUnclickedHandler;
             }
+
+            if (SelectionManager.Instance == null)
+            {
+                throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
+            }
+            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
         }
 
-        public void SetSelection(ISelectable newItem)
+
+        private void SelectionChangedHander(List<ISelectable> newSelection)
+        {
+            if (newSelection.Count != 1)
+            {
+                SetSelection(null);
+                return;
+            }
+
+            SetSelection(newSelection[0]);
+        }
+
+
+        private void SetSelection(ISelectable newItem, bool forceMoveIntoView = false)
         {
             _selectedItem = newItem;
-            newItem.OnSelected();
-            MoveIntoView();
+            if (!IsVisibleInView || forceMoveIntoView)
+            {
+                MoveIntoView();
+            }
 
             SetState(States.MovingIntoView);
             UpdateContentVisibility();
         }
+
 
         void UpdateContentVisibility()
         {
@@ -60,12 +83,13 @@ namespace ff.vr.interaction
             _contentForAnnotations.gameObject.SetActive(false);
 
 
-            if (_selectedItem is NodeSelectionMarker)
+            if (_selectedItem is Node)
             {
-                var marker = _selectedItem as NodeSelectionMarker;
+                //var marker = _selectedItem as NodeSelectionMarker;
+                var node = _selectedItem as Node;
 
                 _contentForNodes.gameObject.SetActive(true);
-                _contentForNodes.SetSelectedNode(marker._currentNode);
+                _contentForNodes.SetSelectedNode(node);
             }
             else if (_selectedItem is AnnotationGizmo)
             {
@@ -162,6 +186,17 @@ namespace ff.vr.interaction
 
         private const float CLOSE_MENU_THRESHOLD_DISTANCE = 0.3f;
 
+        private bool IsVisibleInView
+        {
+            get
+            {
+                var screenPoint = Camera.main.WorldToViewportPoint(this.transform.position);
+                var visibleInView = (screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1);
+                return visibleInView;
+            }
+        }
+
+
         private void MenuButtonUnclickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
             var controller = sender as SteamVR_TrackedController;
@@ -245,9 +280,13 @@ namespace ff.vr.interaction
         }
 
 
-        private void MoveIntoView()
+        private const float DISTANCE_FROM_CAMERA = 1.5f;
+        private const float OFFSET_TO_RIGHT = 0.5f;
+        public void MoveIntoView()
         {
-            _lastValidPosition = Camera.main.transform.position + Camera.main.transform.forward + Camera.main.transform.right * 0.7f;
+            _lastValidPosition = Camera.main.transform.position
+                + Camera.main.transform.forward * DISTANCE_FROM_CAMERA
+                + Camera.main.transform.right * OFFSET_TO_RIGHT;
             var ea = Camera.main.transform.eulerAngles;
             ea.z = 0;
             ea.y += 30;
