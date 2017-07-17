@@ -89,6 +89,8 @@ namespace ff.nodegraph.interaction
             var isValid = newNode != null;
             var hasParent = newNode != null && newNode.Parent != null;
 
+            this.gameObject.SetActive(isValid);
+
             _selectionLabel.text = isValid ? newNode.Name : "";
             _parentLabel.text = hasParent ? newNode.Parent.Name + " /" : "";
             _exitButton.gameObject.SetActive(hasParent);

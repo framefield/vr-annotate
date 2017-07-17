@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 23559458643557876}
   - component: {fileID: 114289928307519344}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Quad - LaserPointerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,7 +196,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9685cba7b1bdb3458fdcf1c96e9e73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 114289928307519344}
   _label: {fileID: 114219498320131936}
+  HighlightBackgroundColor: {r: 0, g: 0.75268817, b: 1, a: 1}
+  HighlightLabelColor: {r: 1, g: 1, b: 1, a: 1}
+  BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.397}
+  LabelColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &114219498320131936
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -324,7 +329,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 114195144081716648}
-        m_MethodName: OnSelectItem
+        m_MethodName: OnClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -346,7 +351,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  HighlightColor: {r: 0, g: 0.75268817, b: 1, a: 0.466}
+  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
+  Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.397}
 --- !u!222 &222472308591986540
 CanvasRenderer:
   m_ObjectHideFlags: 1

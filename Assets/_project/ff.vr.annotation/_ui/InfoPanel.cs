@@ -89,7 +89,7 @@ namespace ff.vr.interaction
                 var node = _selectedItem as Node;
 
                 _contentForNodes.gameObject.SetActive(true);
-                _contentForNodes.SetSelectedNode(node);
+                _contentForNodes.SetSelection(node);
             }
             else if (_selectedItem is AnnotationGizmo)
             {

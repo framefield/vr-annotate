@@ -8,16 +8,44 @@ namespace ff.nodegraph.interaction
 {
     public class SceneGraphItem : MonoBehaviour
     {
+        [Header("--- internal prefab references ----")]
+        [SerializeField]
+        LaserPointerButton _button;
+
         [SerializeField]
         TMPro.TextMeshPro _label;
+
+        public Color HighlightBackgroundColor = Color.blue;
+        public Color HighlightLabelColor = Color.white;
+        public Color BackgroundColor = Color.gray;
+        public Color LabelColor = Color.white;
+
+        private Node _node;
+
+        public Node Node
+        {
+            get { return _node; }
+            set
+            {
+                _node = value;
+                UpdateUI();
+            }
+        }
+
+
+        public bool IsSelected
+        {
+            get
+            {
+                return SelectionManager.Instance.IsItemSelected(_node);
+            }
+        }
 
         public string Text
         {
             get { return _label.text; }
             set { _label.text = value; }
         }
-
-        public Node Node { get; set; }
 
         public int Indentation
         {
@@ -27,8 +55,19 @@ namespace ff.nodegraph.interaction
         /** Called from LaserPointButton */
         public void OnClicked()
         {
-            SelectionManager.Instance.SelectItem(Node);
-            //SceneGraphPanel(Node);
+            SelectionManager.Instance.SelectItem(_node);
+        }
+
+        public void UpdateUI()
+        {
+            _button.Color = IsSelected ? HighlightBackgroundColor : BackgroundColor;
+            _label.color = IsSelected ? HighlightLabelColor : LabelColor;
+            _button.UpdateUI();
+
+            if (IsSelected)
+            {
+                Debug.Log("It's selected", this);
+            }
         }
 
         public SceneGraphPanel SceneGraphPanel { get; set; }

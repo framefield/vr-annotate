@@ -31,6 +31,11 @@ namespace ff.vr.interaction
                 SelectionChangedEvent(_selection);
         }
 
+        public bool IsItemSelected(ISelectable item)
+        {
+            return _selection.Contains(item);
+        }
+
         private List<ISelectable> _selection = new List<ISelectable>();
 
         public static SelectionManager Instance { get; private set; }

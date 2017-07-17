@@ -10,6 +10,9 @@ namespace ff.nodegraph.interaction
         public Node root;
         public List<Node> selectedNodes = new List<Node>();
 
+        [SerializeField]
+        Color SelectionColor;
+
         [Header("--- internal prefab references----")]
 
         [SerializeField]
@@ -41,67 +44,96 @@ namespace ff.nodegraph.interaction
         {
             ClearItems();
 
-            // Only show other root nodes
-            //if (selectedNodes.Count == 0)
-            //{
-            foreach (var ng in _nodeSelectionManager.NodeGraphs)
-            {
-                AppendItem(ng.Node);
-            }
-            //}
-
             if (selectedNodes.Count > 1)
             {
                 Debug.LogWarning("graph list only supports one item");
             }
+
+            // Path to selection
             if (selectedNodes.Count == 1)
             {
                 var node = selectedNodes[0];
-                var parent = node.Parent;
                 var path = new List<Node>();
 
-                while (parent != null && parent.Parent != null)
+                // Collect path to get indentation level
+                while (node != null)
                 {
-                    path.Insert(0, parent);
-                    parent = parent.Parent;
+                    path.Insert(0, node);
+                    node = node.Parent;
                 }
 
-                var pathIndex = 1;
-                foreach (var parentNode in path)
+                for (var indentIndex = 0; indentIndex < path.Count; indentIndex++)
                 {
-                    AppendItem(parentNode, pathIndex);
-                    pathIndex++;
+                    InsertItem(path[indentIndex], indentIndex, indentIndex);
                 }
-                AppendItem(node, pathIndex);
             }
+
+            // Add other graph-root nodes before and after
+            var insertionIndex = 0;
+            foreach (var ng in _nodeSelectionManager.NodeGraphs)
+            {
+                // Skip already added root
+                if (NodeInserted(ng.Node))
+                {
+                    insertionIndex = _items.Count;
+                    continue;
+                }
+                InsertItem(ng.Node, insertionIndex);
+                insertionIndex++;
+            }
+            LayoutItems();
         }
 
 
-        private SceneGraphItem AppendItem(Node node, int indentation = 0)
+        private bool NodeInserted(Node node)
         {
+            foreach (var n in _items)
+            {
+                if (node == n.Node)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        /** Use index -1 to apped */
+        private SceneGraphItem InsertItem(Node node, int index = -1, int indentation = 0)
+        {
+            // -1 appends to list
+            if (index == -1)
+                index = _items.Count;
+
             var newItem = GameObject.Instantiate(_itemPrefab);
-            _items.Add(newItem);
+            _items.Insert(index, newItem);
             newItem.Text = node.Name;
             newItem.Indentation = indentation;
 
             newItem.name += "-" + node.Name;
             newItem.Node = node;
 
-            newItem.transform.localPosition = new Vector3(
-                0,
-                -LINE_HEIGHT * _itemsContainer.transform.childCount,
-                0);
 
             newItem.transform.SetParent(_itemsContainer, false);
             newItem.SceneGraphPanel = this;
             return newItem;
         }
 
+        private void LayoutItems()
+        {
+            for (var index = 0; index < _items.Count; index++)
+            {
+                _items[index].transform.localPosition = new Vector3(
+                    0,
+                    -LINE_HEIGHT * index,
+                    0);
+            }
+        }
+
 
         internal void OnItemClicked(SceneGraphItem item)
         {
             SelectionManager.Instance.SelectItem(item.Node);
-            //_nodeSelectionManager.SetSelectedNode(item.Node);
             SetSelectedNode(item.Node);
         }
 

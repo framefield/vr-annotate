@@ -14,12 +14,14 @@ namespace ff.nodegraph.interaction
 
         public void SetSelection(ISelectable newSelection)
         {
+            var node = newSelection as Node;
+            SetSelectedNode(node);
         }
 
-        public void SetSelectedNode(Node newNode)
+        private void SetSelectedNode(Node newNode)
         {
             _selectedNode = newNode;
-            _sceneGraphPanel.SetSelectedNode(_selectedNode);
+            _sceneGraphPanel.SetSelectedNode(newNode);
         }
 
         private InfoPanel _infoPanel;

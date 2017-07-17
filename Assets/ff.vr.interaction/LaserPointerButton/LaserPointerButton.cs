@@ -12,48 +12,43 @@ namespace ff.vr.interaction
         public UnityEvent OnHover;
         public UnityEvent OnUnhover;
 
-        [SerializeField] Color HighlightColor = Color.blue;
+        public Color HoverColor = Color.blue;
 
-        private Color _defaultColor;
-        private Renderer _renderer;
+        public Color Color = Color.gray;
+
+        public bool IsSelected
+        {
+            get; set;
+        }
 
         void Awake()
         {
             _renderer = GetComponent<Renderer>();
-            _defaultColor = _renderer.material.GetColor("_tintColor");
+            //Color = _renderer.material.GetColor("_tintColor");
         }
 
-        void Update()
-        {
-
-        }
-
-        private bool hitByLaser = false;
 
         #region Clickable 
         public void PointerEnter(LaserPointer pointer)
         {
-            hitByLaser = true;
-            _renderer.material.SetColor("_tintColor", HighlightColor);
+            _hitByLaser = true;
+            UpdateUI();
             OnHover.Invoke();
         }
 
         public void PointerExit(LaserPointer pointer)
         {
-            hitByLaser = false;
-            _renderer.material.SetColor("_tintColor", _defaultColor);
+            _hitByLaser = false;
+            UpdateUI();
             OnUnhover.Invoke();
         }
 
-        public void PointerTriggered(LaserPointer pointer)
-        {
-
-        }
+        public void PointerTriggered(LaserPointer pointer) { }
 
         public void PointerUntriggered(LaserPointer pointer)
         {
 
-            if (hitByLaser)
+            if (_hitByLaser)
             {
                 OnClick.Invoke();
             }
@@ -63,6 +58,16 @@ namespace ff.vr.interaction
         {
 
         }
+
+        public void UpdateUI()
+        {
+            _renderer.material.SetColor("_tintColor", _hitByLaser ? HoverColor : Color);
+        }
+
         #endregion Clickable
+
+        private bool _hitByLaser = false;
+        private Renderer _renderer;
+        private bool _isSelected;
     }
 }
