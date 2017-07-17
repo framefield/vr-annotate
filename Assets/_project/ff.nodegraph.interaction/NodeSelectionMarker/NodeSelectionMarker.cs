@@ -88,6 +88,27 @@ namespace ff.nodegraph.interaction
 
             this.gameObject.SetActive(isValid);
 
+            // Move to boundingbox center if not parent
+            if (isValid && _currentNode != null)
+            {
+                var parent = _currentNode.Parent;
+                bool newNodeIsParent = false;
+                while (parent != null)
+                {
+                    if (newNode == parent)
+                    {
+                        newNodeIsParent = true;
+                        break;
+                    }
+                    parent = parent.Parent;
+                }
+
+                if (!newNodeIsParent)
+                {
+                    _targetPosition = newNode.Bounds.center;
+                }
+            }
+
             _selectionLabel.text = isValid ? newNode.Name : "";
             _parentLabel.text = hasParent ? newNode.Parent.Name + " /" : "";
             _exitButton.gameObject.SetActive(hasParent);

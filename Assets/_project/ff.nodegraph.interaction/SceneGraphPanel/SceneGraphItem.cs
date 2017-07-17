@@ -63,11 +63,6 @@ namespace ff.nodegraph.interaction
             _button.Color = IsSelected ? HighlightBackgroundColor : BackgroundColor;
             _label.color = IsSelected ? HighlightLabelColor : LabelColor;
             _button.UpdateUI();
-
-            if (IsSelected)
-            {
-                Debug.Log("It's selected", this);
-            }
         }
 
         public SceneGraphPanel SceneGraphPanel { get; set; }
