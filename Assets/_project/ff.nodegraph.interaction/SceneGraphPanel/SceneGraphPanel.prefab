@@ -80,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1112836056786342}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.414, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4921635982372770}
@@ -175,6 +175,7 @@ MonoBehaviour:
     HasBounds: 0
     HitDistance: 0
   selectedNodes: []
+  SelectionColor: {r: 0, g: 0, b: 0, a: 0}
   _itemPrefab: {fileID: 114195144081716648, guid: 373c2c89c1ef4fe4e85af1b0a10bddc8,
     type: 2}
   _itemsContainer: {fileID: 4921635982372770}

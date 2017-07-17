@@ -12,6 +12,7 @@ namespace ff.vr.interaction
     public interface IInfoPanelContent
     {
         void SetSelection(ISelectable newSelection);
+        Vector3 GetConnectionLineStart();
     }
 
     public class InfoPanel : MonoBehaviour
@@ -27,7 +28,6 @@ namespace ff.vr.interaction
         [SerializeField]
         LineRenderer _connectionLine;
 
-        private IInfoPanelContent _content;
 
         void Start()
         {
@@ -88,19 +88,17 @@ namespace ff.vr.interaction
             _contentForNodes.gameObject.SetActive(false);
             _contentForAnnotations.gameObject.SetActive(false);
 
-
             if (_selectedItem is Node)
             {
-                //var marker = _selectedItem as NodeSelectionMarker;
-                var node = _selectedItem as Node;
-
                 _contentForNodes.gameObject.SetActive(true);
-                _contentForNodes.SetSelection(node);
+                _contentForNodes.SetSelection(_selectedItem);
+                _content = _contentForNodes;
             }
             else if (_selectedItem is AnnotationGizmo)
             {
                 _contentForAnnotations.gameObject.SetActive(true);
                 _contentForAnnotations.SetSelection(_selectedItem);
+                _content = _contentForAnnotations;
             }
         }
 
@@ -109,23 +107,7 @@ namespace ff.vr.interaction
         {
             var transitionComplete = TransitionProgress == 1;
 
-            var selectionLineVisible = _selectedItem != null;
-
-            _connectionLine.gameObject.SetActive(selectionLineVisible);
-            if (selectionLineVisible)
-            {
-                _connectionLine.SetPosition(0, _connectionLine.transform.TransformPoint(Vector3.zero));
-
-
-                if (_selectedItem is Node && _selectionMarker != null)
-                {
-                    _connectionLine.SetPosition(1, _selectionMarker.transform.position);
-                }
-                else
-                {
-                    _connectionLine.SetPosition(1, _selectedItem.GetPosition());
-                }
-            }
+            UpdateConnectionLine();
 
             switch (_state)
             {
@@ -191,8 +173,6 @@ namespace ff.vr.interaction
 
             _pressedMenuButtonController = controller;
 
-            //var distanceToCurrentPos = Vector3.Distance(PositionFromController, transform.position);
-            //var toggle = (distanceToCurrentPos < CLOSE_MENU_THRESHOLD_DISTANCE);
             switch (_state)
             {
                 case States.Undefined:
@@ -201,6 +181,28 @@ namespace ff.vr.interaction
                     SetState(States.Opening);
                     break;
             }
+        }
+
+        private void UpdateConnectionLine()
+        {
+            var selectionLineVisible = _selectedItem != null;
+
+            _connectionLine.gameObject.SetActive(selectionLineVisible);
+            if (!selectionLineVisible)
+                return;
+
+            _connectionLine.SetPosition(0, _connectionLine.transform.TransformPoint(Vector3.zero));
+
+            if (_selectedItem is Node && _selectionMarker != null)
+            {
+                _connectionLine.SetPosition(1, _selectionMarker.transform.position);
+            }
+            else
+            {
+                _connectionLine.SetPosition(1, _selectedItem.GetPosition());
+            }
+
+            _connectionLine.SetPosition(0, _content.GetConnectionLineStart());
         }
 
         private const float CLOSE_MENU_THRESHOLD_DISTANCE = 0.3f;
@@ -366,6 +368,7 @@ namespace ff.vr.interaction
         SteamVR_TrackedController _pressedMenuButtonController;
 
         private ISelectable _selectedItem;
+        private IInfoPanelContent _content;
 
         private const float TRANSITION_DURATION = 0.35f;
         private float _interactionStartTime = 0;

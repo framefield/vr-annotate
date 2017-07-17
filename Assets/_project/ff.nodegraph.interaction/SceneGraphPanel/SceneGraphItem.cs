@@ -15,10 +15,11 @@ namespace ff.nodegraph.interaction
         [SerializeField]
         TMPro.TextMeshPro _label;
 
-        public Color HighlightBackgroundColor = Color.blue;
-        public Color HighlightLabelColor = Color.white;
         public Color BackgroundColor = Color.gray;
         public Color LabelColor = Color.white;
+
+        public Color SelectedBackgroundColor = Color.blue;
+        public Color SelectedLabelColor = Color.white;
 
         private Node _node;
 
@@ -60,8 +61,8 @@ namespace ff.nodegraph.interaction
 
         public void UpdateUI()
         {
-            _button.Color = IsSelected ? HighlightBackgroundColor : BackgroundColor;
-            _label.color = IsSelected ? HighlightLabelColor : LabelColor;
+            _button.Color = IsSelected ? SelectedBackgroundColor : BackgroundColor;
+            _label.color = IsSelected ? SelectedLabelColor : LabelColor;
             _button.UpdateUI();
         }
 

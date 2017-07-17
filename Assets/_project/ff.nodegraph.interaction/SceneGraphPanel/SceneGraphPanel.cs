@@ -30,11 +30,12 @@ namespace ff.nodegraph.interaction
 
         public void SetSelectedNode(Node newNode)
         {
+            _selectedNode = newNode;
             selectedNodes.Clear();
+
             if (newNode != null)
             {
                 selectedNodes.Add(newNode);
-
             }
             RebuildUI();
         }
@@ -73,7 +74,7 @@ namespace ff.nodegraph.interaction
             foreach (var ng in _nodeSelectionManager.NodeGraphs)
             {
                 // Skip already added root
-                if (NodeInserted(ng.Node))
+                if (HasAlreadyInsertedNode(ng.Node))
                 {
                     insertionIndex = _items.Count;
                     continue;
@@ -85,7 +86,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        private bool NodeInserted(Node node)
+        private bool HasAlreadyInsertedNode(Node node)
         {
             foreach (var n in _items)
             {
@@ -98,7 +99,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        /** Use index -1 to apped */
+        /** Use index -1 to append */
         private SceneGraphItem InsertItem(Node node, int index = -1, int indentation = 0)
         {
             // -1 appends to list
@@ -113,7 +114,6 @@ namespace ff.nodegraph.interaction
             newItem.name += "-" + node.Name;
             newItem.Node = node;
 
-
             newItem.transform.SetParent(_itemsContainer, false);
             newItem.SceneGraphPanel = this;
             return newItem;
@@ -121,15 +121,19 @@ namespace ff.nodegraph.interaction
 
         private void LayoutItems()
         {
+            _localPositionOfSelectedItem = Vector3.zero;
+
             for (var index = 0; index < _items.Count; index++)
             {
-                _items[index].transform.localPosition = new Vector3(
-                    0,
-                    -LINE_HEIGHT * index,
-                    0);
+                var pos = new Vector3(0, -LINE_HEIGHT * index, 0);
+                _items[index].transform.localPosition = pos;
+                if (_items[index].Node == _selectedNode)
+                {
+                    Debug.Log("Set selection");
+                    _localPositionOfSelectedItem = pos;
+                }
             }
         }
-
 
         internal void OnItemClicked(SceneGraphItem item)
         {
@@ -149,6 +153,21 @@ namespace ff.nodegraph.interaction
 
 
         private float LINE_HEIGHT = 0.2f;
+        private Node _selectedNode;
+
+        public Vector3 PositionOfSelectedItem
+        {
+            get
+            {
+                //var pInWorld = transform.InverseTransformVector(_localPositionOfSelectedItem);
+                //Debug.Log("pWorld:" + pInWorld + " <--- local: " + _localPositionOfSelectedItem);
+                //return this.transform.position;
+                return this.transform.TransformPoint(_localPositionOfSelectedItem);
+            }
+        }
+
+        private Vector3 _localPositionOfSelectedItem;
+
         private List<SceneGraphItem> _items = new List<SceneGraphItem>();
         private NodeSelectionManager _nodeSelectionManager;
     }

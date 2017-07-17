@@ -30,10 +30,14 @@ namespace ff.vr.annotate
         }
 
         /** Called from annotation manager */
-        public void SetAnnotation(Annotation newAnnotation)
+        public Annotation Annotation
         {
-            _annotation = newAnnotation;
-            UpdateVisibility();
+            get { return _annotation; }
+            set
+            {
+                _annotation = value;
+                UpdateVisibility();
+            }
         }
 
 
