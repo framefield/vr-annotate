@@ -52,12 +52,9 @@ namespace ff.vr.annotate.viz
         private void ReadAllAnnotationsFromDatabase()
         {
 
-            var filesInDirectory = Directory.GetFiles(AnnotationDirectory);
+            var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
             foreach (var file in filesInDirectory)
             {
-                if (!file.EndsWith(".json"))
-                    continue;
-
                 var newAnnotation = new Annotation(File.ReadAllText(file));
                 CreateAnnotationGizmo(newAnnotation);
             }

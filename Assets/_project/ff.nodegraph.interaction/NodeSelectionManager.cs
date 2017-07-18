@@ -128,11 +128,6 @@ namespace ff.nodegraph.interaction
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
-            // _trackpadButtonUI = pointer.Controller.gameObject.GetComponentInChildren<TrackpadButtonUI>();
-            // if (_trackpadButtonUI)
-            // {
-            //     _trackpadButtonUI.UIButtonClickedEvent += UiButtonClickedHandler;
-            // }
             _hoverLabel.gameObject.SetActive(true);
             HoveredNode = _lastNodeHitByRay;
             UpdateHoverHighlight();
@@ -155,10 +150,6 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
-            // if (_trackpadButtonUI)
-            // {
-            //     _trackpadButtonUI.UIButtonClickedEvent -= UiButtonClickedHandler;
-            // }
             HoveredNode = null;
             UpdateHoverHighlight();
             _lastNodeHitByRay = null;    // really?
@@ -172,7 +163,6 @@ namespace ff.nodegraph.interaction
             if (HoveredNode != null)
             {
                 SelectionManager.Instance.SelectItem(HoveredNode);
-                //SetSelectedNode(HoveredNode);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
@@ -190,22 +180,6 @@ namespace ff.nodegraph.interaction
         {
 
         }
-
-        // /** A dummy implementation to simulate entering and exiting hierarchy */
-        // private void UiButtonClickedHandler(object s, TrackpadButtonUI.ControllerButtons buttonPressed)
-        // {
-        //     switch (buttonPressed)
-        //     {
-        //         case TrackpadButtonUI.ControllerButtons.Down:
-        //             SetSelectedNode(HoveredNode);
-        //             break;
-
-        //         case TrackpadButtonUI.ControllerButtons.Up:
-        //             SelectParent();
-        //             break;
-        //     }
-        // }
-
 
         public void SelectParentNode()
         {
@@ -241,11 +215,6 @@ namespace ff.nodegraph.interaction
                 _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
                 _highlightContextRenderer.enabled = true;
             }
-
-            // if (_selectionMarker)
-            // {
-            //     _selectionMarker.SetCurrentNode(newSelectedNode);
-            // }
         }
 
 
@@ -255,13 +224,13 @@ namespace ff.nodegraph.interaction
             var hits = new List<Node>();
             if (SelectedNode != null)
             {
-                SelectedNode.CollectLeafesIntersectingRay(ray, hits);
+                SelectedNode.CollectLeavesIntersectingRay(ray, hits);
             }
             else
             {
                 foreach (var ag in NodeGraphs)
                 {
-                    ag.Node.CollectLeafesIntersectingRay(ray, hits);
+                    ag.Node.CollectLeavesIntersectingRay(ray, hits);
                 }
             }
             if (hits.Count == 0)

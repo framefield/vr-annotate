@@ -53,7 +53,7 @@ namespace ff.vr.annotate
                 {"rootNodeId", TargetNode.NodeGraphRoot.RootNodeId},
                 {"targetNodeId", TargetNodeId.ToString()},
                 {"targetNodeName", TargetNode.Name},
-                {"simulatedTime", AnnotationManager._instance.SimulatedTimeOfDay},
+                {"simulatedDate", AnnotationManager._instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager._instance.SimulatedTimeOfDay},
                 {"interpretationStateJSON", "{}"},
                 {"sceneGraphPath", TargetNode.NodePath},
@@ -61,8 +61,6 @@ namespace ff.vr.annotate
                 {"annotationPositionJSON", JsonUtility.ToJson(AnnotationPosition)},
             });
         }
-
-
 
         public void DeserializeFromJson(string jsonString)
         {
@@ -139,7 +137,7 @@ namespace ff.vr.annotate
                 'type': 'VRSimulation',
                 'refinedBy': {
                     'type': 'SimulationTime',
-                    'sourceDate': '{simulatedTime}',
+                    'sourceDate': '{simulatedDate}',
                     'timeOfDay': '{simulatedTimeofDay}'
                 }
             },

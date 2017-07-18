@@ -53,11 +53,11 @@ namespace ff.vr.interaction
             {
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
-            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
+            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHandler;
         }
 
 
-        private void SelectionChangedHander(List<ISelectable> newSelection)
+        private void SelectionChangedHandler(List<ISelectable> newSelection)
         {
             if (newSelection.Count != 1)
             {
