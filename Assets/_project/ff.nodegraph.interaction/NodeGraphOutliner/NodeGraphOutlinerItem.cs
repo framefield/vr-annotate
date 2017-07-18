@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ff.nodegraph.interaction
 {
-    public class SceneGraphItem : MonoBehaviour
+    public class NodeGraphOutlinerItem : MonoBehaviour
     {
         public Color BackgroundColor = Color.gray;
         public Color LabelColor = Color.white;
@@ -24,7 +24,7 @@ namespace ff.nodegraph.interaction
         TMPro.TextMeshPro _label;
 
 
-        public SceneGraphPanel SceneGraphPanel { get; set; }
+        public NodeGraphOutliner SceneGraphPanel { get; set; }
 
         public Node Node
         {

@@ -10,7 +10,7 @@ namespace ff.nodegraph.interaction
     {
         [Header("--- internal prefab references ----")]
         [SerializeField]
-        SceneGraphPanel _sceneGraphPanel;
+        NodeGraphOutliner _sceneGraphPanel;
 
         public void SetSelection(ISelectable newSelection)
         {

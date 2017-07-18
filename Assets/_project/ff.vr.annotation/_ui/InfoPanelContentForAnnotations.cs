@@ -13,7 +13,7 @@ namespace ff.vr.interaction
     {
         [Header("--- internal prefab references -----")]
         [SerializeField]
-        SceneGraphPanel _sceneGraphPanel;
+        NodeGraphOutliner _sceneGraphPanel;
 
         [SerializeField]
         TMPro.TextMeshPro _annotationObjectLabel;

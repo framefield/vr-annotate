@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4672099054182416}
   - component: {fileID: 114009027321804360}
   m_Layer: 0
-  m_Name: SceneGraphPanel
+  m_Name: NodeGraphOutliner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,7 +36,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4030124397921836}
   - component: {fileID: 33892868047935008}
-  - component: {fileID: 64044629632357190}
   - component: {fileID: 23632018362000532}
   m_Layer: 0
   m_Name: Background - Quad
@@ -140,20 +139,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1829777386097280}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &64044629632357190
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1829777386097280}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Convex: 0
-  m_InflateMesh: 0
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114009027321804360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,17 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef6bfd64867e934490b5721b9c022a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  root:
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0, y: 0, z: 0}
-    IsAnnotatable: 0
-    HasGeometry: 0
-    Name: 
-    HasBounds: 0
-    HitDistance: 0
   selectedNodes: []
-  SelectionColor: {r: 0, g: 0, b: 0, a: 0}
   _itemPrefab: {fileID: 114195144081716648, guid: 373c2c89c1ef4fe4e85af1b0a10bddc8,
     type: 2}
   _itemsContainer: {fileID: 4921635982372770}

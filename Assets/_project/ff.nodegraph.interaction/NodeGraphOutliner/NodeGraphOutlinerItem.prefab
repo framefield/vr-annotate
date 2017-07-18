@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4018255107209740}
   - component: {fileID: 114195144081716648}
   m_Layer: 0
-  m_Name: SceneGraphItem2
+  m_Name: NodeGraphOutlinerItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -196,12 +196,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9685cba7b1bdb3458fdcf1c96e9e73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _button: {fileID: 114289928307519344}
-  _label: {fileID: 114219498320131936}
   BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
   LabelColor: {r: 1, g: 1, b: 1, a: 1}
   SelectedBackgroundColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   SelectedLabelColor: {r: 0, g: 0, b: 0, a: 1}
+  IsHighlighted: 0
+  _button: {fileID: 114289928307519344}
+  _label: {fileID: 114219498320131936}
 --- !u!114 &114219498320131936
 MonoBehaviour:
   m_ObjectHideFlags: 1

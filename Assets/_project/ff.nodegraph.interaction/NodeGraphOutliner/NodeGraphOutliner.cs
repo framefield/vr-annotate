@@ -5,18 +5,18 @@ using UnityEngine;
 
 namespace ff.nodegraph.interaction
 {
-    public class SceneGraphPanel : MonoBehaviour
+    public class NodeGraphOutliner : MonoBehaviour
     {
-        public Node root;
+        public Node root { get; set; }
+
+        [HideInInspector]
         public List<Node> selectedNodes = new List<Node>();
 
-        [SerializeField]
-        Color SelectionColor;
 
-        [Header("--- internal prefab references----")]
+        [Header("--- internal prefab references-----")]
 
         [SerializeField]
-        SceneGraphItem _itemPrefab;
+        NodeGraphOutlinerItem _itemPrefab;
 
         [SerializeField]
         Transform _itemsContainer;
@@ -100,7 +100,7 @@ namespace ff.nodegraph.interaction
 
 
         /** Use index -1 to append */
-        private SceneGraphItem InsertItem(Node node, int index = -1, int indentation = 0)
+        private NodeGraphOutlinerItem InsertItem(Node node, int index = -1, int indentation = 0)
         {
             // -1 appends to list
             if (index == -1)
@@ -135,7 +135,7 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        internal void OnItemClicked(SceneGraphItem item)
+        internal void OnItemClicked(NodeGraphOutlinerItem item)
         {
             SelectionManager.Instance.SelectItem(item.Node);
             SetSelectedNode(item.Node);
@@ -168,7 +168,7 @@ namespace ff.nodegraph.interaction
 
         private Vector3 _localPositionOfSelectedItem;
 
-        private List<SceneGraphItem> _items = new List<SceneGraphItem>();
+        private List<NodeGraphOutlinerItem> _items = new List<NodeGraphOutlinerItem>();
         private NodeSelectionManager _nodeSelectionManager;
     }
 }
