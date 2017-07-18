@@ -2,17 +2,17 @@
 
 Shader "Unlit/StencilTest"
 {
-	Properties
-	{
-		_MainTex ("Texture", 2D) = "white" {}
+    Properties
+    {
+        _MainTex ("Texture", 2D) = "white" {}
         _FillColor ("FillColor", Color) = (1,1,1,0.5) 
         _LineWidth ("LineWidth", Range(0, 1)) = 1
         _LineColor ("LineColor", Color) = (1,0,0,0.6) 
-	}
-	SubShader
-	{
-		Tags { "RenderType"="Transparent" }
-		LOD 100
+    }
+    SubShader
+    {
+        Tags { "RenderType"="Transparent" }
+        LOD 100
 
         ZWrite Off
         ZTest Always
@@ -55,6 +55,9 @@ Shader "Unlit/StencilTest"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+
+                // HACK: fix horizontal disaligment on Vive
+                o.vertex.x /= 1.01;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
@@ -102,7 +105,7 @@ Shader "Unlit/StencilTest"
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
                 float4 n = mul(UNITY_MATRIX_MV, float4(v.normal, 0));
-                n.z = 0;
+                n.z = 0; 
                 n.w = 0;
                 n.xyz= normalize(n.xyz);
 
@@ -119,5 +122,6 @@ Shader "Unlit/StencilTest"
             }
             ENDCG
         }
-	}
+    }
 }
+ 
