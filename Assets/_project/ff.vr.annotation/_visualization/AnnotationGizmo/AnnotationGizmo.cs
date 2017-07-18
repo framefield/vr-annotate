@@ -20,9 +20,14 @@ namespace ff.vr.annotate
         TMPro.TextMeshPro _annotationDateLabel;
 
         [SerializeField]
+        LaserPointerButton _icon;
+
+
+        [SerializeField]
         GameObject _hoverGroup;
 
-        Color SelectedColor;
+        public Color SelectedColor = Color.white;
+        public Color Color = Color.gray;
 
         void Update()
         {
@@ -36,12 +41,23 @@ namespace ff.vr.annotate
             set
             {
                 _annotation = value;
-                UpdateVisibility();
+                UpdateUI();
+            }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                _isSelected = value;
+                UpdateUI();
             }
         }
 
 
-        private void UpdateVisibility()
+
+        private void UpdateUI()
         {
             if (_annotation != null)
             {
@@ -50,7 +66,8 @@ namespace ff.vr.annotate
                 _authorLabel.text = _annotation.Author.name;
                 _annotationDateLabel.text = _annotation.CreatedAt.ToString("yyyy/MM/dd");
             }
-            _hoverGroup.SetActive(_isHovered);
+            _icon.SetColor(_isSelected ? SelectedColor : Color);
+            _hoverGroup.SetActive(_isHovered && !_isSelected);
         }
 
         public void UpdateBodyText(string newText)
@@ -62,13 +79,13 @@ namespace ff.vr.annotate
         public void OnHover()
         {
             _isHovered = true;
-            UpdateVisibility();
+            UpdateUI();
         }
 
         public void OnUnhover()
         {
             _isHovered = false;
-            UpdateVisibility();
+            UpdateUI();
         }
 
         public void OnClicked()
@@ -85,8 +102,8 @@ namespace ff.vr.annotate
         #endregion
 
         private bool _isHovered = false;
-        //private bool _isSelected = false;
         private float _startTime;
+        private bool _isSelected = false;
         private Annotation _annotation;
         private const float DEFAULT_SIZE = 0.3f;
     }

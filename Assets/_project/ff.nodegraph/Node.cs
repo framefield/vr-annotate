@@ -51,6 +51,8 @@ namespace ff.nodegraph
             }
         }
 
+        public bool IsSelected { get; set; }
+
         public NodeGraph NodeGraphRoot
         {
             get

@@ -179,8 +179,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000578564018302}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 10, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.3219128, y: 0.39848042, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4859873296939198}
@@ -973,7 +973,10 @@ MonoBehaviour:
   _annotationBodyLabel: {fileID: 114179781073288426}
   _authorLabel: {fileID: 114566145360807084}
   _annotationDateLabel: {fileID: 114872869318626702}
+  _icon: {fileID: 114562836399293544}
   _hoverGroup: {fileID: 1801136722934438}
+  SelectedColor: {r: 1, g: 1, b: 1, a: 0.78431374}
+  Color: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
 --- !u!114 &114872869318626702
 MonoBehaviour:
   m_ObjectHideFlags: 1

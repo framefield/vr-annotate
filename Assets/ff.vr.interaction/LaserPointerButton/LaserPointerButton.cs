@@ -21,13 +21,6 @@ namespace ff.vr.interaction
             get; set;
         }
 
-        void Awake()
-        {
-            _renderer = GetComponent<Renderer>();
-            //Color = _renderer.material.GetColor("_tintColor");
-        }
-
-
         #region Clickable 
         public void PointerEnter(LaserPointer pointer)
         {
@@ -54,13 +47,21 @@ namespace ff.vr.interaction
             }
         }
 
-        public void PointerUpdate(LaserPointer pointer)
-        {
+        public void PointerUpdate(LaserPointer pointer) { }
 
+
+        public void SetColor(Color newColor)
+        {
+            Color = newColor;
+            UpdateUI();
         }
 
-        public void UpdateUI()
+
+        private void UpdateUI()
         {
+            if (_renderer == null)
+                _renderer = GetComponent<Renderer>();
+
             _renderer.material.SetColor("_tintColor", _hitByLaser ? HoverColor : Color);
         }
 

@@ -36,14 +36,15 @@ namespace ff.nodegraph.interaction
             }
         }
 
+        public bool IsSelected { get; set; }
 
-        public bool IsSelected
-        {
-            get
-            {
-                return SelectionManager.Instance.IsItemSelected(_node) || IsHighlighted;
-            }
-        }
+        // public bool IsSelected
+        // {
+        //     get
+        //     {
+        //         return SelectionManager.Instance.IsItemSelected(_node) || IsHighlighted;
+        //     }
+        // }
 
 
         public string Text
@@ -66,10 +67,11 @@ namespace ff.nodegraph.interaction
 
         private void UpdateUI()
         {
-            _button.Color = IsSelected ? SelectedBackgroundColor : BackgroundColor;
-            _label.color = IsSelected ? SelectedLabelColor : LabelColor;
-            _button.UpdateUI();
+            var on = IsSelected || IsHighlighted;
+            _button.SetColor(on ? SelectedBackgroundColor : BackgroundColor);
+            _label.color = on ? SelectedLabelColor : LabelColor;
         }
+
 
         private float INDENTATION_WIDHT = 0.1f;
         private Node _node;

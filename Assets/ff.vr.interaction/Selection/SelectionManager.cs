@@ -22,22 +22,33 @@ namespace ff.vr.interaction
 
         public void SelectItem(ISelectable item)
         {
+            // Clear old selection (e.g. send property setter updates)
+            foreach (var oldSelected in _selection)
+            {
+                if (oldSelected != item)
+                {
+                    oldSelected.IsSelected = false;
+                }
+            }
+
             _selection.Clear();
+
             if (item != null)
             {
                 _selection.Add(item);
+                item.IsSelected = true;
             }
+
             if (SelectionChangedEvent != null)
                 SelectionChangedEvent(_selection);
         }
 
-        public bool IsItemSelected(ISelectable item)
-        {
-            return _selection.Contains(item);
-        }
+        // public bool IsItemSelected(ISelectable item)
+        // {
+        //     return _selection.Contains(item);
+        // }
 
         private List<ISelectable> _selection = new List<ISelectable>();
-
         public static SelectionManager Instance { get; private set; }
     }
 }

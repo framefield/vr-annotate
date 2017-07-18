@@ -6,7 +6,7 @@ using System;
 
 namespace ff.nodegraph.interaction
 {
-    public class NodeSelectionMarker : MonoBehaviour, ISelectable
+    public class NodeSelectionMarker : MonoBehaviour
     {
         public Node _currentNode;
         public NodeSelectionManager _nodeSelectionManager;
@@ -38,6 +38,7 @@ namespace ff.nodegraph.interaction
             SetSelectedNode(nodeOrNull);
         }
 
+        public bool IsSelected { get; set; }
 
         void Update()
         {
