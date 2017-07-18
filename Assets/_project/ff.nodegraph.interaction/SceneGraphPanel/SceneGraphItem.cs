@@ -8,6 +8,14 @@ namespace ff.nodegraph.interaction
 {
     public class SceneGraphItem : MonoBehaviour
     {
+        public Color BackgroundColor = Color.gray;
+        public Color LabelColor = Color.white;
+
+        public Color SelectedBackgroundColor = Color.blue;
+        public Color SelectedLabelColor = Color.white;
+
+        public bool IsHighlighted;
+
         [Header("--- internal prefab references ----")]
         [SerializeField]
         LaserPointerButton _button;
@@ -15,13 +23,8 @@ namespace ff.nodegraph.interaction
         [SerializeField]
         TMPro.TextMeshPro _label;
 
-        public Color BackgroundColor = Color.gray;
-        public Color LabelColor = Color.white;
 
-        public Color SelectedBackgroundColor = Color.blue;
-        public Color SelectedLabelColor = Color.white;
-
-        private Node _node;
+        public SceneGraphPanel SceneGraphPanel { get; set; }
 
         public Node Node
         {
@@ -38,9 +41,10 @@ namespace ff.nodegraph.interaction
         {
             get
             {
-                return SelectionManager.Instance.IsItemSelected(_node);
+                return SelectionManager.Instance.IsItemSelected(_node) || IsHighlighted;
             }
         }
+
 
         public string Text
         {
@@ -53,20 +57,21 @@ namespace ff.nodegraph.interaction
             set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
         }
 
+
         /** Called from LaserPointButton */
         public void OnClicked()
         {
             SelectionManager.Instance.SelectItem(_node);
         }
 
-        public void UpdateUI()
+        private void UpdateUI()
         {
             _button.Color = IsSelected ? SelectedBackgroundColor : BackgroundColor;
             _label.color = IsSelected ? SelectedLabelColor : LabelColor;
             _button.UpdateUI();
         }
 
-        public SceneGraphPanel SceneGraphPanel { get; set; }
         private float INDENTATION_WIDHT = 0.1f;
+        private Node _node;
     }
 }

@@ -45,7 +45,7 @@ namespace ff.nodegraph.interaction
             NodeGraphs = FindObjectsOfType<NodeGraph>();
             foreach (var ng in NodeGraphs)
             {
-                Debug.Log(ng.name);
+                Debug.Log("initializing graph:" + ng.name + " / " + ng.RootNodeId);
             }
             _annotationManager = FindObjectOfType<AnnotationManager>();
         }

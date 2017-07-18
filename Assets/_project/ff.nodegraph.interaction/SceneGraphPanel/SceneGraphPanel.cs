@@ -110,6 +110,7 @@ namespace ff.nodegraph.interaction
             _items.Insert(index, newItem);
             newItem.Text = node.Name;
             newItem.Indentation = indentation;
+            newItem.IsHighlighted = node == _selectedNode;
 
             newItem.name += "-" + node.Name;
             newItem.Node = node;

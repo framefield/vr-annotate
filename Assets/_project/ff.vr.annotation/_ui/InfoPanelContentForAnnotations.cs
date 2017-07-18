@@ -34,8 +34,8 @@ namespace ff.vr.interaction
             var annotationGizmo = newSelection as AnnotationGizmo;
             _annotation = annotationGizmo != null ? annotationGizmo.Annotation : null;
             _targetNode = _annotation != null ? _annotation.TargetNode : null;
-            _sceneGraphPanel.SetSelectedNode(_targetNode);
 
+            _sceneGraphPanel.SetSelectedNode(_targetNode);
             UpdateUI();
         }
 
