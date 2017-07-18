@@ -72,7 +72,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1890151798202818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.887973, y: -7.71144, z: 6.2304254}
+  m_LocalPosition: {x: 0, y: 0.874, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224729003539963174}
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _button: {fileID: 114289928307519344}
   _label: {fileID: 114219498320131936}
-  BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.397}
+  BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
   LabelColor: {r: 1, g: 1, b: 1, a: 1}
   SelectedBackgroundColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   SelectedLabelColor: {r: 0, g: 0, b: 0, a: 1}

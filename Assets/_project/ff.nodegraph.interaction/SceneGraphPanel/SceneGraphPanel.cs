@@ -129,7 +129,6 @@ namespace ff.nodegraph.interaction
                 _items[index].transform.localPosition = pos;
                 if (_items[index].Node == _selectedNode)
                 {
-                    Debug.Log("Set selection");
                     _localPositionOfSelectedItem = pos;
                 }
             }

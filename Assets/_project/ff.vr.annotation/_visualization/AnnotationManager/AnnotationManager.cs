@@ -112,7 +112,7 @@ namespace ff.vr.annotate.viz
             var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
             newAnnotationGizmo.transform.position = annotation.Position;
             newAnnotationGizmo.transform.SetParent(_gizmoContainer.transform, false);
-            //newAnnotationGizmo.Annotation = annotation;
+            newAnnotationGizmo.Annotation = annotation;
             AllAnnotationGizmos.Add(newAnnotationGizmo);
             return newAnnotationGizmo;
         }

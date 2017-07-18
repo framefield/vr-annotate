@@ -15,6 +15,15 @@ namespace ff.vr.interaction
         [SerializeField]
         SceneGraphPanel _sceneGraphPanel;
 
+        [SerializeField]
+        TMPro.TextMeshPro _annotationObjectLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _annotationBodyLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _authorLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _annotationDateLabel;
+
         public Vector3 GetConnectionLineStart()
         {
             return _sceneGraphPanel.PositionOfSelectedItem;
@@ -23,8 +32,22 @@ namespace ff.vr.interaction
         public void SetSelection(ISelectable newSelection)
         {
             var annotationGizmo = newSelection as AnnotationGizmo;
-            var nodeOrNull = annotationGizmo != null ? annotationGizmo.Annotation.TargetNode : null;
-            _sceneGraphPanel.SetSelectedNode(nodeOrNull);
+            _annotation = annotationGizmo != null ? annotationGizmo.Annotation : null;
+            _targetNode = _annotation != null ? _annotation.TargetNode : null;
+            _sceneGraphPanel.SetSelectedNode(_targetNode);
+
+            UpdateUI();
         }
+
+        private void UpdateUI()
+        {
+            _annotationObjectLabel.text = _targetNode != null ? _targetNode.Name : "<Without Object>"; // FIXME: Needs to be implemented
+            _annotationBodyLabel.text = _annotation != null ? _annotation.Text : "";
+            _authorLabel.text = _annotation != null ? _annotation.Author.name : "";
+            _annotationDateLabel.text = _annotation != null ? _annotation.CreatedAt.ToString("yyyy/MM/dd") : "";
+        }
+
+        private Annotation _annotation;
+        private Node _targetNode;
     }
 }

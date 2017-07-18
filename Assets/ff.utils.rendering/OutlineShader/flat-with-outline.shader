@@ -57,7 +57,7 @@ Shader "Unlit/StencilTest"
                 o.vertex = UnityObjectToClipPos(v.vertex);
 
                 // HACK: fix horizontal disaligment on Vive
-                o.vertex.x /= 1.01;
+                o.vertex.x /= 1.012;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
