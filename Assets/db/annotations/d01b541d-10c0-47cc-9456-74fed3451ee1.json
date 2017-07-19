@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/d01b541d-10c0-47cc-9456-74fed3451ee1",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/19/2017 10:12:25 AM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "cfdsw,xxxx"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "https://www.wikidata.org/wiki/Q1670679",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "Südanbau",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "300 BC",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "Stoa_komplett_low/Südanbau"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":6.993031978607178,"y":1.0267679691314698,"z":5.6398210525512699},"rotation":{"x":1.888854742050171,"y":265.6976623535156,"z":3.886404037475586},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97606297718135,"longitude":23.72227459659919,"elevation":1.0267679691314698},
+            "AnnotationCoordinates" : {"position":{"x":5.084953308105469,"y":0.9666929244995117,"z":5.687589645385742},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97607349495592,"longitude":23.722291783025548,"elevation":0.9666929244995117}
+        }
+    }
+}

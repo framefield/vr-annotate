@@ -56,6 +56,9 @@ namespace ff.vr.annotate.viz
             foreach (var file in filesInDirectory)
             {
                 var newAnnotation = new Annotation(File.ReadAllText(file));
+                if (newAnnotation.TargetNode == null)
+                    continue;
+
                 CreateAnnotationGizmo(newAnnotation);
             }
         }

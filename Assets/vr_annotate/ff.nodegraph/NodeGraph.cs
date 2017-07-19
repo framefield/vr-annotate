@@ -10,6 +10,9 @@ namespace ff.nodegraph
         public string RootNodeId; // Iri
         public string objStateDescription = "";
 
+        public string modelAuthor = "email@address.com";
+        public string modelVersion = "v1";
+
         [HideInInspector]
         public Node Node;
 

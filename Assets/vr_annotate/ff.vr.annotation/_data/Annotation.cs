@@ -59,6 +59,8 @@ namespace ff.vr.annotate
                 {"sceneGraphPath", TargetNode.NodePath},
                 {"viewPointPositionJSON", JsonUtility.ToJson(ViewPointPosition)},
                 {"annotationPositionJSON", JsonUtility.ToJson(AnnotationPosition)},
+                {"modelAuthor", TargetNode.NodeGraphRoot.modelAuthor},
+                {"modelVersion", TargetNode.NodeGraphRoot.modelVersion},
             });
         }
 
@@ -143,7 +145,14 @@ namespace ff.vr.annotate
             },
             {
                 'type': 'InterpretiveReconstruction',
-                'refinedBy': {interpretationStateJSON}
+                'refinedBy': {interpretationStateJSON},
+            },
+            {
+                'type': 'model',
+                'refinedBy': {
+                    'author' : '{modelAuthor}',
+                    'version' : '{modelVersion}',
+                },
             }
         ],
         'selector': {
