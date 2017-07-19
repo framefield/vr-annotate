@@ -1,0 +1,49 @@
+
+{
+    "@context": "http://www.w3.org/ns/anno.jsonld",
+    "id": "http://annotator/anno/49bfe263-7b0b-4dda-a63c-1736359a7dd5",
+    "type": "Annotation",
+    "creator": {"id":"_alan","name":"Alan","email":"alan@google.com"},
+    "created": "7/19/2017 9:54:45 AM",
+    "generator": {
+        "id": "http://vr-annotator/v/01",
+        "type": "Software",
+        "name": "VR-Annotator v0.1"
+    },
+    "body": [
+        {
+            "type": "TextualBody",
+            "purpose": "describing",
+            "value": "test"
+        }
+    ],
+    "target": {
+        "type": "http://vr-annotator/feature/",
+        "rootNodeId": "_SampleCubes1",
+        "targetNodeId": "00000000-0000-0000-0000-000000000000",
+        "targetNodeName": "SomeCubes",
+        "state": [
+            {
+                "type": "VRSimulation",
+                "refinedBy": {
+                    "type": "SimulationTime",
+                    "sourceDate": "300 BC",
+                    "timeOfDay": "18:23:12"
+                }
+            },
+            {
+                "type": "InterpretiveReconstruction",
+                "refinedBy": {}
+            }
+        ],
+        "selector": {
+                "type": "SceneGraphSelector",
+                "value": "SampleGeometry/SomeCubes"
+        },
+        "position": {
+            "type":"AnnotationLocation",
+            "AnnotationViewPoint": {"position":{"x":7.914401054382324,"y":0.8004238605499268,"z":-5.91445255279541},"rotation":{"x":352.82220458984377,"y":329.4794006347656,"z":1.5361818075180054},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97613847200653,"longitude":23.722183449778404,"elevation":0.8004238605499268},
+            "AnnotationCoordinates" : {"position":{"x":4.610000133514404,"y":0.9485805034637451,"z":-1.9827768802642823},"rotation":{"x":0.0,"y":0.0,"z":0.0},"type":"GeoCoordinates","coordinateSystem":"Unity.WorldSpace","latitude":37.97612979232936,"longitude":23.72224086656264,"elevation":0.9485805034637451}
+        }
+    }
+}

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4387541972093216}
   - component: {fileID: 114079540424180786}
   m_Layer: 0
-  m_Name: DrumStick2
+  m_Name: DrumStickForController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

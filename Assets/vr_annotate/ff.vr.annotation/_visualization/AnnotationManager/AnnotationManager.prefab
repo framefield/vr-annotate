@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4205900988386908}
   - component: {fileID: 114058603520785466}
+  - component: {fileID: 114856891819420284}
   m_Layer: 0
   m_Name: AnnotationManager
   m_TagString: Untagged
@@ -55,3 +56,14 @@ MonoBehaviour:
   SimulatedTimeOfDay: 18:23:12
   _annotationGizmoPrefab: {fileID: 114672977400686654, guid: d37af7bff6cc6334494de9bb4ada8d18,
     type: 2}
+--- !u!114 &114856891819420284
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1672844594168556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bd18bcedec6706408f1eecf39a18575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
