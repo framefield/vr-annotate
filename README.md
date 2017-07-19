@@ -28,10 +28,6 @@ Part of the package are the following non-unity dependencies:
 - [Punchkeyboard](https://github.com/rjth/Punchkeyboard) by Jonathan Ravasz (MIT-license)
 - [InputSimulator](https://github.com/michaelnoonan/inputsimulator) by Michael Noonan
 
-# Overview
-
-This unity-package allows to make annotations on arbitrary Unity-scenes of architectural sites. The generated annotation-data can be transformed into real world coordinates and because the data-format is JSON-ld, it can be cross references with other open databases.
-
 # What it does
 
 Once you added to required prefabs to a part of your scene, you use the Vive-controller to select it’s geometry, browse the hierarchical structure of the scene, place comments to certain parts of the geometry by pressing trigger and using a virtual keyboard or reading the comments of other users.
