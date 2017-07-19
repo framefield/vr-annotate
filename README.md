@@ -4,7 +4,7 @@
 
 This unity-package allows to make annotations on arbitrary Unity-scenes of architectural sites. The generated annotation-data can be transformed into real world coordinates and because the data-format is JSON-ld, it can be cross references with other open databases.
 
-Also check the [live version]https://paper.dropbox.com/doc/vr-annotate-Documentation-YxSHjwYodKZkEP93F6NNX() of this document.
+Also check the [live version](https://paper.dropbox.com/doc/vr-annotate-Documentation-YxSHjwYodKZkEP93F6NNX) of this document.
 
 # Contact
 
