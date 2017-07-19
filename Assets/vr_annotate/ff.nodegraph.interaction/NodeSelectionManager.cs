@@ -115,7 +115,7 @@ namespace ff.nodegraph.interaction
 
         This method is called from LaserPointer on Update() additional to
         a normal Physics.RayCast. If both return hitResults the one with the
-        smaller distance will be used. If this wins, NodeHitTester.PointerEnter(). 
+        smaller distance will be used. If NodeSelectionManager wins .PointerEnter() is called. 
         We then can use the _lastNodeHitByRay to update the visualization respectively.
         */
         public Node FindAndRememberHit(Ray ray)
