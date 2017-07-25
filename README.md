@@ -8,7 +8,7 @@ Also check the [live version](https://paper.dropbox.com/doc/vr-annotate-Document
 
 # Contact
 
-VR-Annotate is a project of the [TOPOI - Clusters of Excellence](http://www.topoi.org/) of the Humboldt-University Berlin.
+VR-Annotate is a project of the [Image Knowledge Gestaltung - Clusters of Excellence](https://www.interdisciplinary-laboratory.hu-berlin.de/en/bwg/) of the Humboldt-University Berlin.
 
 Developed by [Framefield.com](http://www.framefield.com)
 
