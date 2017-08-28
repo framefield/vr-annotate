@@ -39,7 +39,6 @@ namespace ff.vr.interaction
         void HideHighlight();
     }
 
-
     public class LaserPointer : MonoBehaviour
     {
         public delegate void PointingAtChanged(object sender, PointingAtChangedEventArgs e);
@@ -99,8 +98,6 @@ namespace ff.vr.interaction
 
             _laserHitSphere.transform.position = LastHitPoint;
         }
-
-
 
         private ILaserPointerTarget FindHitTarget()
         {

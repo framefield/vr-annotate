@@ -12,7 +12,6 @@ namespace ff.vr.interaction
         void Start()
         {
             _inverseScale = this.transform.InverseTransformVector(Vector3.one);
-            _mainCam = GameObject.FindGameObjectWithTag("MainCamera");
             _telepotationZoneRenderer = this.gameObject.GetComponent<Renderer>();
         }
 
@@ -29,7 +28,7 @@ namespace ff.vr.interaction
             {
                 Hightlight.transform.localScale = _inverseScale * _hoverDamped * HIGHLIGHT_SIZE;
                 TargetArrow.transform.localPosition = new Vector3(0, Mathf.Pow(Mathf.Abs(Mathf.Sin(Time.time * 5)), 0.7f) * 0.5f + 0.5f, 0);
-                TargetArrow.transform.LookAt(_mainCam.transform.position);
+                TargetArrow.transform.LookAt(Camera.main.transform.position);
                 var rot = TargetArrow.transform.eulerAngles;
                 TargetArrow.transform.eulerAngles = new Vector3(0, rot.y + 180, 0);
 
@@ -67,7 +66,6 @@ namespace ff.vr.interaction
         Renderer _telepotationZoneRenderer;
 
         Vector3 _inverseScale = Vector3.one;
-        GameObject _mainCam;
 
         const float HIGHLIGHT_SIZE = 0.3f;
     }

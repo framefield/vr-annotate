@@ -29,7 +29,6 @@ namespace ff.vr.annotate.datamodel
             get { return GUID.ToString(); }
         }
         public string JsonLdId { get { return ANNOTATION_ID_PREFIX + ID; } }
-        public Vector3 Position;
         public string Text;
 
         [System.NonSerializedAttribute]
@@ -84,7 +83,6 @@ namespace ff.vr.annotate.datamodel
 
             ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
             AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
-            Position = AnnotationPosition.position;
 
             // Initialize Author
             var authorId = j["creator"]["id"].str;
@@ -102,11 +100,8 @@ namespace ff.vr.annotate.datamodel
                 };
                 Person.PeopleById[authorId] = Author;
             }
-
             // Find Object Reference 
-
         }
-
 
         private const string DateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 

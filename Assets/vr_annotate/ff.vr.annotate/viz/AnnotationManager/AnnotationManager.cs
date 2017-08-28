@@ -86,7 +86,6 @@ namespace ff.vr.annotate.viz
         {
             var newAnnotation = new Annotation()
             {
-                Position = position,
                 TargetNodeId = contextNode.Id,
                 TargetNode = contextNode,
                 GUID = System.Guid.NewGuid(),
@@ -112,7 +111,7 @@ namespace ff.vr.annotate.viz
         private AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
         {
             var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
-            newAnnotationGizmo.transform.position = annotation.Position;
+            newAnnotationGizmo.transform.position = annotation.AnnotationPosition.position;
             newAnnotationGizmo.transform.SetParent(_gizmoContainer.transform, false);
             newAnnotationGizmo.Annotation = annotation;
             AllAnnotationGizmos.Add(newAnnotationGizmo);

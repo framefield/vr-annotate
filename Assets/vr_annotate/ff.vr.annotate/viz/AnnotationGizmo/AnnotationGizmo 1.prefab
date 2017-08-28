@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 33669169850414432}
   - component: {fileID: 64415055096527450}
   - component: {fileID: 23598172056981904}
-  - component: {fileID: 114562836399293544}
+  - component: {fileID: 114241698006589558}
   m_Layer: 0
   m_Name: AnnotationIcon - Button
   m_TagString: Untagged
@@ -179,8 +179,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000578564018302}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.3219128, y: 0.39848042, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4859873296939198}
@@ -673,7 +673,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_maskType: 0
---- !u!114 &114562836399293544
+--- !u!114 &114241698006589558
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -681,7 +681,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1031561235211184}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4972f167ef4880847a10e0ea5b3e0cf0, type: 3}
+  m_Script: {fileID: 11500000, guid: 31229fece6896c645a63b3ba855da7a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnClick:
@@ -714,6 +714,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 114241698006589558}
+        m_MethodName: ShowPerspective
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnUnhover:
@@ -721,6 +732,17 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 114672977400686654}
         m_MethodName: OnUnhover
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 114241698006589558}
+        m_MethodName: HidePerspective
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -973,7 +995,7 @@ MonoBehaviour:
   _annotationBodyLabel: {fileID: 114179781073288426}
   _authorLabel: {fileID: 114566145360807084}
   _annotationDateLabel: {fileID: 114872869318626702}
-  _icon: {fileID: 114562836399293544}
+  _icon: {fileID: 114241698006589558}
   _hoverGroup: {fileID: 1801136722934438}
   SelectedColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   Color: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
