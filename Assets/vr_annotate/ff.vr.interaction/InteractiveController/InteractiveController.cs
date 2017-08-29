@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace ff.vr.interaction
 {
@@ -54,6 +55,7 @@ namespace ff.vr.interaction
             UpdateListofGizmoColliders();
         }
 
+
         protected virtual void OnDisable()
         {
             if (_controller == null)
@@ -61,8 +63,6 @@ namespace ff.vr.interaction
 
             _controller.TriggerClicked -= TriggerClickedHandler;
             _controller.TriggerUnclicked -= TriggerUnclickedHandler;
-            _controller.PadClicked -= PadClickedHandler;
-            _controller.PadUnclicked -= PadUnclickedHandler;
         }
 
 
@@ -93,7 +93,7 @@ namespace ff.vr.interaction
                 if (newHoverGizmo)
                 {
                     newHoverGizmo.OnControllerEnter(this);
-                    ActiveState = States.IsCollidingWithGizmo;
+                    _state = States.IsCollidingWithGizmo;
                     _currentHoverGizmo = newHoverGizmo;
                     _laserPointer.SetLaserpointerEnabled(false);
                 }
@@ -107,35 +107,42 @@ namespace ff.vr.interaction
                 else
                 {
                     _currentHoverGizmo.OnControllerExit(this);
-                    ActiveState = States.Default;
+                    _state = States.Default;
+                    _currentHoverGizmo = null;
                     _laserPointer.SetLaserpointerEnabled(true);
-
                 }
             }
             else if (_state == States.DraggingGizmo)
             {
                 _currentHoverGizmo.OnDragUpdate(this);
             }
-            else if (_state == States.PointerCapturedOnClickable || _state == States.PointerCapturedOnTeleportationTrigger)
+            else if (_state == States.PointerCapturedOnClickable && !(_laserPointer.PointingAt is IClickableLaserPointerTarget))
             {
-                if (newHoverGizmo != _currentHoverGizmo)
-                {
-                    _currentHoverGizmo.OnControllerExit(this);
-                    _laserNoLongerPointsAtCapturedScreen = true;
-                    if (_capturedTeleportationTrigger != null)
-                        _capturedTeleportationTrigger.SetPerspectiveHighlight(false);
-                }
-
-                if (_laserNoLongerPointsAtCapturedScreen && newHoverGizmo == _currentHoverGizmo)
-                {
-                    _laserNoLongerPointsAtCapturedScreen = false;
-                    _currentHoverGizmo.OnControllerEnter(this);
-                }
+                _capturedClickTarget = null;
+                _state = States.Default;
+                _laserPointer.IsLockedAtTarget = false;
             }
+            else if (_state == States.PointerCapturedOnTeleporter && !(_laserPointer.PointingAt is AnnotationPositionTeleporter))
+            {
+                _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
+                _capturedAnnotationTeleporter = null;
+                _state = States.Default;
+            }
+            // else if (_state == States.PointerCapturedOnClickable)
+            // {
+            //     if (newHoverGizmo != _currentHoverGizmo)
+            //     {
+            //         _currentHoverGizmo.OnControllerExit(this);
+            //         _laserNoLongerPointsAtCapturedScreen = true;
+            //     }
+
+            //     if (_laserNoLongerPointsAtCapturedScreen && newHoverGizmo == _currentHoverGizmo)
+            //     {
+            //         _laserNoLongerPointsAtCapturedScreen = false;
+            //         _currentHoverGizmo.OnControllerEnter(this);
+            //     }
+            // }
         }
-
-        private bool _laserNoLongerPointsAtCapturedScreen = false;
-
 
         private void TriggerClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
@@ -147,13 +154,12 @@ namespace ff.vr.interaction
 
             if (_state == States.Default)
             {
+
                 if (_laserPointer.PointingAt is IClickableLaserPointerTarget)
                 {
-                    var clickableTarget = _laserPointer.PointingAt as IClickableLaserPointerTarget;
-
-                    clickableTarget.PointerTriggered(_laserPointer);
-                    _capturedClickable = clickableTarget;
-                    ActiveState = States.PointerCapturedOnClickable;
+                    _capturedClickTarget = _laserPointer.PointingAt as IClickableLaserPointerTarget;
+                    _capturedClickTarget.PointerTriggered(_laserPointer);
+                    _state = States.PointerCapturedOnClickable;
                     _laserPointer.IsLockedAtTarget = true;
                 }
             }
@@ -170,65 +176,53 @@ namespace ff.vr.interaction
             if (_state == States.DraggingGizmo)
             {
                 _currentHoverGizmo.OnDragCompleted(this);
-                ActiveState = States.Default;
+                _state = States.Default;
             }
             else if (_state == States.PointerCapturedOnClickable)
             {
-                if (_capturedClickable == null)
-                {
-                    Debug.LogError("Can't release pointer if not captured by Target");
-                    return;
-                }
-                _laserNoLongerPointsAtCapturedScreen = false;
-                _capturedClickable.PointerUntriggered(_laserPointer);
-                _capturedClickable = null;
-                ActiveState = States.Default;
+                _capturedClickTarget.PointerUntriggered(_laserPointer);
+                _capturedClickTarget = null;
+                _state = States.Default;
                 _laserPointer.IsLockedAtTarget = false;
             }
-
         }
 
-        private void PadClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
+
+        private void PadClickedHandler(object sender, ClickedEventArgs e)
         {
-            if (_laserPointer == null)
+            if (_laserPointer.PointingAt is TeleportationSpot)
             {
-                Debug.LogError("LaserPointer component not found for interactiveController");
-                return;
-            }
-            if (_state == States.Default)
-            {
-                if (_laserPointer.PointingAt is TeleportationSpot)
-                {
-                    _teleportation.JumpToSpot(_laserPointer.PointingAt as TeleportationSpot);
-                    if (_audioSourceForTeleportation)
-                        _audioSourceForTeleportation.Play();
-                }
-                else if (_laserPointer.PointingAt is TeleportationZone)
-                {
-                    _teleportation.JumpToPosition(_laserPointer.LastHitPoint);
-                    if (_audioSourceForTeleportation)
-                        _audioSourceForTeleportation.Play();
-                }
-                else if (_laserPointer.PointingAt is AnnotationPositionTeleporter)
-                {
-                    _capturedTeleportationTrigger = _laserPointer.PointingAt as AnnotationPositionTeleporter;
-                    _capturedTeleportationTrigger.SetPerspectiveHighlight(true);
-                    _state = States.PointerCapturedOnTeleportationTrigger;
-                }
-            }
-        }
-        private void PadUnclickedHandler(object sender, ClickedEventArgs clickedEventArgs)
-        {
-            if (_state == States.PointerCapturedOnTeleportationTrigger && _laserPointer.PointingAt is AnnotationPositionTeleporter)
-            {
-                _teleportation.JumpToPosition(_capturedTeleportationTrigger.GetTeleportationTarget());
+                _teleportation.JumpToSpot(_laserPointer.PointingAt as TeleportationSpot);
                 if (_audioSourceForTeleportation)
                     _audioSourceForTeleportation.Play();
-                _state = States.Default;
-                _laserNoLongerPointsAtCapturedScreen = false;
-                _capturedTeleportationTrigger.SetPerspectiveHighlight(false);
+            }
+            else if (_laserPointer.PointingAt is TeleportationZone)
+            {
+                _teleportation.JumpToPosition(_laserPointer.LastHitPoint);
+                if (_audioSourceForTeleportation)
+                    _audioSourceForTeleportation.Play();
+            }
+            else if (_laserPointer.PointingAt is AnnotationPositionTeleporter)
+            {
+                _capturedAnnotationTeleporter = _laserPointer.PointingAt as AnnotationPositionTeleporter;
+                _capturedAnnotationTeleporter.OnClick(_teleportation);
+                _capturedAnnotationTeleporter.SetPerspectiveHighlight(true);
+                _state = States.PointerCapturedOnTeleporter;
             }
         }
+
+
+        private void PadUnclickedHandler(object sender, ClickedEventArgs e)
+        {
+            if (_state == States.PointerCapturedOnTeleporter)
+            {
+                _capturedAnnotationTeleporter.OnUnclick(_teleportation);
+                _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
+                _capturedAnnotationTeleporter = null;
+                _state = States.Default;
+            }
+        }
+
 
         InteractiveGizmo GetGizmoUnderController()
         {
@@ -272,9 +266,8 @@ namespace ff.vr.interaction
         private GameObject _laserInstance;
         protected SteamVR_TrackedController _controller;
         private InteractiveGizmo _currentHoverGizmo;
-        private IClickableLaserPointerTarget _capturedClickable;
-        private AnnotationPositionTeleporter _capturedTeleportationTrigger;
-
+        private IClickableLaserPointerTarget _capturedClickTarget;
+        private AnnotationPositionTeleporter _capturedAnnotationTeleporter;
 
         private States _state = States.Default;
 
@@ -301,7 +294,7 @@ namespace ff.vr.interaction
             IsCollidingWithGizmo,
             DraggingGizmo,
             PointerCapturedOnClickable,
-            PointerCapturedOnTeleportationTrigger
+            PointerCapturedOnTeleporter
         }
     }
 }

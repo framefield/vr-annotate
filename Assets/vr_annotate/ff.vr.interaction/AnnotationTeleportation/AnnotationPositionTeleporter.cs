@@ -36,6 +36,15 @@ namespace ff.vr.interaction
             PerspectiveVisualization.Instance.SetHighlight(highlighted);
         }
 
+        public void OnClick(Teleportation teleportation)
+        {
+        }
+
+        public void OnUnclick(Teleportation teleportation)
+        {
+            teleportation.JumpToPosition(GetTeleportationTarget());
+        }
+
         private AnnotationGizmo _annotationGizmo;
 
     }
