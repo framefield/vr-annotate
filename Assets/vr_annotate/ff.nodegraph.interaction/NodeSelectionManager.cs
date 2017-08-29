@@ -125,6 +125,21 @@ namespace ff.nodegraph.interaction
         }
 
 
+        public void SetHoveredNode(Node node)
+        {
+            _hoverLabel.gameObject.SetActive(true);
+            HoveredNode = node;
+            UpdateHoverHighlight();
+        }
+
+        public void SetHoveredNodeToNull()
+        {
+            _hoverLabel.gameObject.SetActive(false);
+            HoveredNode = null;
+            UpdateHoverHighlight();
+        }
+
+
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {

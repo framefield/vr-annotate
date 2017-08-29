@@ -8,6 +8,7 @@ using System.IO;
 using ff.location;
 using ff.vr.annotate.datamodel;
 using ff.vr.annotate.helpers;
+using ff.nodegraph.interaction;
 
 namespace ff.vr.annotate.viz
 {
@@ -65,13 +66,14 @@ namespace ff.vr.annotate.viz
             }
         }
 
+
         private void HandleInputCompleted()
         {
             _keyboardEnabler.Hide();
-            _currentAnnotation.Text = _keyboardEnabler._inputField.text;
-            _currentAnnotation.ToJson();
+            _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
+            _lastCreatedAnnotation.ToJson();
 
-            File.WriteAllText(AnnotationDirectory + _currentAnnotation.GUID + ".json", _currentAnnotation.ToJson());
+            File.WriteAllText(AnnotationDirectory + _lastCreatedAnnotation.GUID + ".json", _lastCreatedAnnotation.ToJson());
         }
 
 
@@ -102,7 +104,7 @@ namespace ff.vr.annotate.viz
             };
 
             AllAnnotations.Add(newAnnotation);
-            _currentAnnotation = newAnnotation;
+            _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
             _keyboardEnabler.Show();
         }
@@ -119,7 +121,53 @@ namespace ff.vr.annotate.viz
         }
 
 
-        private Annotation _currentAnnotation;
+        public void GoToNextAnnotation(Teleportation teleportation)
+        {
+            var selectedAnnotationGizmo = GetSelectedGizmo();
+            if (selectedAnnotationGizmo == null)
+                return;
+
+            var nextGizmo = GetNextAnnotationGizmoOnNode(selectedAnnotationGizmo);
+            SelectionManager.Instance.SelectItem(nextGizmo);
+            teleportation.JumpToPosition(nextGizmo.Annotation.ViewPointPosition.position);
+        }
+
+
+        private AnnotationGizmo GetSelectedGizmo()
+        {
+            AnnotationGizmo selectedAnnotationGizmo = null;
+            foreach (var selectable in SelectionManager.Instance.Selection)
+            {
+                if (selectable is AnnotationGizmo)
+                    selectedAnnotationGizmo = selectable as AnnotationGizmo;
+            }
+            return selectedAnnotationGizmo;
+        }
+
+
+        private AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
+        {
+            var relevantAnnotations = GetAllAnnotationsGizmosOnNode(gizmo.Annotation.TargetNode);
+            int i = 0;
+            while (relevantAnnotations[i] != gizmo)
+                i++;
+            return relevantAnnotations[(i + 1) % relevantAnnotations.Count];
+        }
+
+
+        private List<AnnotationGizmo> GetAllAnnotationsGizmosOnNode(Node node)
+        {
+            List<AnnotationGizmo> annotationsThatTargetNode = new List<AnnotationGizmo>();
+            foreach (var a in GetComponentsInChildren<AnnotationGizmo>())
+            {
+                if (a.Annotation.TargetNode == node)
+                    annotationsThatTargetNode.Add(a);
+            }
+            return annotationsThatTargetNode;
+        }
+
+
+        private Annotation _lastCreatedAnnotation;
         private AnnotationGizmo _focusedAnnotationGizmo;
         private GameObject _gizmoContainer;
         private KeyboardEnabler _keyboardEnabler;

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System;
+using ff.vr.annotate.viz;
 
 namespace ff.vr.interaction
 {
@@ -51,6 +52,7 @@ namespace ff.vr.interaction
             _controller.TriggerUnclicked += TriggerUnclickedHandler;
             _controller.PadClicked += PadClickedHandler;
             _controller.PadUnclicked += PadUnclickedHandler;
+            _controller.Gripped += ControllerGrippedHandler;
 
             UpdateListofGizmoColliders();
         }
@@ -63,8 +65,10 @@ namespace ff.vr.interaction
 
             _controller.TriggerClicked -= TriggerClickedHandler;
             _controller.TriggerUnclicked -= TriggerUnclickedHandler;
+            _controller.PadClicked -= PadClickedHandler;
+            _controller.PadUnclicked -= PadUnclickedHandler;
+            _controller.Gripped -= ControllerGrippedHandler;
         }
-
 
 
         public void UpdateListofGizmoColliders()
@@ -223,6 +227,11 @@ namespace ff.vr.interaction
             }
         }
 
+        private void ControllerGrippedHandler(object sender, ClickedEventArgs e)
+        {
+            if (_state == States.Default)
+                AnnotationManager._instance.GoToNextAnnotation(_teleportation);
+        }
 
         InteractiveGizmo GetGizmoUnderController()
         {
