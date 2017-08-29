@@ -33,7 +33,7 @@ namespace ff.location
             var inRotatedObjectSpace = GeoCoordinateTransformer.T.InverseTransformPoint(position);
             longitude = inRotatedObjectSpace.x / GeoCoordinateTransformer._metersPerLong + GeoCoordinateTransformer._referenceLong;
             latitude = inRotatedObjectSpace.z / GeoCoordinateTransformer._metersPerLat + GeoCoordinateTransformer._referenceLat;
-            elevation = inRotatedObjectSpace.y;
+            elevation = inRotatedObjectSpace.y / (GeoCoordinateTransformer._metersPerLat + GeoCoordinateTransformer._metersPerLong) * 2;
         }
 
         // These values will be serialized but not directly used

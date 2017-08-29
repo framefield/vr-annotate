@@ -22,7 +22,7 @@ namespace ff.vr.interaction
         {
             var visualization = PerspectiveVisualization.Instance;
             visualization.transform.position =
-            new Vector3(_annotationGizmo.Annotation.ViewPointPosition.position.x, 0f, _annotationGizmo.Annotation.ViewPointPosition.position.z);
+            (_annotationGizmo.Annotation.ViewPointPosition.position);//.x, 0f, _annotationGizmo.Annotation.ViewPointPosition.position.z);
             visualization.Show();
         }
 
