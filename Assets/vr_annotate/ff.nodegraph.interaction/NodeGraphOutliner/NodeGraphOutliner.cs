@@ -67,6 +67,10 @@ namespace ff.nodegraph.interaction
                 {
                     InsertItem(path[indentIndex], indentIndex, indentIndex);
                 }
+
+                foreach (var child in path[path.Count - 1].Children)
+                    InsertItem(child, -1, path.Count);
+
             }
 
             // Add other graph-root nodes before and after
@@ -152,7 +156,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        private float LINE_HEIGHT = 0.2f;
+        private float LINE_HEIGHT = 0.1f;
         private Node _selectedNode;
 
         public Vector3 PositionOfSelectedItem

@@ -72,6 +72,15 @@ namespace ff.nodegraph.interaction
             _label.color = on ? SelectedLabelColor : LabelColor;
         }
 
+        public void OnHover()
+        {
+            NodeSelectionManager._instance.SetHoveredNode(_node);
+        }
+
+        public void OnUnhover()
+        {
+            NodeSelectionManager._instance.SetHoveredNodeToNull();
+        }
 
         private float INDENTATION_WIDHT = 0.1f;
         private Node _node;
