@@ -69,12 +69,12 @@ namespace ff.nodegraph.interaction
 
         public Node FindNodeFromPath(string rootNodeId, string nodePath)
         {
-            foreach (var ag in NodeGraphs)
+            foreach (var ng in NodeGraphs)
             {
-                if (ag.RootNodeId == rootNodeId)
+                if (ng.RootNodeId == rootNodeId)
                 {
                     var nodeNames = new List<string>(nodePath.Split('/'));
-                    var node = ag.Node;
+                    var node = ng.Node;
 
                     // remove rootnode
                     if (node.Name == nodeNames[0])
@@ -215,6 +215,8 @@ namespace ff.nodegraph.interaction
 
         private void SetSelectedNode(Node newSelectedNode)
         {
+            Debug.Log("SetSelectedNode");
+
             if (newSelectedNode == SelectedNode)
                 return;
 
@@ -227,7 +229,17 @@ namespace ff.nodegraph.interaction
             else
             {
                 var bounds = SelectedNode.CollectGeometryBounds().ToArray();
-                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                var transforms = SelectedNode.CollectBoundsTransforms().ToArray();
+                var isLocals = SelectedNode.CollectBoundsIsLocals().ToArray();
+
+                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds, transforms, isLocals);
+
+                if (HoveredNode.HasLocalBounds)
+                {
+                    _highlightHoverRenderer.transform.localPosition = HoveredNode.UnityObj.transform.localPosition;
+                    _highlightHoverRenderer.transform.localRotation = HoveredNode.UnityObj.transform.localRotation;
+                }
+
                 _highlightContextRenderer.enabled = true;
             }
         }
@@ -243,9 +255,9 @@ namespace ff.nodegraph.interaction
             }
             else
             {
-                foreach (var ag in NodeGraphs)
+                foreach (var ng in NodeGraphs)
                 {
-                    ag.Node.CollectLeavesIntersectingRay(ray, hits);
+                    ng.Node.CollectLeavesIntersectingRay(ray, hits);
                 }
             }
             if (hits.Count == 0)
@@ -303,6 +315,7 @@ namespace ff.nodegraph.interaction
 
         private void UpdateHoverHighlight()
         {
+            Debug.Log("UpdateHoverHighlight");
             if (HoveredNode == null)
             {
                 _hoverLabel.gameObject.SetActive(false);
@@ -312,7 +325,14 @@ namespace ff.nodegraph.interaction
             {
                 _hoverLabel.text = HoveredNode.Name;
                 var bounds = HoveredNode.CollectGeometryBounds().ToArray();
-                _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds);
+                var transforms = HoveredNode.CollectBoundsTransforms().ToArray();
+                var isLocals = HoveredNode.CollectBoundsIsLocals().ToArray();
+                _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(bounds, transforms, isLocals);
+                if (HoveredNode.HasLocalBounds)
+                {
+                    _highlightHoverRenderer.transform.localPosition = HoveredNode.UnityObj.transform.localPosition;
+                    _highlightHoverRenderer.transform.localRotation = HoveredNode.UnityObj.transform.localRotation;
+                }
                 _highlightHoverRenderer.enabled = true;
             }
         }

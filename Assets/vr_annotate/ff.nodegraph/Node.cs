@@ -13,6 +13,7 @@ namespace ff.nodegraph
         public Bounds Bounds;
         public bool IsAnnotatable;
         public bool HasGeometry;
+        public bool HasLocalBounds;
         public string Name;
         public bool HasBounds = false;
 
@@ -93,14 +94,16 @@ namespace ff.nodegraph
                 Id = new System.Guid(),
                 UnityObj = unityObj,
             };
+            Debug.Log("unityObj defined: " + node.UnityObj.transform.localRotation + " rotation of " + node.UnityObj);
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
             var renderer = unityObj.GetComponent<MeshRenderer>();
+            var meshfilter = unityObj.GetComponent<MeshFilter>();
             if (renderer != null && unityObj.GetComponent<IgnoreNode>() == null)
             {
-                //Debug.Log(renderer.gameObject.name + " > " + renderer.bounds, renderer);
-                node.Bounds = renderer.bounds;   // in worldspace
                 node.HasBounds = true;
+                node.HasLocalBounds = meshfilter != null;
+                node.Bounds = node.HasLocalBounds ? meshfilter.mesh.bounds : renderer.bounds;   // in worldspace               
                 node.HasGeometry = true;
             }
 
@@ -129,11 +132,25 @@ namespace ff.nodegraph
             return node;
         }
 
+        public static void PrintBound(Bounds b)
+        {
+            Debug.Log("bounds: center: " + b.center + " , size: " + b.size);
+        }
+
         public void CollectLeavesIntersectingRay(Ray ray, List<Node> hits)
         {
-
-            if (!this.Bounds.IntersectRay(ray, out HitDistance))
-                return;
+            if (this.HasLocalBounds)
+            {
+                var localRayOrigin = UnityObj.transform.InverseTransformPoint(ray.origin);
+                var localRayDirection = UnityObj.transform.InverseTransformDirection(ray.direction);
+                if (!this.Bounds.IntersectRay(new Ray(localRayOrigin, localRayDirection), out HitDistance))
+                    return;
+            }
+            else
+            {
+                if (!this.Bounds.IntersectRay(ray, out HitDistance))
+                    return;
+            }
 
             // Set back distance to favor selection of smaller object
             // if (HitDistance > 0)
@@ -163,6 +180,7 @@ namespace ff.nodegraph
             return true;
         }
 
+
         public List<Bounds> CollectGeometryBounds(List<Bounds> result = null)
         {
             if (result == null)
@@ -180,10 +198,50 @@ namespace ff.nodegraph
             return result;
         }
 
+        public List<Transform> CollectBoundsTransforms(List<Transform> result = null)
+        {
+            if (result == null) result = new List<Transform>();
+
+            if (this.HasGeometry)
+            {
+                result.Add(UnityObj.transform);
+            }
+
+            foreach (var c in Children)
+            {
+                c.CollectBoundsTransforms(result);
+            }
+            return result;
+        }
+
+        public List<bool> CollectBoundsIsLocals(List<bool> result = null)
+        {
+            if (result == null) result = new List<bool>();
+
+            if (this.HasGeometry)
+            {
+                result.Add(HasLocalBounds);
+            }
+
+            foreach (var c in Children)
+            {
+                c.CollectBoundsIsLocals(result);
+            }
+            return result;
+        }
+
 
         public Vector3 GetPosition()
         {
             return this.Bounds.center;
+        }
+
+
+        private bool IntersectsWithRay(Ray ray)
+        {
+
+            var intersects = this.Bounds.IntersectRay(ray, out HitDistance);
+            return intersects;
         }
     }
 }

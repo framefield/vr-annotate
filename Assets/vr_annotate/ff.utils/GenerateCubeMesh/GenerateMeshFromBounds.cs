@@ -5,9 +5,12 @@ namespace ff.utils
 {
     public class GenerateMeshFromBounds
     {
-        static public Mesh GenerateMesh(Bounds[] bounds, Mesh mesh = null)
+        static public Mesh GenerateMesh(Bounds[] bounds, Transform[] transforms, bool[] isLocals, Mesh mesh = null)
         {
             _bounds = bounds;
+            _transforms = transforms;
+            _isLocals = isLocals;
+
             if (bounds.Length > MAX_BOUNDS_POSSIBLE)
             {
                 Debug.LogWarning("list of bounds too large to convert to mesh");
@@ -45,11 +48,12 @@ namespace ff.utils
         static Vector3[] _vertices;
         static int[] _triangles;
         static Bounds[] _bounds;
+        static Transform[] _transforms;
+        static bool[] _isLocals;
 
         private static void WriteVertices(int index)
         {
             var b = _bounds[index];
-
 
             var sx = b.extents.x;
             var sy = b.extents.y;
@@ -67,6 +71,20 @@ namespace ff.utils
             var vertice_5 = new Vector3(x + sx, y + sy, z + sz);
             var vertice_6 = new Vector3(x + sx, y + sy, z - sz);
             var vertice_7 = new Vector3(x - sx, y + sy, z - sz);
+
+            if (_isLocals[index])
+            {
+                var t = _transforms[index];
+
+                vertice_0 = t.TransformPoint(vertice_0);
+                vertice_1 = t.TransformPoint(vertice_1);
+                vertice_2 = t.TransformPoint(vertice_2);
+                vertice_3 = t.TransformPoint(vertice_3);
+                vertice_4 = t.TransformPoint(vertice_4);
+                vertice_5 = t.TransformPoint(vertice_5);
+                vertice_6 = t.TransformPoint(vertice_6);
+                vertice_7 = t.TransformPoint(vertice_7);
+            }
 
             int i = index * VERTICES_PER_CUBE;
             // Bottom Polygon
