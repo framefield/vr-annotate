@@ -12,7 +12,6 @@ namespace ff.nodegraph.interaction
         [HideInInspector]
         public List<Node> selectedNodes = new List<Node>();
 
-
         [Header("--- internal prefab references-----")]
 
         [SerializeField]
@@ -27,6 +26,10 @@ namespace ff.nodegraph.interaction
             RebuildUI();
         }
 
+        void Update()
+        {
+            RebuildUI();
+        }
 
         public void SetSelectedNode(Node newNode)
         {
@@ -112,12 +115,14 @@ namespace ff.nodegraph.interaction
 
             var newItem = GameObject.Instantiate(_itemPrefab);
             _items.Insert(index, newItem);
-            newItem.Text = node.Name;
             newItem.Indentation = indentation;
-            newItem.IsHighlighted = node == _selectedNode;
-
+            newItem.IsSelected = node == _selectedNode;
+            newItem.IsHovered = node == _nodeSelectionManager.HoveredNode;
             newItem.name += "-" + node.Name;
             newItem.Node = node;
+
+            var prefix = (node.Children.Length == 0) ? "- " : "+ ";
+            newItem.Text = prefix + node.Name;
 
             newItem.transform.SetParent(_itemsContainer, false);
             newItem.SceneGraphPanel = this;
@@ -137,12 +142,6 @@ namespace ff.nodegraph.interaction
                     _localPositionOfSelectedItem = pos;
                 }
             }
-        }
-
-        internal void OnItemClicked(NodeGraphOutlinerItem item)
-        {
-            SelectionManager.Instance.SelectItem(item.Node);
-            SetSelectedNode(item.Node);
         }
 
 
@@ -171,7 +170,6 @@ namespace ff.nodegraph.interaction
         }
 
         private Vector3 _localPositionOfSelectedItem;
-
         private List<NodeGraphOutlinerItem> _items = new List<NodeGraphOutlinerItem>();
         private NodeSelectionManager _nodeSelectionManager;
     }

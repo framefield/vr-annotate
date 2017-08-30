@@ -65,7 +65,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public bool IsLockedAtTarget;
 
-        private NodeSelectionManager _hitTester;
+        private NodeSelectionManager _nodeSelectionManager;
 
         void Start()
         {
@@ -76,8 +76,8 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
-            _hitTester = FindObjectOfType<NodeSelectionManager>();
-            if (_hitTester == null)
+            _nodeSelectionManager = NodeSelectionManager._instance;
+            if (_nodeSelectionManager == null)
             {
                 Debug.LogError("NodeHitTester not found in scene");
             }
@@ -109,27 +109,40 @@ namespace ff.vr.interaction
             RaycastHit physicsHit = new RaycastHit();
             var hasPhysicsHit = (Physics.Raycast(Ray, out physicsHit, 1000));
 
-            var nodeHit = (_hitTester != null) ? _hitTester.FindAndRememberHit(Ray) : null;
+            var nodeHit = (_nodeSelectionManager != null) ? _nodeSelectionManager.FindHit(Ray) : null;
             var hasNodeHit = (nodeHit != null);
 
             // Physics ray wins
             if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
             {
-                LastHitPoint = physicsHit.point;
-                LastHitDistance = physicsHit.distance;
+                // check if cast hit NodeGraphOutlinerItem in Menu, in this case treat it like nodeHit
+                if (physicsHit.collider.gameObject.GetComponent<LaserPointerButton>() != null
+                && physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>() != null)
+                {
+                    LastHitPoint = physicsHit.point;
+                    LastHitDistance = physicsHit.distance;
+                    _nodeSelectionManager.LastNodeHitByRay = physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>().Node;
+                    newTarget = _nodeSelectionManager as ILaserPointerTarget;
+                }
+                else
+                {
+                    LastHitPoint = physicsHit.point;
+                    LastHitDistance = physicsHit.distance;
 
-                var hitCollider = physicsHit.collider;
-                var newTargetInterface = hitCollider.attachedRigidbody
-                                     ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
-                                     : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
-                newTarget = newTargetInterface as ILaserPointerTarget;
+                    var hitCollider = physicsHit.collider;
+                    var newTargetInterface = hitCollider.attachedRigidbody
+                                         ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
+                                         : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
+                    newTarget = newTargetInterface as ILaserPointerTarget;
+                }
             }
             // NodeHit wins...
             else if (hasNodeHit)
             {
+                _nodeSelectionManager.LastNodeHitByRay = nodeHit;
                 LastHitPoint = Ray.origin + Ray.direction * nodeHit.HitDistance;
                 LastHitDistance = nodeHit.HitDistance;
-                newTarget = _hitTester as ILaserPointerTarget;
+                newTarget = _nodeSelectionManager as ILaserPointerTarget;
             }
             // Nothing hit
             else

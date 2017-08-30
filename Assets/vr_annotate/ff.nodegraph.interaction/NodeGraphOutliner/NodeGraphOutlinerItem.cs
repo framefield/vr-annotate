@@ -8,13 +8,19 @@ namespace ff.nodegraph.interaction
 {
     public class NodeGraphOutlinerItem : MonoBehaviour
     {
-        public Color BackgroundColor = Color.gray;
-        public Color LabelColor = Color.white;
 
-        public Color SelectedBackgroundColor = Color.blue;
-        public Color SelectedLabelColor = Color.white;
+        [Header("Label Color")]
+        public Color LabelColor;
+        public Color HoveredLabelColor;
+        public Color SelectedLabelColor;
 
-        public bool IsHighlighted;
+        [Header("Background Color")]
+        public Color BackgroundColor;
+        public Color HoveredBackgorundColor;
+        public Color SelectedBackgroundColor;
+
+        public bool IsSelected;
+        public bool IsHovered;
 
         [Header("--- internal prefab references ----")]
         [SerializeField]
@@ -36,17 +42,6 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        public bool IsSelected { get; set; }
-
-        // public bool IsSelected
-        // {
-        //     get
-        //     {
-        //         return SelectionManager.Instance.IsItemSelected(_node) || IsHighlighted;
-        //     }
-        // }
-
-
         public string Text
         {
             get { return _label.text; }
@@ -58,18 +53,33 @@ namespace ff.nodegraph.interaction
             set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
         }
 
+        private void UpdateUI()
+        {
+            Color backgroundColor;
+            Color labelColor;
 
-        /** Called from LaserPointButton */
+            if (IsSelected)
+            {
+                labelColor = SelectedLabelColor;
+                backgroundColor = SelectedBackgroundColor;
+            }
+            else if (IsHovered)
+            {
+                labelColor = HoveredLabelColor;
+                backgroundColor = HoveredBackgorundColor;
+            }
+            else
+            {
+                labelColor = LabelColor;
+                backgroundColor = BackgroundColor;
+            }
+            _button.SetColor(backgroundColor);
+            _label.color = labelColor;
+        }
+
         public void OnClicked()
         {
             SelectionManager.Instance.SelectItem(_node);
-        }
-
-        private void UpdateUI()
-        {
-            var on = IsSelected || IsHighlighted;
-            _button.SetColor(on ? SelectedBackgroundColor : BackgroundColor);
-            _label.color = on ? SelectedLabelColor : LabelColor;
         }
 
         public void OnHover()

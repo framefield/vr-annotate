@@ -15,7 +15,7 @@ namespace ff.nodegraph.interaction
     {
         private Node SelectedNode = null;
 
-        private Node HoveredNode = null;
+        public Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
 
         public NodeSelectionMarker _selectionMarker;
@@ -118,11 +118,12 @@ namespace ff.nodegraph.interaction
         smaller distance will be used. If NodeSelectionManager wins .PointerEnter() is called. 
         We then can use the _lastNodeHitByRay to update the visualization respectively.
         */
-        public Node FindAndRememberHit(Ray ray)
-        {
-            _lastNodeHitByRay = FindHit(ray);
-            return _lastNodeHitByRay;
-        }
+        // public Node FindAndRememberHit(Ray ray)
+        // {
+        //     // LastNodeHitByRay = FindHit(ray);
+        //     // return LastNodeHitByRay;
+        //     return FindHit(ray);
+        // }
 
 
         public void SetHoveredNode(Node node)
@@ -143,18 +144,20 @@ namespace ff.nodegraph.interaction
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
+            Debug.Log("pointer entered with " + LastNodeHitByRay);
             _hoverLabel.gameObject.SetActive(true);
-            HoveredNode = _lastNodeHitByRay;
+            HoveredNode = LastNodeHitByRay;
             UpdateHoverHighlight();
         }
 
         public void PointerUpdate(LaserPointer pointer)
         {
-            if (_lastNodeHitByRay != _renderedNode)
+            // Debug.Log("pointer update with " + LastNodeHitByRay);
+            if (LastNodeHitByRay != _renderedNode)
             {
-                HoveredNode = _lastNodeHitByRay;
+                HoveredNode = LastNodeHitByRay;
                 UpdateHoverHighlight();
-                _renderedNode = _lastNodeHitByRay;
+                _renderedNode = LastNodeHitByRay;
 
             }
             _lastHoverPosition = pointer.LastHitPoint;
@@ -165,9 +168,10 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
+            Debug.Log("pointer exit with " + LastNodeHitByRay);
             HoveredNode = null;
             UpdateHoverHighlight();
-            _lastNodeHitByRay = null;    // really?
+            LastNodeHitByRay = null;    // really?
             _hoverLabel.gameObject.SetActive(false);
         }
         #endregion implement LaserInterface
@@ -215,8 +219,6 @@ namespace ff.nodegraph.interaction
 
         private void SetSelectedNode(Node newSelectedNode)
         {
-            Debug.Log("SetSelectedNode");
-
             if (newSelectedNode == SelectedNode)
                 return;
 
@@ -239,7 +241,7 @@ namespace ff.nodegraph.interaction
 
 
         #region Hit Detection
-        private Node FindHit(Ray ray)
+        public Node FindHit(Ray ray)
         {
             var hits = new List<Node>();
             if (SelectedNode != null)
@@ -325,13 +327,9 @@ namespace ff.nodegraph.interaction
             }
         }
 
-
-
-
-
         private Vector3 _lastHoverPosition;
         private TrackpadButtonUI _trackpadButtonUI;
-        private Node _lastNodeHitByRay;
+        public Node LastNodeHitByRay;
         private Node _renderedNode;
         private SteamVR_TrackedController _controller;
         private string _lastResult;
