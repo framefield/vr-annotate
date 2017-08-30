@@ -228,9 +228,6 @@ namespace ff.nodegraph.interaction
             }
             else
             {
-                // var bounds = SelectedNode.CollectGeometryBounds().ToArray();
-                // var transforms = SelectedNode.CollectBoundsTransforms().ToArray();
-                // var isLocals = SelectedNode.CollectBoundsIsLocals().ToArray();
                 var boundsWithContext = SelectedNode.CollectBoundsWithContext().ToArray();
 
                 _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
@@ -256,6 +253,7 @@ namespace ff.nodegraph.interaction
                     ng.Node.CollectLeavesIntersectingRay(ray, hits);
                 }
             }
+
             if (hits.Count == 0)
                 return null;
 
@@ -322,11 +320,7 @@ namespace ff.nodegraph.interaction
                 var allBoundsWithContext = HoveredNode.CollectBoundsWithContext().ToArray();
 
                 _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(allBoundsWithContext);
-                // if (HoveredNode.BoundsWithContext.HasLocalBounds)
-                // {
-                //     _highlightHoverRenderer.transform.position = HoveredNode.UnityObj.transform.position;
-                //     _highlightHoverRenderer.transform.rotation = HoveredNode.UnityObj.transform.rotation;
-                // }
+
                 _highlightHoverRenderer.enabled = true;
             }
         }

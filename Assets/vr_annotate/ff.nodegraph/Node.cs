@@ -16,6 +16,8 @@ namespace ff.nodegraph
             public Bounds LocalBounds;
             public Transform LocalTransform;
             public bool HasLocalBounds;
+            public MeshCollider MeshCollider;
+            public bool HasMeshCollider;
         }
 
         public BoundsWithContextStruct BoundsWithContext = new BoundsWithContextStruct();
@@ -100,21 +102,32 @@ namespace ff.nodegraph
                 Id = new System.Guid(),
                 UnityObj = unityObj,
             };
-            Debug.Log("unityObj defined: " + node.UnityObj.transform.localRotation + " rotation of " + node.UnityObj);
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
             var renderer = unityObj.GetComponent<MeshRenderer>();
-            var meshfilter = unityObj.GetComponent<MeshFilter>();
             if (renderer != null && unityObj.GetComponent<IgnoreNode>() == null)
             {
                 node.HasBounds = true;
 
                 node.BoundsWithContext.Bounds = renderer.bounds;
-                node.BoundsWithContext.HasLocalBounds = meshfilter != null;
-                if (node.BoundsWithContext.HasLocalBounds)
+
+                var meshfilter = unityObj.GetComponent<MeshFilter>();
+
+                if (node.BoundsWithContext.HasLocalBounds = meshfilter != null)
                 {
                     node.BoundsWithContext.LocalBounds = meshfilter.mesh.bounds;
                     node.BoundsWithContext.LocalTransform = unityObj.transform;
+                }
+
+                var meshCollider = unityObj.GetComponent<MeshCollider>();
+                if (meshCollider == null && meshfilter != null)
+                {
+                    meshCollider = unityObj.AddComponent<MeshCollider>();
+                }
+
+                if (node.BoundsWithContext.HasMeshCollider = meshCollider != null)
+                {
+                    node.BoundsWithContext.MeshCollider = meshCollider;
                 }
 
                 node.HasGeometry = true;
@@ -152,7 +165,15 @@ namespace ff.nodegraph
 
         public void CollectLeavesIntersectingRay(Ray ray, List<Node> hits)
         {
-            if (this.BoundsWithContext.HasLocalBounds)
+            if (this.BoundsWithContext.HasMeshCollider)
+            {
+                RaycastHit hit;
+                var hasHit = this.BoundsWithContext.MeshCollider.Raycast(ray, out hit, 100f);
+                HitDistance = hit.distance;
+                if (!hasHit)
+                    return;
+            }
+            else if (this.BoundsWithContext.HasLocalBounds)
             {
                 var localRayOrigin = UnityObj.transform.InverseTransformPoint(ray.origin);
                 var localRayDirection = UnityObj.transform.InverseTransformDirection(ray.direction);
@@ -165,19 +186,11 @@ namespace ff.nodegraph
                     return;
             }
 
-            Debug.Log("Ray hit Node " + this.UnityObj + " , LocalBounds?: " + BoundsWithContext.LocalBounds + " , HasGeometry?: " + HasGeometry);
-
-            // Set back distance to favor selection of smaller object
-            // if (HitDistance > 0)
-            // {
-            //     var hitPoint = ray.origin + ray.direction * HitDistance;
-            //     var backed = Vector3.Lerp(hitPoint, Bounds.center, 0.98f);
-            //     var backDistance = Vector3.Distance(ray.origin, backed);
-            //     HitDistance = backDistance;
-            // }
-
             if (this.HasGeometry)
+            {
                 hits.Add(this);
+
+            }
 
             if (Children == null)
                 return;
@@ -191,7 +204,7 @@ namespace ff.nodegraph
 
         public bool CheckIfObjectIsAnnotatable()
         {
-            //GameObject obj = this.UnityObj;
+            // todo!!
             return true;
         }
 

@@ -113,7 +113,7 @@ namespace ff.vr.interaction
             var hasNodeHit = (nodeHit != null);
 
             // Physics ray wins
-            if (hasPhysicsHit && (!hasNodeHit || nodeHit.HitDistance > physicsHit.distance - 0.5f))
+            if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
             {
                 LastHitPoint = physicsHit.point;
                 LastHitDistance = physicsHit.distance;
