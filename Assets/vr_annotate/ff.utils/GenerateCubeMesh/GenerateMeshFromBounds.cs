@@ -1,22 +1,22 @@
 using UnityEngine;
 using System.Collections;
+using ff.nodegraph;
 
 namespace ff.utils
 {
     public class GenerateMeshFromBounds
     {
-        static public Mesh GenerateMesh(Bounds[] bounds, Transform[] transforms, bool[] isLocals, Mesh mesh = null)
-        {
-            _bounds = bounds;
-            _transforms = transforms;
-            _isLocals = isLocals;
 
-            if (bounds.Length > MAX_BOUNDS_POSSIBLE)
+        static public Mesh GenerateMesh(Node.BoundsWithContextStruct[] boundsWithContext, Mesh mesh = null)
+        {
+            _boundsWithContext = boundsWithContext;
+
+            if (boundsWithContext.Length > MAX_BOUNDS_POSSIBLE)
             {
                 Debug.LogWarning("list of bounds too large to convert to mesh");
             }
 
-            var cubeCount = Mathf.Min(bounds.Length, MAX_BOUNDS_POSSIBLE);
+            var cubeCount = Mathf.Min(boundsWithContext.Length, MAX_BOUNDS_POSSIBLE);
 
             _triangles = new int[cubeCount * TRIANGLES_PER_CUBE];
             _vertices = new Vector3[cubeCount * VERTICES_PER_CUBE];
@@ -47,13 +47,13 @@ namespace ff.utils
         static int TRIANGLES_PER_CUBE = 6 * 2 * 3;
         static Vector3[] _vertices;
         static int[] _triangles;
-        static Bounds[] _bounds;
-        static Transform[] _transforms;
-        static bool[] _isLocals;
+        static Node.BoundsWithContextStruct[] _boundsWithContext;
 
         private static void WriteVertices(int index)
         {
-            var b = _bounds[index];
+            var bwc = _boundsWithContext[index];
+
+            var b = bwc.HasLocalBounds ? bwc.LocalBounds : bwc.Bounds;
 
             var sx = b.extents.x;
             var sy = b.extents.y;
@@ -72,9 +72,9 @@ namespace ff.utils
             var vertice_6 = new Vector3(x + sx, y + sy, z - sz);
             var vertice_7 = new Vector3(x - sx, y + sy, z - sz);
 
-            if (_isLocals[index])
+            if (bwc.HasLocalBounds)
             {
-                var t = _transforms[index];
+                var t = bwc.LocalTransform;
 
                 vertice_0 = t.TransformPoint(vertice_0);
                 vertice_1 = t.TransformPoint(vertice_1);
@@ -119,36 +119,6 @@ namespace ff.utils
             _vertices[i + 23] = vertice_4;
         }
 
-        // private Vector3[] GetNormals()
-        // {
-
-
-        //     Vector3[] normales = new Vector3[]
-        //     {
-        //     down, down, down, down,// Bottom Side Render
-        //     left, left, left, left,// LEFT Side Render
-        //     front, front, front, front,// FRONT Side Render
-        //     back, back, back, back,// BACK Side Render
-        //     right, right, right, right,// RIGTH Side Render
-        //     up, up, up, up// UP Side Render
-        //     };
-        //     return normales;
-        // }
-
-        // private Vector2[] GetUVsMap()
-        // {
-
-        //     Vector2[] uvs = new Vector2[]
-        //             {
-        //             _11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Bottom
-        // 			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Left
-        // 			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Front
-        // 			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Back
-        // 			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Right
-        // 			_11_CORDINATES, _01_CORDINATES, _00_CORDINATES, _10_CORDINATES,// Top
-        //             };
-        //     return uvs;
-        // }
 
         private static void WriteTriangles(int cubeIndex)
         {
@@ -160,45 +130,6 @@ namespace ff.utils
             }
         }
 
-        // private Mesh GetCubeMesh()
-        // {
-        //     if (GetComponent<MeshFilter>() == null)
-        //     {
-        //         Mesh mesh;
-        //         MeshFilter filter = gameObject.AddComponent<MeshFilter>();
-        //         mesh = filter.mesh;
-        //         mesh.Clear();
-        //         return mesh;
-        //     }
-        //     else
-        //     {
-        //         return gameObject.AddComponent<MeshFilter>().mesh;
-        //     }
-        // }
-
-        // void MakeCube()
-        // {
-        //     cubeMesh = GetCubeMesh();
-        //     cubeMesh.vertices = GetVerticesForBound();
-        //     cubeMesh.normals = GetNormals();
-        //     cubeMesh.uv = GetUVsMap();
-        //     cubeMesh.triangles = GetTriangles();
-        //     cubeMesh.RecalculateBounds();
-        //     cubeMesh.RecalculateNormals();
-        // }
-
-
-        // Vector3 up = Vector3.up;
-        // Vector3 down = Vector3.down;
-        // Vector3 front = Vector3.forward;
-        // Vector3 back = Vector3.back;
-        // Vector3 left = Vector3.left;
-        // Vector3 right = Vector3.right;
-
-        // Vector2 _00_CORDINATES = new Vector2(0f, 0f);
-        // Vector2 _10_CORDINATES = new Vector2(1f, 0f);
-        // Vector2 _01_CORDINATES = new Vector2(0f, 1f);
-        // Vector2 _11_CORDINATES = new Vector2(1f, 1f);
 
         static int[] TRIANGE_INDECES = new int[]
         {

@@ -10,13 +10,19 @@ namespace ff.nodegraph
     [System.Serializable]
     public class Node : ISelectable
     {
-        public Bounds Bounds;
+        public struct BoundsWithContextStruct
+        {
+            public Bounds Bounds;
+            public Bounds LocalBounds;
+            public Transform LocalTransform;
+            public bool HasLocalBounds;
+        }
+
+        public BoundsWithContextStruct BoundsWithContext = new BoundsWithContextStruct();
         public bool IsAnnotatable;
         public bool HasGeometry;
-        public bool HasLocalBounds;
         public string Name;
         public bool HasBounds = false;
-
         public System.Guid Id;
 
         public float HitDistance;
@@ -102,8 +108,15 @@ namespace ff.nodegraph
             if (renderer != null && unityObj.GetComponent<IgnoreNode>() == null)
             {
                 node.HasBounds = true;
-                node.HasLocalBounds = meshfilter != null;
-                node.Bounds = node.HasLocalBounds ? meshfilter.mesh.bounds : renderer.bounds;   // in worldspace               
+
+                node.BoundsWithContext.Bounds = renderer.bounds;
+                node.BoundsWithContext.HasLocalBounds = meshfilter != null;
+                if (node.BoundsWithContext.HasLocalBounds)
+                {
+                    node.BoundsWithContext.LocalBounds = meshfilter.mesh.bounds;
+                    node.BoundsWithContext.LocalTransform = unityObj.transform;
+                }
+
                 node.HasGeometry = true;
             }
 
@@ -119,12 +132,12 @@ namespace ff.nodegraph
                 {
                     if (node.HasBounds)
                     {
-                        node.Bounds.Encapsulate(childNode.Bounds);
+                        node.BoundsWithContext.Bounds.Encapsulate(childNode.BoundsWithContext.Bounds);
                         node.HasBounds = true;
                     }
                     else
                     {
-                        node.Bounds = childNode.Bounds;
+                        node.BoundsWithContext.Bounds = childNode.BoundsWithContext.Bounds;
                         node.HasBounds = childNode.HasBounds;
                     }
                 }
@@ -139,18 +152,20 @@ namespace ff.nodegraph
 
         public void CollectLeavesIntersectingRay(Ray ray, List<Node> hits)
         {
-            if (this.HasLocalBounds)
+            if (this.BoundsWithContext.HasLocalBounds)
             {
                 var localRayOrigin = UnityObj.transform.InverseTransformPoint(ray.origin);
                 var localRayDirection = UnityObj.transform.InverseTransformDirection(ray.direction);
-                if (!this.Bounds.IntersectRay(new Ray(localRayOrigin, localRayDirection), out HitDistance))
+                if (!this.BoundsWithContext.LocalBounds.IntersectRay(new Ray(localRayOrigin, localRayDirection), out HitDistance))
                     return;
             }
             else
             {
-                if (!this.Bounds.IntersectRay(ray, out HitDistance))
+                if (!this.BoundsWithContext.Bounds.IntersectRay(ray, out HitDistance))
                     return;
             }
+
+            Debug.Log("Ray hit Node " + this.UnityObj + " , LocalBounds?: " + BoundsWithContext.LocalBounds + " , HasGeometry?: " + HasGeometry);
 
             // Set back distance to favor selection of smaller object
             // if (HitDistance > 0)
@@ -180,67 +195,33 @@ namespace ff.nodegraph
             return true;
         }
 
-
-        public List<Bounds> CollectGeometryBounds(List<Bounds> result = null)
+        public List<BoundsWithContextStruct> CollectBoundsWithContext(List<BoundsWithContextStruct> result = null)
         {
             if (result == null)
-                result = new List<Bounds>();
+                result = new List<BoundsWithContextStruct>();
 
             if (this.HasGeometry)
             {
-                result.Add(this.Bounds);
+                result.Add(this.BoundsWithContext);
             }
 
             foreach (var c in Children)
             {
-                c.CollectGeometryBounds(result);
+                c.CollectBoundsWithContext(result);
             }
             return result;
         }
-
-        public List<Transform> CollectBoundsTransforms(List<Transform> result = null)
-        {
-            if (result == null) result = new List<Transform>();
-
-            if (this.HasGeometry)
-            {
-                result.Add(UnityObj.transform);
-            }
-
-            foreach (var c in Children)
-            {
-                c.CollectBoundsTransforms(result);
-            }
-            return result;
-        }
-
-        public List<bool> CollectBoundsIsLocals(List<bool> result = null)
-        {
-            if (result == null) result = new List<bool>();
-
-            if (this.HasGeometry)
-            {
-                result.Add(HasLocalBounds);
-            }
-
-            foreach (var c in Children)
-            {
-                c.CollectBoundsIsLocals(result);
-            }
-            return result;
-        }
-
 
         public Vector3 GetPosition()
         {
-            return this.Bounds.center;
+            return this.BoundsWithContext.Bounds.center;
         }
 
 
         private bool IntersectsWithRay(Ray ray)
         {
 
-            var intersects = this.Bounds.IntersectRay(ray, out HitDistance);
+            var intersects = this.BoundsWithContext.Bounds.IntersectRay(ray, out HitDistance);
             return intersects;
         }
     }

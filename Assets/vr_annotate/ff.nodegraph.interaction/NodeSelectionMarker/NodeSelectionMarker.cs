@@ -106,7 +106,7 @@ namespace ff.nodegraph.interaction
 
                 if (!newNodeIsParent)
                 {
-                    _targetPosition = newNode.Bounds.center;
+                    _targetPosition = newNode.BoundsWithContext.Bounds.center;
                 }
             }
 
