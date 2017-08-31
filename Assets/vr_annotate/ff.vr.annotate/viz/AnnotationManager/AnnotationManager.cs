@@ -88,7 +88,7 @@ namespace ff.vr.annotate.viz
         {
             var newAnnotation = new Annotation()
             {
-                TargetNodeId = contextNode.Id,
+                TargetNodeId = contextNode.GUID,
                 TargetNode = contextNode,
                 GUID = System.Guid.NewGuid(),
                 ViewPointPosition = new GeoCoordinate()

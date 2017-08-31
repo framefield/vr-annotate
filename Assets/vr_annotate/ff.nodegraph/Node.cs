@@ -25,7 +25,7 @@ namespace ff.nodegraph
         public bool HasGeometry;
         public string Name;
         public bool HasBounds = false;
-        public System.Guid Id;
+        public System.Guid GUID;
 
         public float HitDistance;
 
@@ -97,11 +97,13 @@ namespace ff.nodegraph
         {
             var node = new Node()
             {
-                Name = unityObj.name,
                 Children = new Node[unityObj.transform.childCount],
-                Id = new System.Guid(),
                 UnityObj = unityObj,
+                GUID = new Guid(GUIDGenerator.ExtractGUIDFromName(unityObj.name)),
+                Name = GUIDGenerator.RemoveGUIDFromName(unityObj.name)
             };
+
+            // unityObj.name = node.Name; // write name without GUID back to Object
             node.IsAnnotatable = node.CheckIfObjectIsAnnotatable();
 
             var renderer = unityObj.GetComponent<MeshRenderer>();
@@ -156,11 +158,6 @@ namespace ff.nodegraph
                 }
             }
             return node;
-        }
-
-        public static void PrintBound(Bounds b)
-        {
-            Debug.Log("bounds: center: " + b.center + " , size: " + b.size);
         }
 
         public void CollectLeavesIntersectingRay(Ray ray, List<Node> hits)
@@ -230,12 +227,5 @@ namespace ff.nodegraph
             return this.BoundsWithContext.Bounds.center;
         }
 
-
-        private bool IntersectsWithRay(Ray ray)
-        {
-
-            var intersects = this.BoundsWithContext.Bounds.IntersectRay(ray, out HitDistance);
-            return intersects;
-        }
     }
 }

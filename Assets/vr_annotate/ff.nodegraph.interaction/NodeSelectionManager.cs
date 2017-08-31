@@ -144,7 +144,7 @@ namespace ff.nodegraph.interaction
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
-            Debug.Log("pointer entered with " + LastNodeHitByRay);
+            // Debug.Log("pointer entered with " + LastNodeHitByRay);
             _hoverLabel.gameObject.SetActive(true);
             HoveredNode = LastNodeHitByRay;
             UpdateHoverHighlight();
@@ -168,7 +168,7 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
-            Debug.Log("pointer exit with " + LastNodeHitByRay);
+            // Debug.Log("pointer exit with " + LastNodeHitByRay);
             HoveredNode = null;
             UpdateHoverHighlight();
             LastNodeHitByRay = null;    // really?
@@ -186,18 +186,17 @@ namespace ff.nodegraph.interaction
             }
         }
 
+        public void PointerUntriggered(LaserPointer pointer)
+        {
+
+        }
+
         public void CreateAnnotation()
         {
             if (SelectedNode != null)
             {
                 _annotationManager.CreateAnnotation(SelectedNode, _lastHoverPosition);
             }
-        }
-
-
-        public void PointerUntriggered(LaserPointer pointer)
-        {
-
         }
 
         public void SelectParentNode()

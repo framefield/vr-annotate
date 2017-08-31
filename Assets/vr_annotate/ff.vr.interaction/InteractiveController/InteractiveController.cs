@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using ff.vr.annotate.viz;
+using ff.nodegraph.interaction;
 
 namespace ff.vr.interaction
 {
@@ -132,20 +133,6 @@ namespace ff.vr.interaction
                 _capturedAnnotationTeleporter = null;
                 _state = States.Default;
             }
-            // else if (_state == States.PointerCapturedOnClickable)
-            // {
-            //     if (newHoverGizmo != _currentHoverGizmo)
-            //     {
-            //         _currentHoverGizmo.OnControllerExit(this);
-            //         _laserNoLongerPointsAtCapturedScreen = true;
-            //     }
-
-            //     if (_laserNoLongerPointsAtCapturedScreen && newHoverGizmo == _currentHoverGizmo)
-            //     {
-            //         _laserNoLongerPointsAtCapturedScreen = false;
-            //         _currentHoverGizmo.OnControllerEnter(this);
-            //     }
-            // }
         }
 
         private void TriggerClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
@@ -158,13 +145,16 @@ namespace ff.vr.interaction
 
             if (_state == States.Default)
             {
-
                 if (_laserPointer.PointingAt is IClickableLaserPointerTarget)
                 {
                     _capturedClickTarget = _laserPointer.PointingAt as IClickableLaserPointerTarget;
                     _capturedClickTarget.PointerTriggered(_laserPointer);
                     _state = States.PointerCapturedOnClickable;
                     _laserPointer.IsLockedAtTarget = true;
+                }
+                else
+                {
+                    NodeSelectionManager._instance.SelectParentNode();
                 }
             }
             else if (_state == States.IsCollidingWithGizmo)
