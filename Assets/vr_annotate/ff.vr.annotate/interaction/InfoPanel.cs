@@ -55,26 +55,20 @@ namespace ff.vr.interaction
             SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHandler;
         }
 
-
+        private bool forceMoveIntoView;
         private void SelectionChangedHandler(List<ISelectable> newSelection)
         {
+
             if (newSelection.Count != 1)
             {
-                SetSelection(null);
+                _selectedItem = null;
                 return;
             }
 
-            SetSelection(newSelection[0]);
-        }
+            _selectedItem = newSelection[0];
 
-
-        private void SetSelection(ISelectable newItem, bool forceMoveIntoView = false)
-        {
-            _selectedItem = newItem;
             if (!IsVisibleInView || forceMoveIntoView)
-            {
                 MoveIntoView();
-            }
 
             SetState(States.MovingIntoView);
             UpdateContentVisibility();

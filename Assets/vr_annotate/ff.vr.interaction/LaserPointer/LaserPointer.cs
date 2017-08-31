@@ -40,6 +40,7 @@ namespace ff.vr.interaction
         public event PointingAtChanged NewTargetEnteredEvent;
 
         public Color HoverColor = Color.blue;
+
         [HideInInspector]
         public LaserPointerStyle Style;
 
@@ -49,7 +50,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public Vector3 LastHitPoint;
 
-        private float LastHitDistance = 100;
+        private float _lastHitDistance = 100;
 
         [HideInInspector]
         public Ray Ray;
@@ -86,7 +87,7 @@ namespace ff.vr.interaction
             ILaserPointerTarget newTarget = FindHitTarget();
 
             SetNewHitTarget(newTarget);
-            SetLaserLength(LastHitDistance);
+            SetLaserLength(_lastHitDistance);
 
             _laserHitSphere.transform.position = LastHitPoint;
         }
@@ -112,14 +113,14 @@ namespace ff.vr.interaction
                 && physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>() != null)
                 {
                     LastHitPoint = physicsHit.point;
-                    LastHitDistance = physicsHit.distance;
+                    _lastHitDistance = physicsHit.distance;
                     _nodeSelectionManager.LastNodeHitByRay = physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>().Node;
                     newTarget = _nodeSelectionManager as ILaserPointerTarget;
                 }
                 else
                 {
                     LastHitPoint = physicsHit.point;
-                    LastHitDistance = physicsHit.distance;
+                    _lastHitDistance = physicsHit.distance;
 
                     var hitCollider = physicsHit.collider;
                     var newTargetInterface = hitCollider.attachedRigidbody
@@ -133,13 +134,13 @@ namespace ff.vr.interaction
             {
                 _nodeSelectionManager.LastNodeHitByRay = nodeHit;
                 LastHitPoint = Ray.origin + Ray.direction * nodeHit.HitDistance;
-                LastHitDistance = nodeHit.HitDistance;
+                _lastHitDistance = nodeHit.HitDistance;
                 newTarget = _nodeSelectionManager as ILaserPointerTarget;
             }
             // Nothing hit
             else
             {
-                LastHitDistance = 100;
+                _lastHitDistance = 100;
                 LastHitPoint = Ray.direction * 100;
             }
 
@@ -208,7 +209,7 @@ namespace ff.vr.interaction
             _lineRenderer.startWidth = newLineWidth;
             _lineRenderer.endWidth = newLineWidth;
 
-            var positiveDistance = Mathf.Abs(LastHitDistance);  // Can be negative inside bounding boxes
+            var positiveDistance = Mathf.Abs(_lastHitDistance);  // Can be negative inside bounding boxes
             float scaleByDistance = Mathf.Sqrt(positiveDistance / 2) * spotSize;
             _laserHitSphere.transform.localScale = new Vector3(scaleByDistance, scaleByDistance, scaleByDistance);
         }

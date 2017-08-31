@@ -59,7 +59,23 @@ namespace ff.nodegraph.interaction
         private void SelectionChangedHander(List<ISelectable> newSelection)
         {
             var nodeOrNull = (newSelection.Count == 1) ? newSelection[0] as Node : null;
-            SetSelectedNode(nodeOrNull);
+            if (nodeOrNull == _selectedNode)
+                return;
+
+            _selectedNode = nodeOrNull;
+
+            if (_selectedNode == null)
+            {
+                _highlightContextRenderer.enabled = false;
+            }
+            else
+            {
+                var boundsWithContext = _selectedNode.CollectBoundsWithContext().ToArray();
+
+                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
+
+                _highlightContextRenderer.enabled = true;
+            }
         }
 
 
@@ -179,15 +195,6 @@ namespace ff.nodegraph.interaction
         }
 
 
-        // public void CreateAnnotation()
-        // {
-        //     if (_selectedNode != null)
-        //     {
-        //         _annotationManager.CreateAnnotation(_selectedNode, _lastHoverPosition);
-        //     }
-        // }
-
-
         public void SelectParentNode()
         {
             if (this._selectedNode == null)
@@ -202,29 +209,6 @@ namespace ff.nodegraph.interaction
                 return;
             }
             SelectionManager.Instance.SelectItem(_selectedNode.Parent);
-        }
-
-
-        private void SetSelectedNode(Node newSelectedNode)
-        {
-            if (newSelectedNode == _selectedNode)
-                return;
-
-            _selectedNode = newSelectedNode;
-
-            if (_selectedNode == null)
-            {
-                _highlightContextRenderer.enabled = false;
-            }
-            else
-            {
-                var boundsWithContext = _selectedNode.CollectBoundsWithContext().ToArray();
-
-                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
-
-
-                _highlightContextRenderer.enabled = true;
-            }
         }
 
 

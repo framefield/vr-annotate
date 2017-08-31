@@ -8,21 +8,11 @@ namespace ff.nodegraph.interaction
     public class NodeGraphOutliner : MonoBehaviour, IInfoPanelContent
     {
 
-        public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
-        {
-            SetSelectedNode(newSelection as Node);
-        }
-
-        public Vector3 GetConnectionLineStart()
-        {
-            return PositionOfSelectedItem;
-        }
-
         private InfoPanel _infoPanel;
         public Node root { get; set; }
 
         [HideInInspector]
-        public List<Node> selectedNodes = new List<Node>();
+        // public List<Node> selectedNodes = new List<Node>();
 
         [Header("--- internal prefab references-----")]
 
@@ -43,31 +33,29 @@ namespace ff.nodegraph.interaction
             RebuildUI();
         }
 
+        public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
+        {
+            _selectedNode = newSelection as Node;
+            RebuildUI();
+        }
+
+        public Vector3 GetConnectionLineStart()
+        {
+            return PositionOfSelectedItem;
+        }
+
         public void SetSelectedNode(Node newNode)
         {
-            _selectedNode = newNode;
-            selectedNodes.Clear();
 
-            if (newNode != null)
-            {
-                selectedNodes.Add(newNode);
-            }
-            RebuildUI();
         }
 
         private void RebuildUI()
         {
             ClearItems();
 
-            if (selectedNodes.Count > 1)
+            if (_selectedNode != null)
             {
-                Debug.LogWarning("graph list only supports one item");
-            }
-
-            // Path to selection
-            if (selectedNodes.Count == 1)
-            {
-                var node = selectedNodes[0];
+                var node = _selectedNode;
                 var path = new List<Node>();
 
                 // Collect path to get indentation level
@@ -172,9 +160,6 @@ namespace ff.nodegraph.interaction
         {
             get
             {
-                //var pInWorld = transform.InverseTransformVector(_localPositionOfSelectedItem);
-                //Debug.Log("pWorld:" + pInWorld + " <--- local: " + _localPositionOfSelectedItem);
-                //return this.transform.position;
                 return this.transform.TransformPoint(_localPositionOfSelectedItem);
             }
         }

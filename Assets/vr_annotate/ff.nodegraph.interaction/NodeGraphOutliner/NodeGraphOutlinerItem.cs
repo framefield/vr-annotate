@@ -8,7 +8,6 @@ namespace ff.nodegraph.interaction
 {
     public class NodeGraphOutlinerItem : MonoBehaviour
     {
-
         [Header("Label Color")]
         public Color LabelColor;
         public Color HoveredLabelColor;
@@ -28,7 +27,6 @@ namespace ff.nodegraph.interaction
 
         [SerializeField]
         TMPro.TextMeshPro _label;
-
 
         public NodeGraphOutliner SceneGraphPanel { get; set; }
 
@@ -52,7 +50,6 @@ namespace ff.nodegraph.interaction
         {
             set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
         }
-
 
         private void UpdateUI()
         {
@@ -85,15 +82,13 @@ namespace ff.nodegraph.interaction
 
         public void OnHover()
         {
-            NodeSelectionManager.Instance.SetHoveredNode(_node);
+            SelectionManager.Instance.SetOnHover(_node);
         }
 
         public void OnUnhover()
         {
-            NodeSelectionManager.Instance.SetHoveredNodeToNull();
+            SelectionManager.Instance.SetOnUnhover(_node);
         }
-
-
 
         private float INDENTATION_WIDHT = 0.1f;
         private Node _node;
