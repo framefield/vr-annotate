@@ -32,13 +32,6 @@ namespace ff.vr.interaction
         GameObject HitIndicator { get; }
     }
 
-    public interface ILaserPointerHighlightable
-    {
-        void SetHighlightColor(Color highlightColor);
-        void ShowHighlight();
-        void HideHighlight();
-    }
-
     public class LaserPointer : MonoBehaviour
     {
         public delegate void PointingAtChanged(object sender, PointingAtChangedEventArgs e);
@@ -46,7 +39,6 @@ namespace ff.vr.interaction
         public event PointingAtChanged PointingAtChangedEvent;
         public event PointingAtChanged NewTargetEnteredEvent;
 
-        public Material NonHitMaterial;
         public Color HoverColor = Color.blue;
         [HideInInspector]
         public LaserPointerStyle Style;
@@ -76,7 +68,7 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
-            _nodeSelectionManager = NodeSelectionManager._instance;
+            _nodeSelectionManager = NodeSelectionManager.Instance;
             if (_nodeSelectionManager == null)
             {
                 Debug.LogError("NodeHitTester not found in scene");
@@ -227,21 +219,6 @@ namespace ff.vr.interaction
         {
             _lineRenderer.SetPosition(1, new Vector3(0, 0, distance));
         }
-
-        // Note: We have to return a list because RaycastHit is not nullable
-        public RaycastHit[] GetRayHitsForComponent<T>()
-        {
-            var hits = Physics.RaycastAll(Ray, 100f).OrderBy(hit => hit.distance);
-            var hitsWithPlacementPlanes = new List<RaycastHit>();
-            foreach (RaycastHit hit in hits)
-            {
-                var matchingComponent = hit.collider.gameObject.GetComponent<T>();
-                if (matchingComponent != null)
-                    hitsWithPlacementPlanes.Add(hit);
-            }
-            return hitsWithPlacementPlanes.ToArray();
-        }
-
 
 
         public void SetLaserpointerEnabled(bool enabled)

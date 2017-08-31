@@ -79,7 +79,7 @@ namespace ff.vr.annotate.datamodel
             // Initialize Target Object
             RootNodeId = j["target"]["rootNodeId"].str;
             var nodePath = j["target"]["selector"]["value"].str;
-            TargetNode = NodeSelectionManager._instance.FindNodeFromPath(RootNodeId, nodePath);
+            TargetNode = NodeSelectionManager.Instance.FindNodeFromPath(RootNodeId, nodePath);
 
             ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
             AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());

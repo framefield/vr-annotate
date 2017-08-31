@@ -154,7 +154,7 @@ namespace ff.vr.interaction
                 }
                 else
                 {
-                    NodeSelectionManager._instance.SelectParentNode();
+                    NodeSelectionManager.Instance.SelectParentNode();
                 }
             }
             else if (_state == States.IsCollidingWithGizmo)

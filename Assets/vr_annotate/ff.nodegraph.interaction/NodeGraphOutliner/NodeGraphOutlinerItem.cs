@@ -53,6 +53,7 @@ namespace ff.nodegraph.interaction
             set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
         }
 
+
         private void UpdateUI()
         {
             Color backgroundColor;
@@ -84,13 +85,15 @@ namespace ff.nodegraph.interaction
 
         public void OnHover()
         {
-            NodeSelectionManager._instance.SetHoveredNode(_node);
+            NodeSelectionManager.Instance.SetHoveredNode(_node);
         }
 
         public void OnUnhover()
         {
-            NodeSelectionManager._instance.SetHoveredNodeToNull();
+            NodeSelectionManager.Instance.SetHoveredNodeToNull();
         }
+
+
 
         private float INDENTATION_WIDHT = 0.1f;
         private Node _node;

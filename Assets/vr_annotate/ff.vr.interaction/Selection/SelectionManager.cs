@@ -1,22 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ff.utils;
 using UnityEngine;
 
 namespace ff.vr.interaction
 {
     /** Handles and broadcasts information about the current selection */
-    public class SelectionManager : MonoBehaviour
+    public class SelectionManager : Singleton<SelectionManager>
     {
         public delegate void SelectionChanged(List<ISelectable> newSelection);
         public SelectionChanged SelectionChangedEvent;
 
-        void Awake()
-        {
-            if (Instance != null)
-                throw new UnityException("" + this + " can only be added once.");
-
-            Instance = this;
-        }
 
         public List<ISelectable> Selection { get { return _selection; } }
 
@@ -44,6 +38,5 @@ namespace ff.vr.interaction
         }
 
         private List<ISelectable> _selection = new List<ISelectable>();
-        public static SelectionManager Instance { get; private set; }
     }
 }

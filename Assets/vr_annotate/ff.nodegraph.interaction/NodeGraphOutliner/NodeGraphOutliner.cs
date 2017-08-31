@@ -43,7 +43,6 @@ namespace ff.nodegraph.interaction
             RebuildUI();
         }
 
-
         private void RebuildUI()
         {
             ClearItems();
@@ -73,7 +72,6 @@ namespace ff.nodegraph.interaction
 
                 foreach (var child in path[path.Count - 1].Children)
                     InsertItem(child, -1, path.Count);
-
             }
 
             // Add other graph-root nodes before and after

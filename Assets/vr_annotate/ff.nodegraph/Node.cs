@@ -162,6 +162,17 @@ namespace ff.nodegraph
 
         public void CollectLeavesIntersectingRay(Ray ray, List<Node> hits)
         {
+            if (!this.BoundsWithContext.Bounds.IntersectRay(ray, out HitDistance))
+                return;
+
+            if (this.BoundsWithContext.HasLocalBounds)
+            {
+                var localRayOrigin = UnityObj.transform.InverseTransformPoint(ray.origin);
+                var localRayDirection = UnityObj.transform.InverseTransformDirection(ray.direction);
+                if (!this.BoundsWithContext.LocalBounds.IntersectRay(new Ray(localRayOrigin, localRayDirection), out HitDistance))
+                    return;
+            }
+
             if (this.BoundsWithContext.HasMeshCollider)
             {
                 RaycastHit hit;
@@ -169,18 +180,7 @@ namespace ff.nodegraph
                 HitDistance = hit.distance;
                 if (!hasHit)
                     return;
-            }
-            else if (this.BoundsWithContext.HasLocalBounds)
-            {
-                var localRayOrigin = UnityObj.transform.InverseTransformPoint(ray.origin);
-                var localRayDirection = UnityObj.transform.InverseTransformDirection(ray.direction);
-                if (!this.BoundsWithContext.LocalBounds.IntersectRay(new Ray(localRayOrigin, localRayDirection), out HitDistance))
-                    return;
-            }
-            else
-            {
-                if (!this.BoundsWithContext.Bounds.IntersectRay(ray, out HitDistance))
-                    return;
+
             }
 
             if (this.HasGeometry)
