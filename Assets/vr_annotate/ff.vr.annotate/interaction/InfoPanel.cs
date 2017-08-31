@@ -11,14 +11,13 @@ namespace ff.vr.interaction
 
     public interface IInfoPanelContent
     {
-        void SetSelection(ISelectable newSelection);
-        Vector3 GetConnectionLineStart();
+        void ForwardSelectionFromInfoPanel(ISelectable newSelection);
     }
 
     public class InfoPanel : MonoBehaviour
     {
         [SerializeField]
-        InfoPanelContentForNodes _contentForNodes;
+        NodeGraphOutliner _contentForNodes;
 
         [SerializeField]
         InfoPanelContentForAnnotations _contentForAnnotations;
@@ -91,13 +90,19 @@ namespace ff.vr.interaction
             if (_selectedItem is Node)
             {
                 _contentForNodes.gameObject.SetActive(true);
-                _contentForNodes.SetSelection(_selectedItem);
+                _contentForNodes.ForwardSelectionFromInfoPanel(_selectedItem);
                 _content = _contentForNodes;
             }
             else if (_selectedItem is AnnotationGizmo)
             {
                 _contentForAnnotations.gameObject.SetActive(true);
-                _contentForAnnotations.SetSelection(_selectedItem);
+                _contentForAnnotations.ForwardSelectionFromInfoPanel(_selectedItem);
+
+                var annotationGizmo = _selectedItem as AnnotationGizmo;
+                var annotation = annotationGizmo != null ? annotationGizmo.Annotation : null;
+                var annotatedNode = annotation != null ? annotation.TargetNode : null;
+
+                _contentForNodes.ForwardSelectionFromInfoPanel(annotatedNode);
                 _content = _contentForAnnotations;
             }
         }
@@ -202,7 +207,7 @@ namespace ff.vr.interaction
                 _connectionLine.SetPosition(1, _selectedItem.GetPosition());
             }
 
-            _connectionLine.SetPosition(0, _content.GetConnectionLineStart());
+            _connectionLine.SetPosition(0, _contentForNodes.GetConnectionLineStart());
         }
 
         private const float CLOSE_MENU_THRESHOLD_DISTANCE = 0.3f;

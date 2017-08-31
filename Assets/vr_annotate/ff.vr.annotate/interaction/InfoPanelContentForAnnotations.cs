@@ -13,8 +13,6 @@ namespace ff.vr.interaction
     public class InfoPanelContentForAnnotations : MonoBehaviour, IInfoPanelContent
     {
         [Header("--- internal prefab references -----")]
-        [SerializeField]
-        NodeGraphOutliner _sceneGraphPanel;
 
         [SerializeField]
         TMPro.TextMeshPro _annotationObjectLabel;
@@ -25,18 +23,11 @@ namespace ff.vr.interaction
         [SerializeField]
         TMPro.TextMeshPro _annotationDateLabel;
 
-        public Vector3 GetConnectionLineStart()
-        {
-            return _sceneGraphPanel.PositionOfSelectedItem;
-        }
-
-        public void SetSelection(ISelectable newSelection)
+        public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
         {
             var annotationGizmo = newSelection as AnnotationGizmo;
             _annotation = annotationGizmo != null ? annotationGizmo.Annotation : null;
             _targetNode = _annotation != null ? _annotation.TargetNode : null;
-
-            _sceneGraphPanel.SetSelectedNode(_targetNode);
             UpdateUI();
         }
 

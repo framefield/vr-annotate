@@ -5,8 +5,20 @@ using UnityEngine;
 
 namespace ff.nodegraph.interaction
 {
-    public class NodeGraphOutliner : MonoBehaviour
+    public class NodeGraphOutliner : MonoBehaviour, IInfoPanelContent
     {
+
+        public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
+        {
+            SetSelectedNode(newSelection as Node);
+        }
+
+        public Vector3 GetConnectionLineStart()
+        {
+            return PositionOfSelectedItem;
+        }
+
+        private InfoPanel _infoPanel;
         public Node root { get; set; }
 
         [HideInInspector]
