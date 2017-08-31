@@ -11,8 +11,6 @@ namespace ff.nodegraph.interaction
         private InfoPanel _infoPanel;
         public Node root { get; set; }
 
-        [HideInInspector]
-        // public List<Node> selectedNodes = new List<Node>();
 
         [Header("--- internal prefab references-----")]
 
@@ -24,13 +22,13 @@ namespace ff.nodegraph.interaction
 
         void Start()
         {
-            _nodeSelectionManager = GameObject.FindObjectOfType<NodeSelectionManager>();
+            _nodeSelectionManager = GameObject.FindObjectOfType<NodeSelector>();
             RebuildUI();
         }
 
         void Update()
         {
-            RebuildUI();
+            // RebuildUI();
         }
 
         public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
@@ -115,7 +113,6 @@ namespace ff.nodegraph.interaction
             _items.Insert(index, newItem);
             newItem.Indentation = indentation;
             newItem.IsSelected = node == _selectedNode;
-            newItem.IsHovered = node == _nodeSelectionManager.HoveredNode;
             newItem.name += "-" + node.Name;
             newItem.Node = node;
 
@@ -166,6 +163,6 @@ namespace ff.nodegraph.interaction
 
         private Vector3 _localPositionOfSelectedItem;
         private List<NodeGraphOutlinerItem> _items = new List<NodeGraphOutlinerItem>();
-        private NodeSelectionManager _nodeSelectionManager;
+        private NodeSelector _nodeSelectionManager;
     }
 }

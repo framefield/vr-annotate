@@ -58,7 +58,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public bool IsLockedAtTarget;
 
-        private NodeSelectionManager _nodeSelectionManager;
+        private NodeSelector _nodeSelectionManager;
 
         void Start()
         {
@@ -69,7 +69,7 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
-            _nodeSelectionManager = NodeSelectionManager.Instance;
+            _nodeSelectionManager = NodeSelector.Instance;
             if (_nodeSelectionManager == null)
             {
                 Debug.LogError("NodeHitTester not found in scene");

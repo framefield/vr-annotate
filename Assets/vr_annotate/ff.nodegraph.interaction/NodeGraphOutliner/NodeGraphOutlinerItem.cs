@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ff.vr.interaction;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace ff.nodegraph.interaction
         public Color SelectedBackgroundColor;
 
         public bool IsSelected;
-        public bool IsHovered;
+        private bool _isHovered;
 
         [Header("--- internal prefab references ----")]
         [SerializeField]
@@ -29,6 +30,38 @@ namespace ff.nodegraph.interaction
         TMPro.TextMeshPro _label;
 
         public NodeGraphOutliner SceneGraphPanel { get; set; }
+
+        public void OnEnable()
+        {
+            SelectionManager.Instance.OnHover += OnHoverHandler;
+            SelectionManager.Instance.OnUnhover += OnUnhoverHandler;
+        }
+
+        public void OnDisable()
+        {
+            SelectionManager.Instance.OnHover -= OnHoverHandler;
+            SelectionManager.Instance.OnUnhover -= OnUnhoverHandler;
+        }
+
+        private void OnHoverHandler(ISelectable obj)
+        {
+            if (_node == obj as Node)
+            {
+                _isHovered = true;
+                UpdateUI();
+            }
+        }
+
+        private void OnUnhoverHandler(ISelectable obj)
+        {
+
+            if (_node == obj as Node)
+            {
+                _isHovered = false;
+                UpdateUI();
+
+            }
+        }
 
         public Node Node
         {
@@ -61,7 +94,7 @@ namespace ff.nodegraph.interaction
                 labelColor = SelectedLabelColor;
                 backgroundColor = SelectedBackgroundColor;
             }
-            else if (IsHovered)
+            else if (_isHovered)
             {
                 labelColor = HoveredLabelColor;
                 backgroundColor = HoveredBackgorundColor;

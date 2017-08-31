@@ -52,53 +52,48 @@ namespace ff.vr.interaction
             {
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
-            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHandler;
+            SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHandler;
+            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += GizmoSelectionChangedHandler;
         }
 
         private bool forceMoveIntoView;
-        private void SelectionChangedHandler(List<ISelectable> newSelection)
+        private void NodeSelectionChangedHandler(Node selectedNode)
         {
-
-            if (newSelection.Count != 1)
-            {
-                _selectedItem = null;
+            _selectedItem = selectedNode;
+            if (_selectedItem == null)
                 return;
-            }
-
-            _selectedItem = newSelection[0];
 
             if (!IsVisibleInView || forceMoveIntoView)
                 MoveIntoView();
 
-            SetState(States.MovingIntoView);
-            UpdateContentVisibility();
+            _contentForAnnotations.gameObject.SetActive(false);
+            _contentForNodes.gameObject.SetActive(true);
+
+            _contentForNodes.ForwardSelectionFromInfoPanel(_selectedItem);
+            _content = _contentForNodes;
         }
 
 
-        void UpdateContentVisibility()
+        private void GizmoSelectionChangedHandler(AnnotationGizmo selectedGizmo)
         {
-            // Hide all by default
+            _selectedItem = selectedGizmo;
+            if (_selectedItem == null)
+                return;
+
+            if (!IsVisibleInView || forceMoveIntoView)
+                MoveIntoView();
+
             _contentForNodes.gameObject.SetActive(false);
-            _contentForAnnotations.gameObject.SetActive(false);
+            _contentForAnnotations.gameObject.SetActive(true);
 
-            if (_selectedItem is Node)
-            {
-                _contentForNodes.gameObject.SetActive(true);
-                _contentForNodes.ForwardSelectionFromInfoPanel(_selectedItem);
-                _content = _contentForNodes;
-            }
-            else if (_selectedItem is AnnotationGizmo)
-            {
-                _contentForAnnotations.gameObject.SetActive(true);
-                _contentForAnnotations.ForwardSelectionFromInfoPanel(_selectedItem);
+            _contentForAnnotations.ForwardSelectionFromInfoPanel(_selectedItem);
 
-                var annotationGizmo = _selectedItem as AnnotationGizmo;
-                var annotation = annotationGizmo != null ? annotationGizmo.Annotation : null;
-                var annotatedNode = annotation != null ? annotation.TargetNode : null;
+            var annotation = selectedGizmo.Annotation;
+            var annotatedNode = annotation != null ? annotation.TargetNode : null;
 
-                _contentForNodes.ForwardSelectionFromInfoPanel(annotatedNode);
-                _content = _contentForAnnotations;
-            }
+            _contentForNodes.ForwardSelectionFromInfoPanel(annotatedNode);
+            _content = _contentForAnnotations;
+
         }
 
 
@@ -302,6 +297,8 @@ namespace ff.vr.interaction
         private const float OFFSET_TO_RIGHT = 0.5f;
         public void MoveIntoView()
         {
+            SetState(States.MovingIntoView);
+
             _lastValidPosition = Camera.main.transform.position
                 + Camera.main.transform.forward * DISTANCE_FROM_CAMERA
                 + Camera.main.transform.right * OFFSET_TO_RIGHT;

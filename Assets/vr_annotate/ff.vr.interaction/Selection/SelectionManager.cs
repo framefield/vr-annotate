@@ -13,28 +13,36 @@ namespace ff.vr.interaction
     /** Handles and broadcasts information about the current selection */
     public class SelectionManager : Singleton<SelectionManager>
     {
-        public event Action<List<ISelectable>> SelectionChangedEvent;
+        public event Action<Node> SelectedNodeChangedEvent;
+        public event Action<AnnotationGizmo> SelectedAnnotationGizmoChangedEvent;
         public event Action<ISelectable> OnHover;
         public event Action<ISelectable> OnUnhover;
 
         public List<ISelectable> Selection { get { return _selection; } }
 
+        public Node SelectedNode;
+        public AnnotationGizmo SelectedAnnotationGizmo;
+
         public void SelectItem(ISelectable item)
         {
-            foreach (var oldSelected in _selection)
-                if (oldSelected != item)
-                    oldSelected.IsSelected = false;
+            if (item == SelectedNode || item == SelectedAnnotationGizmo)
+                return;
 
-            _selection.Clear();
-
-            if (item != null)
+            if (item is Node)
             {
-                _selection.Add(item);
-                item.IsSelected = true;
+                SelectedNode.IsSelected = false;
+                SelectedNode = item as Node;
+                SelectedNode.IsSelected = true;
+                SelectedNodeChangedEvent(SelectedNode);
             }
 
-            if (SelectionChangedEvent != null)
-                SelectionChangedEvent(_selection);
+            else if (item is AnnotationGizmo)
+            {
+                SelectedAnnotationGizmo.IsSelected = false;
+                SelectedAnnotationGizmo = item as AnnotationGizmo;
+                SelectedAnnotationGizmo.IsSelected = true;
+                SelectedAnnotationGizmoChangedEvent(SelectedAnnotationGizmo);
+            }
         }
 
         public Node GetSelectedNode()
@@ -57,14 +65,25 @@ namespace ff.vr.interaction
 
         public void SetOnHover(ISelectable item)
         {
+            if (item == _hoveredItem)
+                return;
+
+            if (item is Node)
+                Debug.Log("setting on hover " + (item as Node).Name);
+            // OnUnhover(_hoveredItem);
+            OnHover(item);
             _hoveredItem = item;
-            OnHover(_hoveredItem);
         }
 
         public void SetOnUnhover(ISelectable item)
         {
-            _hoveredItem = null;
+            if (_hoveredItem != item)
+                return;
+
+            if (item is Node)
+                Debug.Log("setting on unHover " + (item as Node).Name);
             OnUnhover(_hoveredItem);
+            _hoveredItem = null;
         }
 
         private ISelectable _hoveredItem;

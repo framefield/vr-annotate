@@ -11,9 +11,9 @@ using ff.vr.annotate;
 namespace ff.nodegraph.interaction
 {
     /** A singleton that handles hit-detection within a node-structure.  */
-    public class NodeSelectionManager : Singleton<NodeSelectionManager>, IClickableLaserPointerTarget, IHitTester
+    public class NodeSelector : Singleton<NodeSelector>, IClickableLaserPointerTarget, IHitTester
     {
-        public Node HoveredNode = null;
+        // public Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
         public Node LastNodeHitByRay;
 
@@ -23,16 +23,6 @@ namespace ff.nodegraph.interaction
         [NonSerializedAttribute]
         public Dictionary<System.Guid, Node> NodesByGuid = new Dictionary<System.Guid, Node>();
 
-        [Header("--- prefab references ----")]
-
-        [SerializeField]
-        TMPro.TextMeshPro _hoverLabel;
-
-        [SerializeField]
-        Renderer _highlightContextRenderer;
-
-        [SerializeField]
-        Renderer _highlightHoverRenderer;
 
 
         new void Awake()
@@ -48,34 +38,17 @@ namespace ff.nodegraph.interaction
 
         void Start()
         {
-            if (SelectionManager.Instance == null)
-            {
-                throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
-            }
-            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
+            SelectionManager.Instance.SelectedNodeChangedEvent += SelectionChangedHander;
         }
 
 
-        private void SelectionChangedHander(List<ISelectable> newSelection)
+        private void SelectionChangedHander(Node selectedNode)
         {
-            var nodeOrNull = (newSelection.Count == 1) ? newSelection[0] as Node : null;
-            if (nodeOrNull == _selectedNode)
+            if (selectedNode == _selectedNode)
                 return;
 
-            _selectedNode = nodeOrNull;
+            _selectedNode = selectedNode;
 
-            if (_selectedNode == null)
-            {
-                _highlightContextRenderer.enabled = false;
-            }
-            else
-            {
-                var boundsWithContext = _selectedNode.CollectBoundsWithContext().ToArray();
-
-                _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
-
-                _highlightContextRenderer.enabled = true;
-            }
         }
 
 
@@ -122,6 +95,7 @@ namespace ff.nodegraph.interaction
         }
 
 
+
         /*
         Read carefully! This part is tricky...
 
@@ -131,27 +105,11 @@ namespace ff.nodegraph.interaction
         We then can use the _lastNodeHitByRay to update the visualization respectively.
         */
 
-        public void SetHoveredNode(Node node)
-        {
-            _hoverLabel.gameObject.SetActive(true);
-            HoveredNode = node;
-            UpdateHoverHighlight();
-        }
-
-        public void SetHoveredNodeToNull()
-        {
-            _hoverLabel.gameObject.SetActive(false);
-            HoveredNode = null;
-            UpdateHoverHighlight();
-        }
-
-
         #region implement LaserInterface
         public void PointerEnter(LaserPointer pointer)
         {
-            _hoverLabel.gameObject.SetActive(true);
-            HoveredNode = LastNodeHitByRay;
-            UpdateHoverHighlight();
+
+            SelectionManager.Instance.SetOnHover(LastNodeHitByRay);
         }
 
 
@@ -159,31 +117,32 @@ namespace ff.nodegraph.interaction
         {
             if (LastNodeHitByRay != _renderedNode)
             {
-                HoveredNode = LastNodeHitByRay;
-                UpdateHoverHighlight();
+                SelectionManager.Instance.SetOnUnhover(_renderedNode);
+                SelectionManager.Instance.SetOnHover(LastNodeHitByRay);
+
+
                 _renderedNode = LastNodeHitByRay;
             }
             _lastHoverPosition = pointer.LastHitPoint;
-            _hoverLabel.transform.position = pointer.LastHitPoint;
-            _hoverLabel.transform.LookAt(_hoverLabel.transform.position - Camera.main.transform.position + _hoverLabel.transform.position);
+            // _hoverLabel.transform.position = pointer.LastHitPoint;
+            // _hoverLabel.transform.LookAt(_hoverLabel.transform.position - Camera.main.transform.position + _hoverLabel.transform.position);
         }
 
 
         public void PointerExit(LaserPointer pointer)
         {
-            HoveredNode = null;
-            UpdateHoverHighlight();
-            LastNodeHitByRay = null;    // really?
-            _hoverLabel.gameObject.SetActive(false);
+            SelectionManager.Instance.SetOnUnhover(LastNodeHitByRay);
+            LastNodeHitByRay = null;
         }
+
         #endregion implement LaserInterface
 
 
         public void PointerTriggered(LaserPointer pointer)
         {
-            if (HoveredNode != null)
+            if (LastNodeHitByRay != null)
             {
-                SelectionManager.Instance.SelectItem(HoveredNode);
+                SelectionManager.Instance.SelectItem(LastNodeHitByRay);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
@@ -280,23 +239,7 @@ namespace ff.nodegraph.interaction
         #endregion
 
 
-        private void UpdateHoverHighlight()
-        {
-            if (HoveredNode == null)
-            {
-                _hoverLabel.gameObject.SetActive(false);
-                _highlightHoverRenderer.enabled = false;
-            }
-            else
-            {
-                _hoverLabel.text = HoveredNode.Name;
-                var allBoundsWithContext = HoveredNode.CollectBoundsWithContext().ToArray();
 
-                _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(allBoundsWithContext);
-
-                _highlightHoverRenderer.enabled = true;
-            }
-        }
 
         private Vector3 _lastHoverPosition;
         private Node _renderedNode;

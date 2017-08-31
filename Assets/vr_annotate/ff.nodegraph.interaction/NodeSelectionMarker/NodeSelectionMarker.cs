@@ -9,7 +9,7 @@ namespace ff.nodegraph.interaction
     public class NodeSelectionMarker : MonoBehaviour
     {
         public Node _currentNode;
-        public NodeSelectionManager _nodeSelectionManager;
+        public NodeSelector _nodeSelectionManager;
 
         [SerializeField] TMPro.TextMeshPro _selectionLabel;
         [SerializeField] TMPro.TextMeshPro _parentLabel;
@@ -19,7 +19,7 @@ namespace ff.nodegraph.interaction
 
         void Awake()
         {
-            _nodeSelectionManager = FindObjectOfType<NodeSelectionManager>();
+            _nodeSelectionManager = FindObjectOfType<NodeSelector>();
         }
 
         void Start()
@@ -28,14 +28,7 @@ namespace ff.nodegraph.interaction
             {
                 throw new UnityException("NodeSelectManager Requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
-            SelectionManager.Instance.SelectionChangedEvent += SelectionChangedHander;
-        }
-
-
-        private void SelectionChangedHander(List<ISelectable> newSelection)
-        {
-            var nodeOrNull = (newSelection.Count == 1) ? newSelection[0] as Node : null;
-            SetSelectedNode(nodeOrNull);
+            SelectionManager.Instance.SelectedNodeChangedEvent += SelectionChangedHandler;
         }
 
         public bool IsSelected { get; set; }
@@ -80,7 +73,7 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        private void SetSelectedNode(Node newNode)
+        private void SelectionChangedHandler(Node newNode)
         {
             PrepareLabelTransition(newNode);
 
