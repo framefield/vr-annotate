@@ -28,7 +28,6 @@ namespace ff.nodegraph.interaction
             {
                 Debug.Log("initializing graph:" + ng.name + " / " + ng.RootNodeId);
             }
-            _annotationManager = FindObjectOfType<AnnotationManager>();
         }
 
         void Start()
@@ -235,7 +234,6 @@ namespace ff.nodegraph.interaction
         private Vector3 _lastHoverPosition;
         private Node _renderedNode;
         private Node _selectedNode = null;
-        private AnnotationManager _annotationManager;
 
     }
 }

@@ -70,7 +70,6 @@ namespace ff.vr.interaction
             _nodeGraphInfoPanel.gameObject.SetActive(true);
 
             _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(_selectedItem);
-            _content = _nodeGraphInfoPanel;
         }
 
 
@@ -92,8 +91,6 @@ namespace ff.vr.interaction
             var annotatedNode = annotation != null ? annotation.TargetNode : null;
 
             _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(annotatedNode);
-            _content = _annotationInfoPanel;
-
         }
 
 
@@ -364,7 +361,6 @@ namespace ff.vr.interaction
         SteamVR_TrackedController _pressedMenuButtonController;
 
         private ISelectable _selectedItem;
-        private IInfoPanelContent _content;
 
         private const float TRANSITION_DURATION = 0.35f;
         private float _interactionStartTime = 0;
