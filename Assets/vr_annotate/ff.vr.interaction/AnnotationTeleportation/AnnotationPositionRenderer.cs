@@ -8,33 +8,57 @@ namespace ff.vr.interaction
 {
     public class AnnotationPositionRenderer : Singleton<AnnotationPositionRenderer>
     {
+        public bool Highlighted;
+        public bool Selected;
+        public bool Hovered;
+
+        [Header("--- configuration -----")]
+
+        [SerializeField]
+        private Color HoverColor;
+        [SerializeField]
+        private Color SelectedColor;
+
+        [SerializeField]
+        private AnimationCurve LineLengthFromHover;
+        [SerializeField]
+        private AnimationCurve LineWidthFromHover;
+        [SerializeField]
+        private float LinePaddingOnEndPoints;
+
+
+        [Header("--- internal prefab references -----")]
 
         [SerializeField]
         private LineRenderer _lineToAnnotation;
-
         [SerializeField]
         private GameObject _target;
-
         [SerializeField]
         private GameObject _arrow;
 
         void Start()
         {
-            _inverseScale = this.transform.InverseTransformVector(Vector3.one);
+            _initialScale = this.transform.localScale;
             _allRenderers = GetComponentsInChildren<Renderer>();
         }
 
         void Update()
         {
-            _hoverDamped = Mathf.Lerp(_hoverDamped, _hover, 0.1f);
-            var isVisible = _hoverDamped > 0.001f;
+            if (Hovered || Selected)
+                _shouldHaveVisibility = 1;
+            else
+                _shouldHaveVisibility = 0;
+
+            _visibility = Mathf.Lerp(_visibility, _shouldHaveVisibility, 0.05f);
+            var isVisible = _visibility > 0.01f;
 
             if (isVisible)
             {
-                _target.transform.localScale = _inverseScale * _hoverDamped * HIGHLIGHT_SIZE;
+
+                _target.transform.localScale = _initialScale * (MINSIZE + _visibility * (1 - MINSIZE));
 
                 _arrow.transform.localPosition =
-                _highlighted
+                Highlighted
                 ? new Vector3(0, Mathf.Pow(Mathf.Abs(Mathf.Sin(Time.time * 5)), 0.7f) * 0.5f, 0)
                 : new Vector3(0f, 0f, 0f);
 
@@ -44,52 +68,59 @@ namespace ff.vr.interaction
 
                 foreach (var r in _allRenderers)
                 {
-                    var color = r.material.color;
-                    r.material.color = new Color(color.r, color.g, color.b, _hoverDamped);
+                    var colorToSet = Hovered ? HoverColor : SelectedColor;
+
+                    var colorWithAlpha = new Color(colorToSet.r, colorToSet.g, colorToSet.b, _visibility);
+
+                    r.material.SetColor("_Color", colorWithAlpha);
+                    r.material.SetColor("_EmissionColor", colorWithAlpha);
                 }
+
+                _lineToAnnotation.SetPosition(1, _lineEndPosition + LineLengthFromHover.Evaluate(_visibility) * (_lineStartPosition - _lineEndPosition));
+                _lineToAnnotation.widthMultiplier = LineWidthFromHover.Evaluate(_visibility);
             }
+            _target.SetActive(isVisible);
+
         }
 
-        public void RenderAnnotation(Annotation annotation)
+        public void SetAnnotationData(Annotation annotation)
         {
             transform.position = new Vector3(annotation.ViewPointPosition.position.x, 0, annotation.ViewPointPosition.position.z);
 
-            var startPos = annotation.ViewPointPosition.position;
-            Debug.Log(startPos);
-            var endPos = annotation.AnnotationPosition.position;
+            _lineStartPosition = annotation.ViewPointPosition.position;
+            _lineEndPosition = annotation.AnnotationPosition.position;
 
-            _lineToAnnotation.SetPosition(0, startPos);
-            _lineToAnnotation.SetPosition(1, (startPos + endPos) / 2);
-            _lineToAnnotation.SetPosition(2, endPos);
-
-            Show();
+            var startToEnd = (_lineEndPosition - _lineStartPosition);
+            if (startToEnd.magnitude > 2 * LinePaddingOnEndPoints)
+            {
+                _lineStartPosition += startToEnd.normalized * LinePaddingOnEndPoints;
+                _lineEndPosition -= startToEnd.normalized * LinePaddingOnEndPoints;
+            }
+            _lineToAnnotation.SetPosition(0, _lineEndPosition);
+            _lineToAnnotation.SetPosition(1, _lineEndPosition);
         }
 
         public void Show()
         {
-            _hover = 1;
-            _target.SetActive(true);
+            _shouldHaveVisibility = 1;
         }
 
         public void Hide()
         {
-            _hover = 0;
-            _target.SetActive(false);
+            _shouldHaveVisibility = 0;
         }
 
-        public void SetHighlight(bool highlighted)
-        {
-            _highlighted = highlighted;
-        }
+        private float _shouldHaveVisibility = 0;
+        private float _visibility = 0;
 
-        float _hover = 0;
-        float _hoverDamped = 0;
-        Vector3 _inverseScale = Vector3.one;
-        private bool _isVisible;
-        private bool _highlighted;
+        Vector3 _initialScale = Vector3.one;
+
         private Renderer[] _allRenderers;
 
-        const float HIGHLIGHT_SIZE = 1.0f;
+        private Vector3 _lineStartPosition;
+        private Vector3 _lineEndPosition;
+
+        private const float MINSIZE = 0.9f;
 
     }
 }

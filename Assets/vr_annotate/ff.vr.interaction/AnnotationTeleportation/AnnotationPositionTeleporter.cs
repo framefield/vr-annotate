@@ -20,19 +20,26 @@ namespace ff.vr.interaction
 
         public void SetPerspectiveHighlight(bool highlighted)
         {
-            AnnotationPositionRenderer.Instance.SetHighlight(highlighted);
+            AnnotationPositionRenderer.Instance.Highlighted = highlighted;
         }
 
         public override void PointerEnter(LaserPointer pointer)
         {
             base.PointerEnter(pointer);
-            AnnotationPositionRenderer.Instance.RenderAnnotation(GetComponentInParent<AnnotationGizmo>().Annotation);
+            AnnotationPositionRenderer.Instance.SetAnnotationData(GetComponentInParent<AnnotationGizmo>().Annotation);
+            AnnotationPositionRenderer.Instance.Hovered = true;
         }
 
         public override void PointerExit(LaserPointer pointer)
         {
             base.PointerExit(pointer);
-            AnnotationPositionRenderer.Instance.Hide();
+            AnnotationPositionRenderer.Instance.Hovered = false;
+        }
+
+        public override void PointerUntriggered(LaserPointer pointer)
+        {
+            base.PointerUntriggered(pointer);
+            AnnotationPositionRenderer.Instance.Selected = true;
         }
 
         public void PadClicked(Teleportation teleportation)
