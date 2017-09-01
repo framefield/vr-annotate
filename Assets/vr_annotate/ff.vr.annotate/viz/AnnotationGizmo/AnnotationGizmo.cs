@@ -91,7 +91,7 @@ namespace ff.vr.annotate
 
         public void OnClicked()
         {
-            SelectionManager.Instance.SelectItem(this);
+            SelectionManager.Instance.SetSelectedItem(this);
         }
         #region implemented ISelectable
 

@@ -58,7 +58,7 @@ namespace ff.vr.interaction
         [HideInInspector]
         public bool IsLockedAtTarget;
 
-        private NodeSelector _nodeSelectionManager;
+        private NodeSelector _nodeSelector;
 
         void Start()
         {
@@ -69,8 +69,8 @@ namespace ff.vr.interaction
             {
                 _laserHitSphereMaterial = _laserHitSphere.GetComponent<Renderer>().material;
             }
-            _nodeSelectionManager = NodeSelector.Instance;
-            if (_nodeSelectionManager == null)
+            _nodeSelector = NodeSelector.Instance;
+            if (_nodeSelector == null)
             {
                 Debug.LogError("NodeHitTester not found in scene");
             }
@@ -102,40 +102,40 @@ namespace ff.vr.interaction
             RaycastHit physicsHit = new RaycastHit();
             var hasPhysicsHit = (Physics.Raycast(Ray, out physicsHit, 1000));
 
-            var nodeHit = (_nodeSelectionManager != null) ? _nodeSelectionManager.FindHit(Ray) : null;
+            var nodeHit = (_nodeSelector != null) ? _nodeSelector.FindHit(Ray) : null;
             var hasNodeHit = (nodeHit != null);
 
             // Physics ray wins
             if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
             {
                 // check if cast hit NodeGraphOutlinerItem in Menu, in this case treat it like nodeHit
-                if (physicsHit.collider.gameObject.GetComponent<LaserPointerButton>() != null
-                && physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>() != null)
-                {
-                    LastHitPoint = physicsHit.point;
-                    _lastHitDistance = physicsHit.distance;
-                    _nodeSelectionManager.LastNodeHitByRay = physicsHit.collider.gameObject.GetComponentInParent<NodeGraphOutlinerItem>().Node;
-                    newTarget = _nodeSelectionManager as ILaserPointerTarget;
-                }
-                else
-                {
-                    LastHitPoint = physicsHit.point;
-                    _lastHitDistance = physicsHit.distance;
+                // if (physicsHit.collider.gameObject.GetComponent<LaserPointerButton>() != null
+                // && physicsHit.collider.gameObject.GetComponentInParent<NodeGraphInfoPanelItem>() != null)
+                // {
+                //     LastHitPoint = physicsHit.point;
+                //     _lastHitDistance = physicsHit.distance;
+                //     _nodeSelector.LastNodeHitByRay = physicsHit.collider.gameObject.GetComponentInParent<NodeGraphInfoPanelItem>().Node;
+                //     newTarget = _nodeSelector as ILaserPointerTarget;
+                // }
+                // else
+                // {
+                LastHitPoint = physicsHit.point;
+                _lastHitDistance = physicsHit.distance;
 
-                    var hitCollider = physicsHit.collider;
-                    var newTargetInterface = hitCollider.attachedRigidbody
-                                         ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
-                                         : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
-                    newTarget = newTargetInterface as ILaserPointerTarget;
-                }
+                var hitCollider = physicsHit.collider;
+                var newTargetInterface = hitCollider.attachedRigidbody
+                                     ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
+                                     : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
+                newTarget = newTargetInterface as ILaserPointerTarget;
+                // }
             }
             // NodeHit wins...
             else if (hasNodeHit)
             {
-                _nodeSelectionManager.LastNodeHitByRay = nodeHit;
+                _nodeSelector.LastNodeHitByRay = nodeHit;
                 LastHitPoint = Ray.origin + Ray.direction * nodeHit.HitDistance;
                 _lastHitDistance = nodeHit.HitDistance;
-                newTarget = _nodeSelectionManager as ILaserPointerTarget;
+                newTarget = _nodeSelector as ILaserPointerTarget;
             }
             // Nothing hit
             else

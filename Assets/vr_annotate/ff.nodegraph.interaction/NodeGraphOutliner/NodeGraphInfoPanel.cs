@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ff.nodegraph.interaction
 {
-    public class NodeGraphOutliner : MonoBehaviour, IInfoPanelContent
+    public class NodeGraphInfoPanel : MonoBehaviour, IInfoPanelContent
     {
 
         private InfoPanel _infoPanel;
@@ -15,7 +15,7 @@ namespace ff.nodegraph.interaction
         [Header("--- internal prefab references-----")]
 
         [SerializeField]
-        NodeGraphOutlinerItem _itemPrefab;
+        NodeGraphInfoPanelItem _itemPrefab;
 
         [SerializeField]
         Transform _itemsContainer;
@@ -42,10 +42,6 @@ namespace ff.nodegraph.interaction
             return PositionOfSelectedItem;
         }
 
-        public void SetSelectedNode(Node newNode)
-        {
-
-        }
 
         private void RebuildUI()
         {
@@ -103,7 +99,7 @@ namespace ff.nodegraph.interaction
 
 
         /** Use index -1 to append */
-        private NodeGraphOutlinerItem InsertItem(Node node, int index = -1, int indentation = 0)
+        private NodeGraphInfoPanelItem InsertItem(Node node, int index = -1, int indentation = 0)
         {
             // -1 appends to list
             if (index == -1)
@@ -130,7 +126,7 @@ namespace ff.nodegraph.interaction
 
             for (var index = 0; index < _items.Count; index++)
             {
-                var pos = new Vector3(0, -LINE_HEIGHT * index, 0);
+                var pos = new Vector3(0, -LINE_HEIGHT * (index + 0.5f), 0);
                 _items[index].transform.localPosition = pos;
                 if (_items[index].Node == _selectedNode)
                 {
@@ -162,7 +158,7 @@ namespace ff.nodegraph.interaction
         }
 
         private Vector3 _localPositionOfSelectedItem;
-        private List<NodeGraphOutlinerItem> _items = new List<NodeGraphOutlinerItem>();
+        private List<NodeGraphInfoPanelItem> _items = new List<NodeGraphInfoPanelItem>();
         private NodeSelector _nodeSelectionManager;
     }
 }

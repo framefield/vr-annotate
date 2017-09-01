@@ -17,10 +17,10 @@ namespace ff.vr.interaction
     public class InfoPanel : MonoBehaviour
     {
         [SerializeField]
-        NodeGraphOutliner _contentForNodes;
+        NodeGraphInfoPanel _nodeGraphInfoPanel;
 
         [SerializeField]
-        InfoPanelContentForAnnotations _contentForAnnotations;
+        AnnotationInfoPanel _annotationInfoPanel;
 
 
         [Header("--- internal prefab references -----")]
@@ -66,11 +66,11 @@ namespace ff.vr.interaction
             if (!IsVisibleInView || forceMoveIntoView)
                 MoveIntoView();
 
-            _contentForAnnotations.gameObject.SetActive(false);
-            _contentForNodes.gameObject.SetActive(true);
+            _annotationInfoPanel.gameObject.SetActive(false);
+            _nodeGraphInfoPanel.gameObject.SetActive(true);
 
-            _contentForNodes.ForwardSelectionFromInfoPanel(_selectedItem);
-            _content = _contentForNodes;
+            _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(_selectedItem);
+            _content = _nodeGraphInfoPanel;
         }
 
 
@@ -83,16 +83,16 @@ namespace ff.vr.interaction
             if (!IsVisibleInView || forceMoveIntoView)
                 MoveIntoView();
 
-            _contentForNodes.gameObject.SetActive(false);
-            _contentForAnnotations.gameObject.SetActive(true);
+            _nodeGraphInfoPanel.gameObject.SetActive(false);
+            _annotationInfoPanel.gameObject.SetActive(true);
 
-            _contentForAnnotations.ForwardSelectionFromInfoPanel(_selectedItem);
+            _annotationInfoPanel.ForwardSelectionFromInfoPanel(_selectedItem);
 
             var annotation = selectedGizmo.Annotation;
             var annotatedNode = annotation != null ? annotation.TargetNode : null;
 
-            _contentForNodes.ForwardSelectionFromInfoPanel(annotatedNode);
-            _content = _contentForAnnotations;
+            _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(annotatedNode);
+            _content = _annotationInfoPanel;
 
         }
 
@@ -196,7 +196,7 @@ namespace ff.vr.interaction
                 _connectionLine.SetPosition(1, _selectedItem.GetPosition());
             }
 
-            _connectionLine.SetPosition(0, _contentForNodes.GetConnectionLineStart());
+            _connectionLine.SetPosition(0, _nodeGraphInfoPanel.GetConnectionLineStart());
         }
 
         private const float CLOSE_MENU_THRESHOLD_DISTANCE = 0.3f;

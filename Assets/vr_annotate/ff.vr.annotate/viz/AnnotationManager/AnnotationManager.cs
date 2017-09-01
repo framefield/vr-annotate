@@ -6,6 +6,7 @@ using ff.vr.interaction;
 using System;
 using System.IO;
 using ff.location;
+using ff.utils;
 using ff.vr.annotate.datamodel;
 using ff.vr.annotate.helpers;
 using ff.nodegraph.interaction;
@@ -19,7 +20,7 @@ namespace ff.vr.annotate.viz
         - We be generated on the fly
         - Is grouped under a Annotations-Group
     */
-    public class AnnotationManager : MonoBehaviour
+    public class AnnotationManager : Singleton<AnnotationManager>
     {
         public string SimulatedYear = "300 BC";
         public string SimulatedTimeOfDay = "18:23:12";
@@ -29,16 +30,9 @@ namespace ff.vr.annotate.viz
 
         public AnnotationGizmo _annotationGizmoPrefab;
 
-        public static AnnotationManager _instance;
 
         void Start()
         {
-            if (_instance != null)
-            {
-                Debug.LogError("Only one instance of " + this + " allowed", this);
-            }
-            _instance = this;
-
             _gizmoContainer = new GameObject();
             _gizmoContainer.name = "GizmoContainer";
             _gizmoContainer.transform.SetParent(this.transform, false);
@@ -128,7 +122,7 @@ namespace ff.vr.annotate.viz
                 return;
 
             var nextGizmo = GetNextAnnotationGizmoOnNode(selectedAnnotationGizmo);
-            SelectionManager.Instance.SelectItem(nextGizmo);
+            SelectionManager.Instance.SetSelectedItem(nextGizmo);
             teleportation.JumpToPosition(nextGizmo.Annotation.ViewPointPosition.position);
         }
 

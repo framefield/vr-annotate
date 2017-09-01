@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4672099054182416}
   - component: {fileID: 114009027321804360}
   m_Layer: 0
-  m_Name: NodeGraphOutliner
+  m_Name: NodeGraphInfoPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,8 +66,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1829777386097280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.676, y: -0.994, z: 0}
-  m_LocalScale: {x: 1.3936676, y: 1.98781, z: 1}
+  m_LocalPosition: {x: 0, y: -0.994, z: 0}
+  m_LocalScale: {x: 1.4, y: 1.98781, z: 1}
   m_Children: []
   m_Father: {fileID: 4672099054182416}
   m_RootOrder: 1
@@ -94,8 +94,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1918236690797392}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.001, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.001, y: 0, z: -0.001}
+  m_LocalScale: {x: 1.4, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4672099054182416}
   m_RootOrder: 0
@@ -150,7 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef6bfd64867e934490b5721b9c022a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedNodes: []
-  _itemPrefab: {fileID: 114195144081716648, guid: 373c2c89c1ef4fe4e85af1b0a10bddc8,
+  _itemPrefab: {fileID: 114880064465798160, guid: d514d4d3d2bb6a6459f35e263d6f2cc2,
     type: 2}
   _itemsContainer: {fileID: 4921635982372770}

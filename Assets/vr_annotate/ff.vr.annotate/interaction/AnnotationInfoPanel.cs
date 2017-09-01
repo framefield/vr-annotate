@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace ff.vr.interaction
 {
-    public class InfoPanelContentForAnnotations : MonoBehaviour, IInfoPanelContent
+    public class AnnotationInfoPanel : MonoBehaviour, IInfoPanelContent
     {
         [Header("--- internal prefab references -----")]
 

@@ -13,17 +13,12 @@ namespace ff.nodegraph.interaction
     /** A singleton that handles hit-detection within a node-structure.  */
     public class NodeSelector : Singleton<NodeSelector>, IClickableLaserPointerTarget, IHitTester
     {
-        // public Node HoveredNode = null;
         public bool DeepPickingEnabled = false;
         public Node LastNodeHitByRay;
-
         public NodeSelectionMarker _selectionMarker;
 
         [HideInInspector]
-        [NonSerializedAttribute]
-        public Dictionary<System.Guid, Node> NodesByGuid = new Dictionary<System.Guid, Node>();
-
-
+        public NodeGraph[] NodeGraphs;
 
         new void Awake()
         {
@@ -124,8 +119,6 @@ namespace ff.nodegraph.interaction
                 _renderedNode = LastNodeHitByRay;
             }
             _lastHoverPosition = pointer.LastHitPoint;
-            // _hoverLabel.transform.position = pointer.LastHitPoint;
-            // _hoverLabel.transform.LookAt(_hoverLabel.transform.position - Camera.main.transform.position + _hoverLabel.transform.position);
         }
 
 
@@ -142,7 +135,7 @@ namespace ff.nodegraph.interaction
         {
             if (LastNodeHitByRay != null)
             {
-                SelectionManager.Instance.SelectItem(LastNodeHitByRay);
+                SelectionManager.Instance.SetSelectedItem(LastNodeHitByRay);
                 _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
@@ -167,7 +160,7 @@ namespace ff.nodegraph.interaction
                 Debug.LogWarning("Tried to select parent when current selection had no parent?");
                 return;
             }
-            SelectionManager.Instance.SelectItem(_selectedNode.Parent);
+            SelectionManager.Instance.SetSelectedItem(_selectedNode.Parent);
         }
 
 
@@ -239,14 +232,9 @@ namespace ff.nodegraph.interaction
         #endregion
 
 
-
-
         private Vector3 _lastHoverPosition;
         private Node _renderedNode;
         private Node _selectedNode = null;
-
-        [HideInInspector]
-        public NodeGraph[] NodeGraphs;
         private AnnotationManager _annotationManager;
 
     }

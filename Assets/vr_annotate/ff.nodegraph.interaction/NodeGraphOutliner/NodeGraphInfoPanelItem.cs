@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ff.nodegraph.interaction
 {
-    public class NodeGraphOutlinerItem : MonoBehaviour
+    public class NodeGraphInfoPanelItem : MonoBehaviour, IClickableLaserPointerTarget
     {
         [Header("Label Color")]
         public Color LabelColor;
@@ -23,13 +23,11 @@ namespace ff.nodegraph.interaction
         private bool _isHovered;
 
         [Header("--- internal prefab references ----")]
-        [SerializeField]
-        LaserPointerButton _button;
 
         [SerializeField]
         TMPro.TextMeshPro _label;
 
-        public NodeGraphOutliner SceneGraphPanel { get; set; }
+        public NodeGraphInfoPanel SceneGraphPanel { get; set; }
 
         public void OnEnable()
         {
@@ -104,26 +102,40 @@ namespace ff.nodegraph.interaction
                 labelColor = LabelColor;
                 backgroundColor = BackgroundColor;
             }
-            _button.SetColor(backgroundColor);
+            var renderer = GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.SetColor("_tintColor", backgroundColor);
+                renderer.material.SetFloat("_tintAmount", 1f);
+            }
             _label.color = labelColor;
         }
 
-        public void OnClicked()
+
+        public void PointerTriggered(LaserPointer pointer)
         {
-            SelectionManager.Instance.SelectItem(_node);
+            SelectionManager.Instance.SetSelectedItem(_node);
         }
 
-        public void OnHover()
+        public void PointerUntriggered(LaserPointer pointer)
+        {
+        }
+
+        public void PointerEnter(LaserPointer pointer)
         {
             SelectionManager.Instance.SetOnHover(_node);
         }
 
-        public void OnUnhover()
+        public void PointerExit(LaserPointer pointer)
         {
             SelectionManager.Instance.SetOnUnhover(_node);
         }
 
-        private float INDENTATION_WIDHT = 0.1f;
+        public void PointerUpdate(LaserPointer pointer)
+        {
+        }
+
+        private float INDENTATION_WIDHT = 0.03f;
         private Node _node;
     }
 }

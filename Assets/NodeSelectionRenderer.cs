@@ -14,7 +14,7 @@ public class NodeSelectionRenderer : MonoBehaviour
     TMPro.TextMeshPro _hoverLabel;
 
     [SerializeField]
-    Renderer _highlightContextRenderer;
+    Renderer _highlightSelectionRenderer;
 
     [SerializeField]
     Renderer _highlightHoverRenderer;
@@ -34,16 +34,10 @@ public class NodeSelectionRenderer : MonoBehaviour
             return;
         _hoverLabel.gameObject.SetActive(true);
         _highlightHoverRenderer.enabled = true;
-        var HoveredNode = obj as Node;
-        _hoverLabel.text = HoveredNode.Name;
-        var allBoundsWithContext = HoveredNode.CollectBoundsWithContext().ToArray();
-
-        _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(allBoundsWithContext);
-        var boundsWithContext = HoveredNode.CollectBoundsWithContext().ToArray();
-
-        _highlightContextRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
-
-        _highlightContextRenderer.enabled = true;
+        var hoveredNode = obj as Node;
+        _hoverLabel.text = hoveredNode.Name;
+        var boundsWithContext = hoveredNode.CollectBoundsWithContext().ToArray();
+        _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
     }
 
     private void OnUnhoverHandler(ISelectable obj)
@@ -52,15 +46,20 @@ public class NodeSelectionRenderer : MonoBehaviour
             return;
         _hoverLabel.gameObject.SetActive(false);
         _highlightHoverRenderer.enabled = false;
-        _highlightContextRenderer.enabled = false;
 
     }
 
 
-    private void NodeSelectionChangedHander(Node nodeOrNull)
+    private void NodeSelectionChangedHander(Node selectedNodeOrNull)
     {
+        if (selectedNodeOrNull == null)
+        {
+            _highlightSelectionRenderer.enabled = false;
+            return;
+        }
 
-
+        var boundsWithContext = selectedNodeOrNull.CollectBoundsWithContext().ToArray();
+        _highlightSelectionRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
+        _highlightSelectionRenderer.enabled = true;
     }
-
 }

@@ -220,7 +220,7 @@ namespace ff.vr.interaction
         private void ControllerGrippedHandler(object sender, ClickedEventArgs e)
         {
             if (_state == States.Default)
-                AnnotationManager._instance.GoToNextAnnotation(_teleportation);
+                AnnotationManager.Instance.GoToNextAnnotation(_teleportation);
         }
 
         InteractiveGizmo GetGizmoUnderController()
