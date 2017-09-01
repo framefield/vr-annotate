@@ -22,32 +22,31 @@ namespace ff.vr.interaction
         }
 
         #region Clickable 
-        public void PointerEnter(LaserPointer pointer)
+        public virtual void PointerEnter(LaserPointer pointer)
         {
             _hitByLaser = true;
             UpdateUI();
             OnHover.Invoke();
         }
 
-        public void PointerExit(LaserPointer pointer)
+        public virtual void PointerExit(LaserPointer pointer)
         {
             _hitByLaser = false;
             UpdateUI();
             OnUnhover.Invoke();
         }
 
-        public void PointerTriggered(LaserPointer pointer) { }
+        public virtual void PointerTriggered(LaserPointer pointer) { }
 
-        public void PointerUntriggered(LaserPointer pointer)
+        public virtual void PointerUntriggered(LaserPointer pointer)
         {
-
             if (_hitByLaser)
             {
                 OnClick.Invoke();
             }
         }
 
-        public void PointerUpdate(LaserPointer pointer) { }
+        public virtual void PointerUpdate(LaserPointer pointer) { }
 
 
         public void SetColor(Color newColor)

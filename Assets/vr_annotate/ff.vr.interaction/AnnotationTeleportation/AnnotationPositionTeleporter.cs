@@ -1,51 +1,51 @@
 ﻿using ff.vr.annotate;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 namespace ff.vr.interaction
 {
-
-    public class AnnotationPositionTeleporter : LaserPointerButton
+    public class AnnotationPositionTeleporter : LaserPointerButton, ITeleportationTrigger
     {
-        public Vector3 GetTeleportationTarget()
-        {
-            var teleportationTarget = _annotationGizmo.Annotation.ViewPointPosition.position;
-            return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
-        }
 
         void Start()
         {
             _annotationGizmo = GetComponentInParent<AnnotationGizmo>();
         }
 
-        public void ShowPerspective()
+        public Vector3 GetTeleportationTarget()
         {
-            var visualization = PerspectiveVisualization.Instance;
-            visualization.transform.position =
-            (_annotationGizmo.Annotation.ViewPointPosition.position);//.x, 0f, _annotationGizmo.Annotation.ViewPointPosition.position.z);
-            visualization.Show();
-        }
-
-        public void HidePerspective()
-        {
-            PerspectiveVisualization.Instance.Hide();
+            var teleportationTarget = _annotationGizmo.Annotation.ViewPointPosition.position;
+            return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
         }
 
         public void SetPerspectiveHighlight(bool highlighted)
         {
-            PerspectiveVisualization.Instance.SetHighlight(highlighted);
+            AnnotationPositionRenderer.Instance.SetHighlight(highlighted);
         }
 
-        public void OnClick(Teleportation teleportation)
+        public override void PointerEnter(LaserPointer pointer)
         {
+            base.PointerEnter(pointer);
+            AnnotationPositionRenderer.Instance.RenderAnnotation(GetComponentInParent<AnnotationGizmo>().Annotation);
         }
 
-        public void OnUnclick(Teleportation teleportation)
+        public override void PointerExit(LaserPointer pointer)
+        {
+            base.PointerExit(pointer);
+            AnnotationPositionRenderer.Instance.Hide();
+        }
+
+        public void PadClicked(Teleportation teleportation)
+        {
+            SetPerspectiveHighlight(true);
+        }
+
+        public void PadUnclicked(Teleportation teleportation)
         {
             teleportation.JumpToPosition(GetTeleportationTarget());
+            SetPerspectiveHighlight(false);
         }
 
         private AnnotationGizmo _annotationGizmo;
-
     }
 }

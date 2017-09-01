@@ -10,7 +10,6 @@ namespace ff.vr.interaction
     /// This Compononent handles the interaction with Vive Controllers for teleportation, 
     /// annotations, drag-gizmos, buttons, etc.
     /// </summary>
-
     [RequireComponent(typeof(SteamVR_TrackedController))]
     public class InteractiveController : MonoBehaviour
     {
@@ -127,10 +126,10 @@ namespace ff.vr.interaction
                 _state = States.Default;
                 _laserPointer.IsLockedAtTarget = false;
             }
-            else if (_state == States.PointerCapturedOnTeleporter && !(_laserPointer.PointingAt is AnnotationPositionTeleporter))
+            else if (_state == States.PointerCapturedOnTeleporter && !(_laserPointer.PointingAt is ITeleportationTrigger))
             {
-                _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
-                _capturedAnnotationTeleporter = null;
+                // _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
+                // _capturedAnnotationTeleporter = null;
                 _state = States.Default;
             }
         }
@@ -196,11 +195,10 @@ namespace ff.vr.interaction
                 if (_audioSourceForTeleportation)
                     _audioSourceForTeleportation.Play();
             }
-            else if (_laserPointer.PointingAt is AnnotationPositionTeleporter)
+            else if (_laserPointer.PointingAt is ITeleportationTrigger)
             {
-                _capturedAnnotationTeleporter = _laserPointer.PointingAt as AnnotationPositionTeleporter;
-                _capturedAnnotationTeleporter.OnClick(_teleportation);
-                _capturedAnnotationTeleporter.SetPerspectiveHighlight(true);
+                var teleportationTrigger = _laserPointer.PointingAt as ITeleportationTrigger;
+                teleportationTrigger.PadClicked(_teleportation);
                 _state = States.PointerCapturedOnTeleporter;
             }
         }
@@ -210,9 +208,8 @@ namespace ff.vr.interaction
         {
             if (_state == States.PointerCapturedOnTeleporter)
             {
-                _capturedAnnotationTeleporter.OnUnclick(_teleportation);
-                _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
-                _capturedAnnotationTeleporter = null;
+                var teleportationTrigger = _laserPointer.PointingAt as ITeleportationTrigger;
+                teleportationTrigger.PadUnclicked(_teleportation);
                 _state = States.Default;
             }
         }
@@ -266,7 +263,7 @@ namespace ff.vr.interaction
         protected SteamVR_TrackedController _controller;
         private InteractiveGizmo _currentHoverGizmo;
         private IClickableLaserPointerTarget _capturedClickTarget;
-        private AnnotationPositionTeleporter _capturedAnnotationTeleporter;
+        // private AnnotationPositionTeleporter _capturedAnnotationTeleporter;
 
         private States _state = States.Default;
 

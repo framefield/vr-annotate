@@ -2,6 +2,12 @@
 
 namespace ff.vr.interaction
 {
+    public interface ITeleportationTrigger
+    {
+        void PadClicked(Teleportation teleportation);
+        void PadUnclicked(Teleportation teleportation);
+    }
+
     public class Teleportation : MonoBehaviour
     {
         void Start()
