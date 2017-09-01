@@ -31,14 +31,14 @@ namespace ff.nodegraph.interaction
 
         public void OnEnable()
         {
-            SelectionManager.Instance.OnHover += OnHoverHandler;
-            SelectionManager.Instance.OnUnhover += OnUnhoverHandler;
+            SelectionManager.Instance.OnNodeHover += OnHoverHandler;
+            SelectionManager.Instance.OnNodeUnhover += OnUnhoverHandler;
         }
 
         public void OnDisable()
         {
-            SelectionManager.Instance.OnHover -= OnHoverHandler;
-            SelectionManager.Instance.OnUnhover -= OnUnhoverHandler;
+            SelectionManager.Instance.OnNodeHover -= OnHoverHandler;
+            SelectionManager.Instance.OnNodeUnhover -= OnUnhoverHandler;
         }
 
         private void OnHoverHandler(ISelectable obj)
@@ -123,12 +123,12 @@ namespace ff.nodegraph.interaction
 
         public void PointerEnter(LaserPointer pointer)
         {
-            SelectionManager.Instance.SetOnHover(_node);
+            SelectionManager.Instance.SetOnNodeHover(_node);
         }
 
         public void PointerExit(LaserPointer pointer)
         {
-            SelectionManager.Instance.SetOnUnhover(_node);
+            SelectionManager.Instance.SetOnNodeUnhover(_node);
         }
 
         public void PointerUpdate(LaserPointer pointer)

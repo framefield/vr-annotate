@@ -1,11 +1,14 @@
-﻿using ff.vr.annotate;
+﻿using System;
+using ff.vr.annotate;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace ff.vr.interaction
 {
-    public class AnnotationPositionTeleporter : LaserPointerButton, ITeleportationTrigger
+    public class AnnotationGizmoButton : LaserPointerButton, ITeleportationTrigger
     {
+        [SerializeField]
+        private AnnotationPositionRenderer AnnotationPositionRendererPrefab;
 
         void Start()
         {
@@ -18,41 +21,44 @@ namespace ff.vr.interaction
             return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
         }
 
-        public void SetPerspectiveHighlight(bool highlighted)
-        {
-            AnnotationPositionRenderer.Instance.Highlighted = highlighted;
-        }
 
         public override void PointerEnter(LaserPointer pointer)
         {
             base.PointerEnter(pointer);
-            AnnotationPositionRenderer.Instance.SetAnnotationData(GetComponentInParent<AnnotationGizmo>().Annotation);
-            AnnotationPositionRenderer.Instance.Hovered = true;
+            if (_spawnedRenderer == null)
+            {
+                _spawnedRenderer = Instantiate(AnnotationPositionRendererPrefab);
+                _spawnedRenderer.SetAnnotationData(_annotationGizmo.Annotation);
+            }
+            SelectionManager.Instance.SetOnAnnotationGizmoHover(_annotationGizmo);
+        }
+
+        private void SpawnAnnotationPositionRenderer()
+        {
         }
 
         public override void PointerExit(LaserPointer pointer)
         {
+            SelectionManager.Instance.SetOnAnnotationGizmoUnhover(GetComponentInParent<AnnotationGizmo>());
             base.PointerExit(pointer);
-            AnnotationPositionRenderer.Instance.Hovered = false;
         }
 
         public override void PointerUntriggered(LaserPointer pointer)
         {
+            SelectionManager.Instance.SetSelectedItem(GetComponentInParent<AnnotationGizmo>());
             base.PointerUntriggered(pointer);
-            AnnotationPositionRenderer.Instance.Selected = true;
         }
 
         public void PadClicked(Teleportation teleportation)
         {
-            SetPerspectiveHighlight(true);
         }
 
         public void PadUnclicked(Teleportation teleportation)
         {
             teleportation.JumpToPosition(GetTeleportationTarget());
-            SetPerspectiveHighlight(false);
         }
 
         private AnnotationGizmo _annotationGizmo;
+        private AnnotationPositionRenderer _spawnedRenderer;
     }
 }

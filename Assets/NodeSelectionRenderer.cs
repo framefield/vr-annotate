@@ -23,12 +23,12 @@ public class NodeSelectionRenderer : MonoBehaviour
     void Start()
     {
         SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHander;
-        SelectionManager.Instance.OnHover += OnHoverHandler;
-        SelectionManager.Instance.OnUnhover += OnUnhoverHandler;
+        SelectionManager.Instance.OnNodeHover += OnNodeHoverHandler;
+        SelectionManager.Instance.OnNodeUnhover += OnNodeUnhoverHandler;
 
     }
 
-    private void OnHoverHandler(ISelectable obj)
+    private void OnNodeHoverHandler(ISelectable obj)
     {
         if (!(obj is Node))
             return;
@@ -40,7 +40,7 @@ public class NodeSelectionRenderer : MonoBehaviour
         _highlightHoverRenderer.GetComponent<MeshFilter>().mesh = GenerateMeshFromBounds.GenerateMesh(boundsWithContext);
     }
 
-    private void OnUnhoverHandler(ISelectable obj)
+    private void OnNodeUnhoverHandler(ISelectable obj)
     {
         if (!(obj is Node))
             return;

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4047206846907438}
   - component: {fileID: 114672977400686654}
   m_Layer: 0
-  m_Name: AnnotationGizmo 1
+  m_Name: AnnotationGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -714,17 +714,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114241698006589558}
-        m_MethodName: ShowPerspective
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   OnUnhover:
@@ -741,21 +730,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 114241698006589558}
-        m_MethodName: HidePerspective
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   HoverColor: {r: 0, g: 0.75268817, b: 1, a: 1}
   Color: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
+  AnnotationPositionRendererPrefab: {fileID: 114514423778005682, guid: 09b43aaca51ccba4ca999de43956ae8f,
+    type: 2}
 --- !u!114 &114566145360807084
 MonoBehaviour:
   m_ObjectHideFlags: 1

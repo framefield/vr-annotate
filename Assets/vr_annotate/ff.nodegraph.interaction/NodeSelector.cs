@@ -103,7 +103,7 @@ namespace ff.nodegraph.interaction
         public void PointerEnter(LaserPointer pointer)
         {
 
-            SelectionManager.Instance.SetOnHover(LastNodeHitByRay);
+            SelectionManager.Instance.SetOnNodeHover(LastNodeHitByRay);
         }
 
 
@@ -111,8 +111,8 @@ namespace ff.nodegraph.interaction
         {
             if (LastNodeHitByRay != _renderedNode)
             {
-                SelectionManager.Instance.SetOnUnhover(_renderedNode);
-                SelectionManager.Instance.SetOnHover(LastNodeHitByRay);
+                SelectionManager.Instance.SetOnNodeUnhover(_renderedNode);
+                SelectionManager.Instance.SetOnNodeHover(LastNodeHitByRay);
 
 
                 _renderedNode = LastNodeHitByRay;
@@ -123,7 +123,7 @@ namespace ff.nodegraph.interaction
 
         public void PointerExit(LaserPointer pointer)
         {
-            SelectionManager.Instance.SetOnUnhover(LastNodeHitByRay);
+            SelectionManager.Instance.SetOnNodeUnhover(LastNodeHitByRay);
             LastNodeHitByRay = null;
         }
 

@@ -117,7 +117,7 @@ namespace ff.vr.annotate.viz
 
         public void GoToNextAnnotation(Teleportation teleportation)
         {
-            var selectedAnnotationGizmo = GetSelectedGizmo();
+            var selectedAnnotationGizmo = SelectionManager.Instance.SelectedAnnotationGizmo;
             if (selectedAnnotationGizmo == null)
                 return;
 
@@ -125,19 +125,6 @@ namespace ff.vr.annotate.viz
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
             teleportation.JumpToPosition(nextGizmo.Annotation.ViewPointPosition.position);
         }
-
-
-        private AnnotationGizmo GetSelectedGizmo()
-        {
-            AnnotationGizmo selectedAnnotationGizmo = null;
-            foreach (var selectable in SelectionManager.Instance.Selection)
-            {
-                if (selectable is AnnotationGizmo)
-                    selectedAnnotationGizmo = selectable as AnnotationGizmo;
-            }
-            return selectedAnnotationGizmo;
-        }
-
 
         private AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
         {

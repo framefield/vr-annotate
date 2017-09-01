@@ -14,82 +14,88 @@ namespace ff.vr.interaction
     public class SelectionManager : Singleton<SelectionManager>
     {
         public event Action<Node> SelectedNodeChangedEvent;
-        public event Action<AnnotationGizmo> SelectedAnnotationGizmoChangedEvent;
-        // public event Action<Vector3> SelectionMarkerPositionChangedEvent;
-        public event Action<ISelectable> OnHover;
-        public event Action<ISelectable> OnUnhover;
+        public event Action<ISelectable> OnNodeHover;
+        public event Action<ISelectable> OnNodeUnhover;
 
-        public List<ISelectable> Selection { get { return _selection; } }
-        public Node SelectedNode;
-        public AnnotationGizmo SelectedAnnotationGizmo;
+        public event Action<AnnotationGizmo> SelectedAnnotationGizmoChangedEvent;
+        public event Action<AnnotationGizmo> OnAnnotationGizmoHover;
+        public event Action<AnnotationGizmo> OnAnnotationGizmoUnhover;
+
+        public Node SelectedNode { get { return _selectedNode; } }
+        public AnnotationGizmo SelectedAnnotationGizmo { get { return _selectedAnnotationGizmo; } }
+
 
         public void SetSelectedItem(ISelectable item)
         {
-            if (item == SelectedNode || item == SelectedAnnotationGizmo)
+            if (item == _selectedNode || item == _selectedAnnotationGizmo)
                 return;
 
             if (item is Node)
             {
-                SelectedNode.IsSelected = false;
-                SelectedNode = item as Node;
-                SelectedNode.IsSelected = true;
-                SelectedNodeChangedEvent(SelectedNode);
-            }
+                if (_selectedNode != null)
+                    _selectedNode.IsSelected = false;
 
+                _selectedNode = item as Node;
+                _selectedNode.IsSelected = true;
+                SelectedNodeChangedEvent(_selectedNode);
+            }
             else if (item is AnnotationGizmo)
             {
-                if (SelectedAnnotationGizmo != null)
-                    SelectedAnnotationGizmo.IsSelected = false;
-                SelectedAnnotationGizmo = item as AnnotationGizmo;
-                SelectedAnnotationGizmo.IsSelected = true;
-                SelectedAnnotationGizmoChangedEvent(SelectedAnnotationGizmo);
+                if (_selectedAnnotationGizmo != null)
+                    _selectedAnnotationGizmo.IsSelected = false;
+
+                _selectedAnnotationGizmo = item as AnnotationGizmo;
+                _selectedAnnotationGizmo.IsSelected = true;
+                SelectedAnnotationGizmoChangedEvent(_selectedAnnotationGizmo);
             }
         }
 
-        // public Node GetSelectedNode()
-        // {
-        //     if (Selection.Count == 0)
-        //         return null;
-
-        //     var selectedItem = Selection[0];
-        //     if (selectedItem is Node)
-        //         return selectedItem as Node;
-
-        //     if (selectedItem is AnnotationGizmo)
-        //     {
-        //         var annotation = (AnnotationGizmo)selectedItem;
-        //         return annotation.Annotation.TargetNode;
-        //     }
-
-        //     return null;
-        // }
-
-        public void SetOnHover(ISelectable item)
+        public void SetOnNodeHover(Node node)
         {
-            if (item == _hoveredItem)
+            if (node == _hoveredNode)
                 return;
 
-            OnHover(item);
-            _hoveredItem = item;
+            OnNodeHover(node);
+            _hoveredNode = node;
         }
 
-        public void SetOnUnhover(ISelectable item)
+        public void SetOnNodeUnhover(Node node)
         {
-            if (_hoveredItem != item)
+            if (_hoveredNode != node)
                 return;
 
-            OnUnhover(_hoveredItem);
-            _hoveredItem = null;
+            OnNodeUnhover(_hoveredNode);
+            _hoveredNode = null;
         }
 
-        // public void SetSelectionMarkerPosition(Vector3 position)
-        // {
-        //     _selectionMarkerPosition = position;
-        //     SelectionMarkerPositionChangedEvent(_selectionMarkerPosition);
-        // }
+        public void SetOnAnnotationGizmoHover(AnnotationGizmo annotation)
+        {
+            if (annotation == _hoveredAnnotationGizmo)
+                return;
 
-        private ISelectable _hoveredItem;
-        private List<ISelectable> _selection = new List<ISelectable>();
+            OnAnnotationGizmoHover(annotation);
+            SelectedAnnotationGizmoChangedEvent(null);
+            _hoveredAnnotationGizmo = annotation;
+        }
+
+        public void SetOnAnnotationGizmoUnhover(AnnotationGizmo annotation)
+        {
+            if (_hoveredAnnotationGizmo != annotation)
+                return;
+
+            OnAnnotationGizmoUnhover(_hoveredAnnotationGizmo);
+            _hoveredAnnotationGizmo = null;
+        }
+
+        private Node _hoveredNode;
+        private Node _selectedNode;
+
+        private AnnotationGizmo _hoveredAnnotationGizmo;
+        private AnnotationGizmo _selectedAnnotationGizmo;
+
         private Vector3 _selectionMarkerPosition;
+
+        public List<AnnotationPositionRenderer> _allActiveAnnotationPositionRenderer = new List<AnnotationPositionRenderer>();
+
     }
 }
