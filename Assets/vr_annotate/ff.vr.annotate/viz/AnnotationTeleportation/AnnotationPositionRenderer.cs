@@ -22,9 +22,11 @@ namespace ff.vr.interaction
         private Color SelectedColor;
 
         [SerializeField]
-        private AnimationCurve LineLengthFromHover;
+        private AnimationCurve AlphaOverVisibility;
         [SerializeField]
-        private AnimationCurve LineWidthFromHover;
+        private AnimationCurve LineLengthOverVisibility;
+        [SerializeField]
+        private AnimationCurve LineWidthOverVisibility;
         [SerializeField]
         private float LinePaddingOnEndPoints;
 
@@ -73,7 +75,6 @@ namespace ff.vr.interaction
 
         private void OnAnnotationGizmoHoverHandler(AnnotationGizmo annotationGizmo)
         {
-            // SetAnnotationData(annotationGizmo.Annotation);
             if (_renderedAnnotation != annotationGizmo.Annotation)
                 return;
             Hovered = true;
@@ -86,39 +87,39 @@ namespace ff.vr.interaction
             else
                 _shouldHaveVisibility = 0;
 
-            _visibility = Mathf.Lerp(_visibility, _shouldHaveVisibility, 0.05f);
-            var isVisible = _visibility > 0.01f;
+            _visibility = Mathf.Lerp(_visibility, _shouldHaveVisibility, 0.2f);
+            var isVisible = _visibility > 0.001f;
 
             if (isVisible)
-            {
-
-                _target.transform.localScale = _initialScale * (MINSIZE + _visibility * (1 - MINSIZE));
-
-                _arrow.transform.localPosition =
-                Highlighted
-                ? new Vector3(0, Mathf.Pow(Mathf.Abs(Mathf.Sin(Time.time * 5)), 0.7f) * 0.5f, 0)
-                : new Vector3(0f, 0f, 0f);
-
-                _arrow.transform.LookAt(Camera.main.transform.position);
-                var rot = _arrow.transform.eulerAngles;
-                _arrow.transform.eulerAngles = new Vector3(0, rot.y + 180, 0);
-
-                foreach (var r in _allRenderers)
-                {
-                    var colorToSet = Hovered ? HoverColor : SelectedColor;
-                    var colorWithAlpha = new Color(colorToSet.r, colorToSet.g, colorToSet.b, _visibility);
-
-                    r.material.SetColor("_Color", colorWithAlpha);
-                    r.material.SetColor("_EmissionColor", colorWithAlpha);
-                }
-
-                _lineToAnnotation.SetPosition(1, _lineEndPosition + LineLengthFromHover.Evaluate(_visibility) * (_lineStartPosition - _lineEndPosition));
-                _lineToAnnotation.widthMultiplier = LineWidthFromHover.Evaluate(_visibility);
-            }
+                RenderAnnotationPositionForCurrentVisibility();
             else
-            {
                 GameObject.Destroy(gameObject);
+        }
+
+
+        private void RenderAnnotationPositionForCurrentVisibility()
+        {
+            _target.transform.localScale = _initialScale * (MINSIZE + _visibility * (1 - MINSIZE));
+
+            _arrow.transform.localPosition =
+            Highlighted
+            ? new Vector3(0, Mathf.Pow(Mathf.Abs(Mathf.Sin(Time.time * 5)), 0.7f) * 0.5f, 0)
+            : new Vector3(0f, 0f, 0f);
+
+            _arrow.transform.LookAt(Camera.main.transform.position);
+            _arrow.transform.eulerAngles = new Vector3(0, _arrow.transform.eulerAngles.y + 180, 0);
+
+            foreach (var r in _allRenderers)
+            {
+                var colorToSet = Selected ? SelectedColor : HoverColor;
+                var colorWithAlpha = new Color(colorToSet.r, colorToSet.g, colorToSet.b, AlphaOverVisibility.Evaluate(_visibility));
+
+                r.material.SetColor("_Color", colorWithAlpha);
+                r.material.SetColor("_EmissionColor", colorWithAlpha);
             }
+
+            _lineToAnnotation.SetPosition(1, _lineEndPosition + LineLengthOverVisibility.Evaluate(_visibility) * (_lineStartPosition - _lineEndPosition));
+            _lineToAnnotation.widthMultiplier = LineWidthOverVisibility.Evaluate(_visibility);
         }
 
         // todo should be Constructor

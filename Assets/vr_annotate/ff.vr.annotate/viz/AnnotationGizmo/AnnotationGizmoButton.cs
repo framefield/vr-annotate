@@ -7,8 +7,11 @@ namespace ff.vr.interaction
 {
     public class AnnotationGizmoButton : LaserPointerButton, ITeleportationTrigger
     {
+        [Header("--- internal prefab references -----")]
         [SerializeField]
-        private AnnotationPositionRenderer AnnotationPositionRendererPrefab;
+        private AnnotationPositionRenderer _annotationPositionRendererPrefab;
+        [SerializeField]
+        private OnTeleportationArrivalOrientation _onTeleportationArrivalOrientationPrefab;
 
         void Start()
         {
@@ -21,13 +24,12 @@ namespace ff.vr.interaction
             return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
         }
 
-
         public override void PointerEnter(LaserPointer pointer)
         {
             base.PointerEnter(pointer);
             if (_spawnedRenderer == null)
             {
-                _spawnedRenderer = Instantiate(AnnotationPositionRendererPrefab);
+                _spawnedRenderer = Instantiate(_annotationPositionRendererPrefab);
                 _spawnedRenderer.SetAnnotationData(_annotationGizmo.Annotation);
             }
             SelectionManager.Instance.SetOnAnnotationGizmoHover(_annotationGizmo);
@@ -55,6 +57,8 @@ namespace ff.vr.interaction
 
         public void PadUnclicked(Teleportation teleportation)
         {
+            var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
+            arrivalHelp.SetAnnotationData(_annotationGizmo.Annotation);
             teleportation.JumpToPosition(GetTeleportationTarget());
         }
 

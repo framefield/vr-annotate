@@ -734,7 +734,9 @@ MonoBehaviour:
       PublicKeyToken=null
   HoverColor: {r: 0, g: 0.75268817, b: 1, a: 1}
   Color: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
-  AnnotationPositionRendererPrefab: {fileID: 114514423778005682, guid: 09b43aaca51ccba4ca999de43956ae8f,
+  _annotationPositionRendererPrefab: {fileID: 114514423778005682, guid: 09b43aaca51ccba4ca999de43956ae8f,
+    type: 2}
+  _onTeleportationArrivalOrientationPrefab: {fileID: 114304884985113838, guid: ae86907115d17774ebe041a6e7e1bf4d,
     type: 2}
 --- !u!114 &114566145360807084
 MonoBehaviour:

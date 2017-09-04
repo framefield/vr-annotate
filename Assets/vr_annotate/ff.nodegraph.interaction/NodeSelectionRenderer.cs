@@ -46,7 +46,6 @@ public class NodeSelectionRenderer : MonoBehaviour
             return;
         _hoverLabel.gameObject.SetActive(false);
         _highlightHoverRenderer.enabled = false;
-
     }
 
 
