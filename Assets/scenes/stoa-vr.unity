@@ -747,6 +747,134 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_maskType: 0
+--- !u!43 &259886242
+Mesh:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  serializedVersion: 8
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    firstVertex: 0
+    vertexCount: 8
+    localAABB:
+      m_Center: {x: 0, y: 0.01, z: 0}
+      m_Extent: {x: 1.65, y: 0, z: 1.275}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
+  m_Skin: []
+  m_VertexData:
+    m_CurrentChannels: 13
+    m_VertexCount: 8
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 4
+    - stream: 0
+      offset: 28
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 0000c03f0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0, y: 0.01, z: 0}
+    m_Extent: {x: 1.65, y: 0, z: 1.275}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshOptimized: 0
 --- !u!1 &290129584
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,6 +1079,17 @@ MonoBehaviour:
   padPressed: 0
   padTouched: 0
   gripped: 0
+--- !u!114 &463073490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 463073486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357891cf48295f04999cf6f42a759bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &463073491 stripped
 Transform:
   m_PrefabParentObject: {fileID: 402434, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
@@ -1065,7 +1204,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 402162, guid: e60129afba00086408db74b557526fb0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1.3584028
+      value: -1.33
       objectReference: {fileID: 0}
     - target: {fileID: 402162, guid: e60129afba00086408db74b557526fb0, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1154,6 +1293,53 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _allActiveAnnotationPositionRenderer: []
+--- !u!1001 &610112317
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410719507318548, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114426817574962332, guid: ace10667e19e45a40af98f88af556d93,
+        type: 2}
+      propertyPath: _annotationContainer
+      value: 
+      objectReference: {fileID: 1472778184}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: ace10667e19e45a40af98f88af556d93, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &620492572
 Prefab:
   m_ObjectHideFlags: 0
@@ -1228,6 +1414,17 @@ Prefab:
 GameObject:
   m_PrefabParentObject: {fileID: 124034, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_PrefabInternal: {fileID: 1094031135}
+--- !u!114 &625145685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 625145684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357891cf48295f04999cf6f42a759bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &625145686 stripped
 Transform:
   m_PrefabParentObject: {fileID: 458974, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
@@ -1654,134 +1851,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 806639931}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!43 &825294810
-Mesh:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  serializedVersion: 8
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 24
-    topology: 0
-    firstVertex: 0
-    vertexCount: 8
-    localAABB:
-      m_Center: {x: 0, y: 0.01, z: 0}
-      m_Extent: {x: 1.65, y: 0, z: 1.275}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexBuffer: 000004000100010004000500010005000200020005000600020006000300030006000700030007000000000007000400
-  m_Skin: []
-  m_VertexData:
-    m_CurrentChannels: 13
-    m_VertexCount: 8
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 288
-    _typelessdata: 0000c03f0ad7233c000090bf000000000000803f0000803f0000803f00000000000000000000c0bf0ad7233c000090bf000000000000803f0000803f0000803f0000803f000000000000c0bf0ad7233c0000903f000000000000803f0000803f0000803f00000000000000000000c03f0ad7233c0000903f000000000000803f0000803f0000803f0000803f000000003333d33f0ad7233c3333a3bf000000000000803f0000803f00000000000000000000803f3333d3bf0ad7233c3333a3bf000000000000803f0000803f000000000000803f0000803f3333d3bf0ad7233c3333a33f000000000000803f0000803f00000000000000000000803f3333d33f0ad7233c3333a33f000000000000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0, y: 0.01, z: 0}
-    m_Extent: {x: 1.65, y: 0, z: 1.275}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshOptimized: 0
 --- !u!1 &840755521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,6 +2307,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 934064920}
+  - component: {fileID: 934064921}
   m_Layer: 0
   m_Name: '[geometry]'
   m_TagString: Untagged
@@ -2260,6 +2330,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &934064921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 934064919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357891cf48295f04999cf6f42a759bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &966212814
 Prefab:
   m_ObjectHideFlags: 0
@@ -2566,11 +2647,11 @@ Prefab:
     - target: {fileID: 3380982, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 825294810}
+      objectReference: {fileID: 259886242}
     - target: {fileID: 2348914, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 1096800547}
+      objectReference: {fileID: 1475429552}
     - target: {fileID: 11417306, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
       propertyPath: modelOverride
       value: 
@@ -2583,39 +2664,6 @@ Prefab:
     - {fileID: 11420968, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 4d293c8e162f3874b982baadd71153d2, type: 2}
   m_IsPrefabParent: 0
---- !u!21 &1096800547
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1001 &1101251677
 Prefab:
   m_ObjectHideFlags: 0
@@ -2992,6 +3040,17 @@ MonoBehaviour:
 Transform:
   m_PrefabParentObject: {fileID: 400186, guid: 639377337731c5a448440c53223c4eb6, type: 3}
   m_PrefabInternal: {fileID: 1437076371}
+--- !u!114 &1401511662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1401511659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7e6047ee0163884d941ddf1efd6215a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1406604684
 GameObject:
   m_ObjectHideFlags: 0
@@ -5795,6 +5854,1186 @@ Prefab:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 100112, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_links_Zwischen [3e6e3976-ad7f-4c6e-9d55-4fc09b1c368f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100206, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ule_1_MeshPart2 [941ca3b5-5d4f-4298-bca9-aadda8957391]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100272, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_29 [66316749-82b5-4b82-8af0-0b8230c67e67]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100266, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_26 [dbe78001-f42b-4dd7-bc4a-3f95ccd5ba72]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100154, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_vorn_4 [a87171bc-7d1e-4dc7-a148-2f17ddd58960]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100580, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_4 [51ff335c-c9b3-4653-a222-be9e5234b0e7]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100584, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_6 [ed9ff88c-557f-4bce-9e87-efa52c501033]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100208, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ulen [c27493c4-c110-4126-bf89-ce7593b3572f]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100258, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_22 [0311c684-be94-4a83-ad11-588ef8f0f081]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100490, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_17_2 [60c04847-01e7-4a2f-ab4a-4fde19094b4f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100582, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_5 [5deb524c-2b8f-4237-b531-575015eb5df2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100398, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_86 [f7556be3-c7fc-4821-bb76-c07fbcd00f7f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100174, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_lp [8a5596ea-d6b0-45d0-a9cc-060d5f5beaa0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100524, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_4_4 [147cf773-b426-47fe-94a5-d8d2280048b0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100126, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Nordannex_S\xE4ule_klein_1 [444c0271-5e72-49a4-86cc-7a9f6ff3a479]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100260, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_23 [b3cbce14-342c-486b-ba0b-1d0e91caf009]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100186, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Stoa_komplett_low [496a1db9-cf97-4ced-a82c-65b42d3ba2ea]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100028, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Fries [214b347e-c002-42ed-a084-834de555c9fe]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100038, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_1_2_MeshPart0 [0aaf6e32-591c-4a1d-a99c-3a1d53e4ef7f]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100436, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tragbalken_2 [97fd0658-db4a-451d-9464-862cac712768]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100536, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_6_2 [7f176351-9e65-4413-b518-cb131644a263]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100182, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Sitzbank_lp_1 [1ff1cbd4-c353-412b-ad62-aa4ad3cacc95]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100096, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_7_MeshPart2 [caf379c0-ccf4-483a-80b9-fd8d9812dd4a]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100566, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Triglyphe_R\xFCck [b1b3bfe4-f73b-4835-a2ed-f86220a4c47a]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100034, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_1 [e1603d82-d3a8-4470-b249-b55a1e346db2]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100046, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_2_2 [65f74de3-9447-4189-b1d5-e40a6a086c31]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100058, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_3_2_MeshPart0 [0eed7dd7-b025-4277-a717-bd40c32f54f4]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100088, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_6_MeshPart2 [382e11e5-3db3-4cc8-8d99-9fa94062ab40]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100246, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_17 [6e9148ad-a7a4-4315-9bc5-68ab9200721f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100012, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Architrav_lp_1 [40b201b8-1637-46ed-b528-bb0ff8a5f142]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100118, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Mutulus_R\xFCck [251e71dd-b09e-44b4-9164-9c744e289da8]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100050, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_2_2_MeshPart1 [71bc113e-675a-4a28-b616-4fb1ea1b1b72]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100408, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_90 [f3b1184b-22f1-4a73-8ed2-d53c794ca257]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100498, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_1_3 [aca001de-033b-46e5-9688-97f8e76eef80]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100494, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_18_2 [85819991-069b-44a5-ba90-bc84536af0d4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100074, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_5 [0022c68f-6185-4fb1-b3d6-70b057100f9e]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100358, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_68 [94aeb651-b3f1-4956-a9f2-b69a4dc2512e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100344, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_61 [753ee9c2-35af-4d56-97ac-bd9897f5bcf5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100340, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_6 [f7a8a305-cc1d-40d7-bc52-7e4ffe66b2e8]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100138, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Phase_3 [efa4e121-3258-4cb2-af69-5c1c74f90418]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100162, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querliegende_Dachkonstruktion_3 [55469678-12de-4af8-bad7-27a5d8bdc77e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100432, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Thron_Reko_lp [c99f322b-cd38-4563-9a5d-b438b4daa575]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100368, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_72 [53284731-4bd0-4def-90fa-bd981c45c626]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100194, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "St\xFCtzbalken_2 [2485bc17-2952-4da3-a503-28dde648e5e5]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100442, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Treppe_1_lp [c7483adf-6197-49e2-9024-d192ff13a275]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100290, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_37 [bd2f2a05-7d32-4583-98fe-1cf668f0898d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100274, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_3 [8c286c1f-86cd-471b-a149-b4f7fccaad34]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100508, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_2_4 [4ffe40f2-93d6-4733-bb28-feacd60be015]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100202, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ule_1_MeshPart0 [0714bfd7-24eb-4923-915e-16cd80fc4285]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100540, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_6_4 [d29e2f14-6e32-4209-98fb-3a3c6ee222f5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100300, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_41 [30324ac8-a619-4605-aae2-361d419715c8]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100094, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_7_MeshPart1 [36d383ba-a655-447b-9c3c-9b4c1644df8a]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100394, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_84 [78fced52-48d2-43b8-ae47-52a394f43ea7]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100466, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_11_2 [fe3fbf13-96fd-437b-b55d-df25961560a3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100014, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dach [b122df0f-dd49-4dd9-abd9-0ccca7824f66]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100338, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_59 [ba883edb-dce9-44a9-8393-a5212c4f4a8b]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100304, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_43 [3c5fdd4a-5f18-4199-b8aa-edb34daec81d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100040, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_1_2_MeshPart1 [d5ad47f1-1a4d-419d-831f-5c41e8e9735e]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Acroterion_1 [bcf78bd5-c4a6-468e-8036-1c737a72ae5d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100352, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_65 [040f66a3-f6bb-413d-9578-6bf0f0bdd515]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100488, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_17 [f1d5d6bf-a444-49b5-b9d0-91cad7fa5bdc]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100496, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_1_2 [ef08f873-3812-47b1-af68-4230d7be2591]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100140, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_hinten [345d9873-3672-457f-96c1-50a018ffa54c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100342, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_60 [7d0689e7-6d9e-45be-afcd-078d619fb9ca]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100168, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_3_lp [b611609f-b610-4c24-8fb9-7d0ff5d5896a]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100448, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Treppe_Phase_3_2_lp [ff14e840-65a3-4c69-a605-5c0c6a32503d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100572, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zierleiste_Aussen [00085ac4-539b-42cd-b16b-3ad1224fb8ff]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100016, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dach_Annex_Nord [8fbf7093-fc08-416a-8a48-3e7e3ee5ad2f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100298, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_40 [93ea25d0-3cce-40eb-8a19-5d39fe20bf6c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100548, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_7_4 [747acccb-e8ba-44a5-b194-f2681e147ea0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100522, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_4_3 [42e381d0-56ed-4e61-8dc0-c381635238c0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100406, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_9 [9c0942c0-c127-43ff-b984-8e1f643cf8f2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100158, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querliegende_Dachkonstruktion_1 [ae8fc19c-2a45-49ea-85b2-22314743f4b2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100146, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_hinten_4 [91354f9f-e0eb-49c0-aef7-5188d02ac930]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100560, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_Front [319ff13e-e05f-4d37-9982-ce7033555295]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100354, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_66 [1a40ab64-7415-4f57-95c6-f4aa811918b8]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100534, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_6 [5b23bc72-956a-438a-974e-a3c2b55c8e57]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100552, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_8_2 [30b6d8d4-d1e9-44db-bfe4-60ac045bbab2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100248, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_18 [a7750d85-1b7e-49d3-b71a-bfccaebb1dbb]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100396, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_85 [99dd0332-67bd-42a1-b908-73fa488b1ab3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100410, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_91 [392d6172-5686-4d4e-ab00-f0737debfe9e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100066, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_4_2 [1efc5e02-e78e-4df1-9f98-2c586b3063de]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100280, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_32 [94c9f254-ed49-4e15-91a7-dfc5545cec0a]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100384, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_8 [86bb70d2-7477-462c-9a31-81f6e3400785]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100350, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_64 [0222e99a-849f-4d85-85a8-2cfb37b04ab6]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100480, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_15 [cfd96563-7529-4ddd-88b9-22ac840fd0f0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100132, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Phase_1 [f79e9e4a-927f-4b60-b314-dbf92556526e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100212, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ulen_3 [3b64c5d3-dc91-48b8-928a-23686cea94f6]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100330, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_55 [144bf6d7-01cf-4a35-8d9c-fe62cea5f2cd]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Acroterion [0f322670-8c8c-4396-a476-b9cd3ec3c259]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100042, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_1_2_MeshPart2 [52725772-e79a-4e98-876c-e3288bec3b7c]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100166, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_2_lp [111b187d-295f-46c3-814c-9d8cc38d0cbd]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100288, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_36 [404ece4d-5eed-4738-94db-d004863df20b]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100236, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_12 [8ff0d55d-00d9-45e0-90c5-4c40c4df7182]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100334, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_57 [15383e9a-46bf-40e4-9293-6180d2f55cd7]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100148, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_vorn [111b9171-ce93-4068-8727-9a8a4be8a13f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100190, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Stylobat_unten_lp [3530cc76-8874-414c-98f4-fe83a9eff0fb]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100220, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdannex_S\xE4ule_klein_1 [d29d464f-c391-464d-a3ac-6b92631fcbc4]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100558, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_Ende [bfd270e0-6ddd-4f76-a6ab-aa6648cc8fe9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100574, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1 [780f6a45-0a87-4d49-80b2-d03aeef47e79]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100348, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_63 [b69cd2b8-1335-4fed-83ac-1c07e49fbb8c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100216, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ulen_innen [7e4c192f-c93e-413c-aa8d-6ffd4e205dde]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100204, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ule_1_MeshPart1 [ccd4fc5a-66ac-4802-afbd-d96654f904ee]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100230, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1 [c9356634-5c51-435d-b641-8b151f871430]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100210, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ulen_2 [c89683a0-78dd-493e-a6f2-f950d3dafcb2]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100052, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_2_2_MeshPart2 [6a8dd933-31b2-45d4-bdf2-45c0113fa07d]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100144, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_hinten_3 [91a430e6-8b02-47c0-bf61-c5f04edaec36]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100092, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_7_MeshPart0 [28bc7059-a3da-4ffe-bf4f-57deb76dbe72]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100400, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_87 [9892a738-9a17-43c6-a35d-29141c36e5b6]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100532, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_5_4 [f6a66cb2-b4e0-4f13-a5d2-0f0e77664a44]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100294, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_39 [44adc7b9-2526-40f9-8b4a-9e35491b5c7f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100492, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_18 [3a12393a-dfbc-4137-8e80-4293816e9a6a]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100048, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_2_2_MeshPart0 [ae307495-dd83-4ae9-9f7c-40a75ab2e3ff]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100160, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querliegende_Dachkonstruktion_2 [c6672b8b-a63d-4c24-9fde-1451012ede98]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100426, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tafel_rechts_lp [97fe7037-0989-4abd-a3c7-f92970f50e78]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100416, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_94 [d07ebb16-19bc-421b-9e33-588fbbfc2406]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100578, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_3 [c356dd5c-8a2f-4fb0-aa86-ec4b0bd13536]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100072, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_4_2_MeshPart2 [90e0fdf4-fcbf-46db-aeee-655bf255bc7b]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100078, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_5_MeshPart1 [a0bb057c-ae67-49a5-8ee2-dbc584a494d7]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100576, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_2 [acd626db-83a9-42eb-962c-aa7a68a96a5f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100312, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_47 [b9c4e74f-fae1-4c9c-8f41-5a01cbda8033]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100262, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_24 [3c1f9826-904c-44ac-85b2-04589e68fea1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100030, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Fundament_rechts_lp [d5cd20cc-b75f-45d2-86fd-27d2e20eedd5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100356, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_67 [a0c88896-c116-4ff0-8e0a-3888882c2bea]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100244, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_16 [65da8c69-7dbd-45ea-8f70-7c013734e923]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100142, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_hinten_2 [edb952b0-e697-455a-81ce-b9ea275443ac]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100440, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tragbalken_4 [d83b15fd-47d0-47b4-bb59-eefd2b2b8105]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100402, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_88 [e1ced259-dc9f-421e-bb55-7d5d3f96d2fb]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100362, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_7 [e845ef95-b37b-4a54-84d2-a75ebc86b536]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100322, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_51 [4428b213-5967-4a2e-bf1a-76ae681b742f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100056, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_3_2 [c1b45d96-21e5-460f-97b5-96679fcf73f8]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100392, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_83 [79551d62-fdd7-4a4d-a9c9-2d0adb393a2e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100176, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schwelle_Phase_1_lp [e7c6e625-eee1-4775-b32f-3a8cf6bed497]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100516, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_3_4 [84c58eb8-bca1-455f-b6b5-db986989c041]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100254, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_20 [40c9e426-6964-4e31-bdec-408027eb2101]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100530, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_5_3 [b9287bd8-5ff5-4b84-86cb-6ffa5f697413]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100538, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_6_3 [04e03d42-6d2e-4d89-87de-b12670c4a050]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100414, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_93 [76c00663-0128-4af4-b3f1-bb766677d7b0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100010, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Anbau_links_lp [68e15897-f521-4f9b-b840-790bed6746e3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100108, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_Front_Zwischenraum [7c4625e5-9181-46d1-aa72-685c146b11ec]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100116, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_rechts_Zwischen [cf6d7f56-0d5c-431d-b6e6-749d973a43e9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100156, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querliegende_Dachkonstruktion_0 [22e076b1-ff8f-4be2-91a4-7f6f02687606]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100296, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_4 [b1d0a97b-582c-42c8-adaa-1043cb41411a]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100302, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_42 [e25f03b3-e617-43e3-8f28-d18c627038ef]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100228, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdannex_S\xE4ule_klein_5 [76b27341-479b-471d-9119-dbfdc81faf68]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100102, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus [ea521ada-1845-495b-8ef0-8c73f9089ba3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100188, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Stylobat_oben_lp [799ad86b-1bd2-43b2-8c78-70e3ef5736e5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100586, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_1_7 [6eac8a98-2350-4a2c-82d8-9759faf0ccb0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100446, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Treppe_Phase_3_1_lp [6ed8acdd-da43-4937-9afa-e2ebabbb8cf6]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100418, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_95 [0416be47-b3f6-4881-8f70-ae72ccf83d74]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100020, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dach_lp [c2d8590b-e385-4fbc-b2f2-dd79b572a37e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100068, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_4_2_MeshPart0 [bbec1332-6356-4c0e-8b3a-75f7ba549404]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100464, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_11 [c76341c4-d13e-4a6c-a456-dc8670d657a1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100222, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdannex_S\xE4ule_klein_2 [29f611cb-f5e2-4723-9510-4a7b5073630a]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100504, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_2_2 [f1e83c45-1b78-432c-adc7-33300c5421b9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100180, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Sima [de543c9f-22b7-4d17-9551-1ba8559dc674]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100214, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ulen_Front [87b6c531-13e5-4995-9529-6484a9e30b35]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100588, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Zylinder_0_2 [5be5bb93-6501-44bd-ae90-c2da83f7ec4d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100380, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_78 [bfd41436-9c26-4c48-bd00-16bf72453c2c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100104, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_Ende [dab9e1c6-7d82-47e8-9ef4-c6230a43afcb]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100564, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_rechts [9b99bd81-b962-4121-8304-3f7aa5d64b85]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100240, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_14 [c1f6fc2e-8d94-429c-a377-df2d0f6dc5fd]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100478, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_14_2 [02d20b9e-59ef-4733-ae29-d9ba6de486f3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100018, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Dach_Annex_S\xFCd [cda229a9-f395-4b5c-bd12-05c143730632]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100086, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_6_MeshPart1 [ea6e59ac-f6d1-46e1-a518-acf9b3ee9661]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100386, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_80 [734c9aae-3ba4-499d-a2da-8c3128864518]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100110, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_links [c9d20886-60cb-427f-97c1-0ab3c35cc166]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100482, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_15_2 [b618cbb3-57c2-4384-a2f7-403fc8b9e5ba]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100486, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_16_2 [aa6cc469-a9ea-404f-90f7-19dd706ccb20]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100404, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_89 [78b1b2d6-7266-4cad-9bf4-1ccd23aa2b48]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100292, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_38 [1e9eafef-f220-41bc-9e47-568ce69bdff5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100570, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tympanon [0756880a-1f8e-4f46-8e7e-4254b1149813]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100026, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dachstuhl [4f2d292c-d5ae-4ca1-bc6a-8b43f28091f5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Acroterion_lp [5cf7fc78-cae3-467f-8928-c02d24590a3c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100544, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_7_2 [d1b97990-fd09-441b-b847-c47ebc81e5d5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100032, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Geison [f128c708-a315-4a70-bb03-839bd41fbac9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100122, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Nordanbau [46854aac-682f-4795-9bbb-a14091433292]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100218, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdanbau [37bf888f-ac9e-412e-8ba5-d569df851c2e]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100372, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_74 [11c8bba3-4398-41de-8470-75fcf4cdc113]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100336, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_58 [4819bc9c-7d59-4656-957a-6f117a553e8e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100224, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdannex_S\xE4ule_klein_3 [d864cc3c-e126-4440-a7f7-f243d0b4d257]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100506, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_2_3 [1b69e602-a77c-4a88-83fb-0b1c7b3e7f36]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100434, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tragbalken [e6e1d408-156f-4e14-9092-e4c30f526184]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100424, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tafel_links_lp [9661f573-d785-4742-bb7c-fa800000fb32]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100044, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_2 [94fe728e-271d-4854-9b3e-511420b35f6f]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100196, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "St\xFCtzbalken_3 [64edd3bf-cbb8-46a5-8993-f35cd11ea2d5]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100388, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_81 [f3b07751-303a-48d1-87b6-00ca01952b91]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100310, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_46 [c310061f-4676-4ec4-ba1c-dfc0c288c189]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100370, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_73 [40560129-9054-433d-8cf8-de1ec761005c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100084, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_6_MeshPart0 [940789ba-5d30-4f08-bf51-8fcb36ac52b6]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100366, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_71 [6a19dc86-0927-44dd-8440-a94dd292d39b]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100198, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "St\xFCtzbalken_4 [2ac05d47-6b21-4984-90c2-4931827a69ce]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100472, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_13 [ff9dd0a6-a7d5-4491-a2d8-570884453bc9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100152, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_vorn_3 [1a0e5dbb-8be1-4fde-8a75-d1ff0a7bee90]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100474, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_13_2 [c76d3061-3452-4888-92f8-abe3b2d5b6b4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100476, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_14 [b74b7153-ee5b-4a67-831f-973c369885f9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100090, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_7 [2c247e73-bed1-42a8-bf07-81c077913033]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100458, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_1 [1671a2dd-ae8b-4a57-9754-c4b91532ffe3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100554, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_9 [ce8eb443-0c6c-48bd-8b21-56f40c43594d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100510, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_3 [b9867fb7-dbba-48a2-a820-e28db5ae5961]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100234, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_11 [4acb404e-4fe7-45a6-b81a-9f415bab5896]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100270, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_28 [0f5d7c2a-fa97-43ae-931e-2e723c5a1e31]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100314, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_48 [53f6c218-0107-48a0-8369-5bc4d15ea9a3]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100278, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_31 [7faa8c23-a035-4469-86ee-620fb92fc7c0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Acroterion_lp_2 [36167a2a-0f09-4edc-9471-25a9e0914cc2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100468, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_12 [0f8c4f0b-2e4a-42e3-bc14-3127bdaae060]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100252, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_2 [2710398e-92da-46bd-9295-54477cfb50de]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100390, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_82 [1bf10078-3ee3-4e87-b8f5-873b2b20b7a1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100514, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_3_3 [b89b3335-b787-4a2d-9e2c-a055d9d380ba]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100378, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_77 [58d87a73-4788-4fc7-a755-12765076d28c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100264, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_25 [50952c03-3158-46f2-8cfa-5b1b61721d2b]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100550, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_8 [f71e915c-134d-45f4-addc-7f756b3d1f7d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100232, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_10 [6ac8918a-e6c2-41fb-9236-7a4203ec490c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100036, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_1_2 [1c337476-1120-4290-8ca3-f131aa6a4816]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100130, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Nordannex_S\xE4ule_klein_3 [7154650d-dfe2-48e5-bde7-3a44780db3dd]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100376, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_76 [1f7a3439-244f-4c75-a873-7f9f6393cb9d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100528, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_5_2 [59c71ac1-f32e-4b12-99da-2f9f6c0cef75]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100172, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_5_lp [20900947-a65e-4eff-a24a-d900820ce619]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100470, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_12_2 [e2d9ef4a-4e51-486f-8c8f-95a5011b5e1f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100284, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_34 [1017bfcc-d17b-42df-85c1-95ae98f17bd4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100428, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tafelanbau_Annex_Nord_P3_lp [c8cd2ea2-fbf2-4329-a1f0-3b9b2bbeaf41]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100060, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_3_2_MeshPart1 [cdc3110d-d241-4f0e-abe6-f400c2ebf3c4]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100318, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_5 [1f362484-a4dc-4668-966b-21ccc50eb632]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100184, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Stein_am_Eingang_lp [b9badfc6-5f02-422c-a491-b25fea4f5522]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100242, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_15 [1b597b6b-029b-45c9-b32c-154ba011e345]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100382, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_79 [42bc0cf1-0eb8-4cfd-9554-f25d64d0db8b]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100076, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_5_MeshPart0 [fc191e23-c114-4d5b-9b83-7dc91dd19509]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100420, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_96 [c41a1855-ab82-447c-ba8c-73215bafbf23]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100450, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_0 [4bf4c093-ecc0-4893-8990-c344831078b1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100320, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_50 [a18708ce-f25a-4805-8c67-7b4af2bac96c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100484, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_16 [e29cbbab-d148-45e5-9a4c-ab0e1a2ec449]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100422, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tafel_Anbau_lp [b19cfe87-c405-4064-aabc-17c37208268d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100282, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_33 [4f8991c7-089c-4937-b3a0-0c7c1cfcfbbd]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100438, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tragbalken_3 [c604f859-9a01-4797-a831-c0fc8b8530f0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100054, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_3 [661e9f2f-f790-4c97-a4bf-a5118150f0c0]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100556, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_9_2 [c6d22b9d-1b95-4f3b-b782-f12b72b86ffa]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100512, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_3_2 [8860fa7e-cbfa-46fd-852a-6954c96ade13]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100412, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_92 [4849b15f-b063-41b6-99b7-8dcb6be51d18]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100022, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dachbalken_lang [f19ee4dd-7d75-4e35-92c2-2c24c104122f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100324, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_52 [29c53fab-ecc5-4e0a-bc1f-ffbf6796889e]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100192, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "St\xFCtzbalken [fff946af-181a-48ac-993a-5e81d391b6a3]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100120, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Mutulus_R\xFCck_Zwischen [7f021624-f4c8-4320-b3fb-9dfb0d9ba2a5]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100460, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_10 [6bec650a-d919-46d2-ac45-b339ffadffd4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100500, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_1_4 [b4b0cdb3-d4f1-42bd-99ae-1c3cbf4d182d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100568, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphen [77b295be-3210-409a-a07a-1c39e70cc575]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100452, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_0_2 [6f09273d-2854-4203-b7cd-a81197cdeac2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100114, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_rechts [bf620334-a69c-4ed1-8c61-869efc22e95d]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100502, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_2 [346c993f-4aae-451b-a935-aee4560976f1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100454, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_0_3 [6e923692-258e-4c27-b4ba-4662ba451b53]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100082, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_6 [09b52f6a-f396-49dd-a429-7b6a68950285]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100332, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_56 [2c5985fb-db71-4ac7-9fed-eb342bcc2cc6]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100098, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Langbalken_klein [b922aeb2-a2d4-43ba-971d-8808be8ec6e9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100526, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_5 [f1f53d11-df98-4867-8a80-01d5ac87d870]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100520, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_4_2 [b917a83d-40ec-4b8b-9e6d-51943e13c4d8]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100518, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_4 [2dbaabf7-581d-4d47-84d2-eae0bddf1915]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100100, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mauer_lp [ac51e149-23ba-4a30-819d-59c26bda942a]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100124, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Nordannex_S\xE4ule_klein [108d7fb1-1acf-4299-bddb-b0e86716a222]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100542, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_7 [cfbcd81f-d6e6-4635-9e43-015e18f2039f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100226, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xFCdannex_S\xE4ule_klein_4 [f0d24ffc-7f2e-4431-83b2-9791cb08816b]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100456, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_0_4 [92f72c63-3c05-41db-9f7e-13acef0182a0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100106, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Mutulus_Front [36aa5679-44b3-4c73-9364-a92b407ee843]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100326, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_53 [fa9d5c7d-1b43-448b-b9c3-ac6886a04393]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100364, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_70 [ce520840-5a01-4830-acb9-6d5cf43f6fd4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100238, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_13 [475636ce-41bc-4a8e-b794-34901e13e1e4]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100316, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_49 [30d2da4f-7fb5-4fae-b952-0b0745ddb6c2]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100444, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Treppe_Phase_2_1_lp [c64452f3-c9c0-4bbc-b212-516a68e37d20]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100070, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_4_2_MeshPart1 [ea9f216f-18f0-4f7a-b6da-23ca0190c29b]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100346, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_62 [704901c4-f69f-4c38-8801-06d421c1cc76]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100136, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Phase_2_3 [3f50758f-003a-4053-b236-120ca7299f56]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Akroterien [7bacfb94-f9d6-402d-9fa9-d75e0066e7b1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100170, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_4_lp [11d52524-7b81-4aea-a9e9-e60f931959fc]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100062, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_3_2_MeshPart2 [ae7e9e7c-d2e0-4550-9301-e27324e3107c]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100128, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Nordannex_S\xE4ule_klein_2 [f498140e-e21b-411f-b7c7-1649d624177d]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100268, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_27 [b979abfe-edf1-4db4-9d8f-8ec019c1e1d5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100286, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_35 [75ee068a-4b46-4ea0-8580-8ea7a58f5f9c]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100134, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Phase_2 [8bd9a86b-e173-4d2f-a533-3765a8cec68f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100462, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_10_2 [f7c16b33-3297-4883-a39a-dab28f979f52]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100328, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_54 [4450a7b4-c0d2-4c74-8fd2-8f627eb294bc]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100306, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_44 [3ffc708d-02b7-4a10-833b-3407ffa02b16]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100374, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_75 [14d24486-4b05-459b-be40-14bfc21650b1]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100024, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Dachbalken_quer [0d1d55fb-6994-4723-8432-640eb1bc70d9]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100064, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_4 [9be82a37-470f-4cdf-b39a-d7fdef7b2bc1]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100276, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_30 [9d890f85-89be-42cb-a54e-c7ca9086d6d0]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100200, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "S\xE4ule_1 [2f87bf2f-ce2b-462d-9e71-9c45091faea7]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100430, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Tafeln [ecb6bc8a-2ce2-4b18-8732-87e3fc0543b5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100250, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_19 [fb38c77f-14d6-4292-8d66-9afaba826d2f]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100546, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_7_3 [3e107cda-8f9b-495d-9f5e-94d6704402f5]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100360, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_69 [a974916e-ef30-4d44-ad93-63a73c17a673]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100178, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schwelle_Phase_2_3_lp [1ec07805-b4d8-4c53-9050-b8ce0e6ad6ff]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100308, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_45 [e97a5618-f0cd-4c03-89dc-194151003204]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100256, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Taenia_1_21 [ab9afc66-8d0f-48b1-a050-9f6ff72d9bcc]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100080, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: "Kapitell_gro\xDF_5_MeshPart2 [269c34a0-0b0e-4e0f-a5a9-7b36b2be49f8]"
+      objectReference: {fileID: 0}
+    - target: {fileID: 100562, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Triglyphe_links [c8c36114-f214-449e-a928-9be9bb782738]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100150, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Querbalken_klein_vorn_2 [1adef7b2-27cc-401b-ac1e-2e2ad7718dac]
+      objectReference: {fileID: 0}
+    - target: {fileID: 100164, guid: 639377337731c5a448440c53223c4eb6, type: 3}
+      propertyPath: m_Name
+      value: Schrifttafel_1_lp [ef30f0a3-0bbb-4db1-a898-e094d969647d]
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 639377337731c5a448440c53223c4eb6, type: 3}
   m_IsPrefabParent: 0
@@ -5892,6 +7131,44 @@ Transform:
   m_Father: {fileID: 2105278415}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1472778184 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1672844594168556, guid: 22a065f2ecc9e5a40977390f6172e2f0,
+    type: 2}
+  m_PrefabInternal: {fileID: 228200243}
+--- !u!21 &1475429552
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - PixelSnap: 0
+    - _EnableExternalAlpha: 0
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1481917986
 GameObject:
   m_ObjectHideFlags: 0

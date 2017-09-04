@@ -6,6 +6,12 @@ using ff.nodegraph.interaction;
 
 namespace ff.vr.interaction
 {
+    public interface ITeleportationTrigger
+    {
+        void PadClicked(Teleportation teleportation);
+        void PadUnclicked(Teleportation teleportation);
+    }
+
     /// <summary>
     /// This Compononent handles the interaction with Vive Controllers for teleportation, 
     /// annotations, drag-gizmos, buttons, etc.

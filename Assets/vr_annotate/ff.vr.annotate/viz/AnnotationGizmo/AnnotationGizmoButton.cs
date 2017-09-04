@@ -29,14 +29,15 @@ namespace ff.vr.interaction
             base.PointerEnter(pointer);
             if (_spawnedRenderer == null)
             {
-                _spawnedRenderer = Instantiate(_annotationPositionRendererPrefab);
-                _spawnedRenderer.SetAnnotationData(_annotationGizmo.Annotation);
+                SpawnAnnotationPositionRenderer();
             }
             SelectionManager.Instance.SetOnAnnotationGizmoHover(_annotationGizmo);
         }
 
         private void SpawnAnnotationPositionRenderer()
         {
+            _spawnedRenderer = Instantiate(_annotationPositionRendererPrefab);
+            _spawnedRenderer.SetAnnotationData(_annotationGizmo);
         }
 
         public override void PointerExit(LaserPointer pointer)
@@ -53,13 +54,23 @@ namespace ff.vr.interaction
 
         public void PadClicked(Teleportation teleportation)
         {
+            var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
+            arrivalHelp.SetAnnotationData(_annotationGizmo.Annotation);
+            teleportation.JumpToPosition(GetTeleportationTarget());
         }
 
         public void PadUnclicked(Teleportation teleportation)
         {
-            var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
-            arrivalHelp.SetAnnotationData(_annotationGizmo.Annotation);
-            teleportation.JumpToPosition(GetTeleportationTarget());
+        }
+
+        public AnnotationPositionRenderer AnnotationPositionRenderer
+        {
+            get
+            {
+                if (_spawnedRenderer == null)
+                    SpawnAnnotationPositionRenderer();
+                return _spawnedRenderer;
+            }
         }
 
         private AnnotationGizmo _annotationGizmo;

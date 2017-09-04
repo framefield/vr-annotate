@@ -37,6 +37,8 @@ namespace ff.vr.interaction
 
                 _selectedNode = item as Node;
                 _selectedNode.IsSelected = true;
+                // Debug.Log("Selected Node Changed Event");
+
                 SelectedNodeChangedEvent(_selectedNode);
             }
             else if (item is AnnotationGizmo)
@@ -46,6 +48,8 @@ namespace ff.vr.interaction
 
                 _selectedAnnotationGizmo = item as AnnotationGizmo;
                 _selectedAnnotationGizmo.IsSelected = true;
+                // Debug.Log("Selected Gizmo Changed Event");
+
                 SelectedAnnotationGizmoChangedEvent(_selectedAnnotationGizmo);
             }
         }
@@ -56,6 +60,8 @@ namespace ff.vr.interaction
                 return;
 
             OnNodeHover(node);
+            // Debug.Log("OnNode Hover");
+
             _hoveredNode = node;
         }
 
@@ -65,6 +71,8 @@ namespace ff.vr.interaction
                 return;
 
             OnNodeUnhover(_hoveredNode);
+            // Debug.Log("OnNode Un hover");
+
             _hoveredNode = null;
         }
 
@@ -74,7 +82,8 @@ namespace ff.vr.interaction
                 return;
 
             OnAnnotationGizmoHover(annotation);
-            SelectedAnnotationGizmoChangedEvent(null);
+            // Debug.Log("OnAnnotationGizmo Hover");
+
             _hoveredAnnotationGizmo = annotation;
         }
 
@@ -83,6 +92,7 @@ namespace ff.vr.interaction
             if (_hoveredAnnotationGizmo != annotation)
                 return;
 
+            // Debug.Log("OnAnnotationGizmo Un hover");
             OnAnnotationGizmoUnhover(_hoveredAnnotationGizmo);
             _hoveredAnnotationGizmo = null;
         }

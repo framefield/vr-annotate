@@ -105,20 +105,11 @@ namespace ff.vr.interaction
             var nodeHit = (_nodeSelector != null) ? _nodeSelector.FindHit(Ray) : null;
             var hasNodeHit = (nodeHit != null);
 
+            // var hitGizmo = physicsHit.collider.GetComponent<IClickableLaserPointerTarget>();
+
             // Physics ray wins
             if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
             {
-                // check if cast hit NodeGraphOutlinerItem in Menu, in this case treat it like nodeHit
-                // if (physicsHit.collider.gameObject.GetComponent<LaserPointerButton>() != null
-                // && physicsHit.collider.gameObject.GetComponentInParent<NodeGraphInfoPanelItem>() != null)
-                // {
-                //     LastHitPoint = physicsHit.point;
-                //     _lastHitDistance = physicsHit.distance;
-                //     _nodeSelector.LastNodeHitByRay = physicsHit.collider.gameObject.GetComponentInParent<NodeGraphInfoPanelItem>().Node;
-                //     newTarget = _nodeSelector as ILaserPointerTarget;
-                // }
-                // else
-                // {
                 LastHitPoint = physicsHit.point;
                 _lastHitDistance = physicsHit.distance;
 

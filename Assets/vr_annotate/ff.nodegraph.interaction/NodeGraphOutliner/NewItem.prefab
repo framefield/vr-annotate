@@ -282,7 +282,7 @@ MonoBehaviour:
   HoveredLabelColor: {r: 1, g: 1, b: 1, a: 1}
   SelectedLabelColor: {r: 0, g: 0, b: 0, a: 1}
   BackgroundColor: {r: 0.5, g: 0.5, b: 0.5, a: 0}
-  HoveredBackgorundColor: {r: 0, g: 0.75268817, b: 1, a: 1}
+  HoveredBackgorundColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
   SelectedBackgroundColor: {r: 1, g: 1, b: 1, a: 0.78431374}
   IsSelected: 0
   _label: {fileID: 114102207857124842}
