@@ -12,17 +12,17 @@ namespace ff.vr.interaction
     {
         private bool Selected;
         private bool Hovered = true;
-        private bool IsPhantom;
-        private float PhantomFactor;
 
         [Header("--- configuration -----")]
 
+        [SerializeField]
+        private Color DefaultColor;
         [SerializeField]
         private Color HoverColor;
         [SerializeField]
         private Color SelectedColor;
         [SerializeField]
-        private Color DefaultColor;
+        private Color HoverSelectedColor;
 
         [SerializeField]
         private AnimationCurve AlphaOverVisibility;
@@ -83,7 +83,7 @@ namespace ff.vr.interaction
         void Update()
         {
 
-            if (Hovered)
+            if (Hovered || Selected)
                 _shouldHaveVisibility = 1;
             else
                 _shouldHaveVisibility = 0;
@@ -120,28 +120,23 @@ namespace ff.vr.interaction
 
             foreach (var r in _allRenderers)
             {
-                Color colorWithAlpha;
-
-                if (Hovered)
+                Color color;
+                if (Selected)
                 {
-                    colorWithAlpha = new Color(HoverColor.r, HoverColor.g, HoverColor.b, HoverColor.a * AlphaOverVisibility.Evaluate(_visibility));
-                }
-                else if (Selected)
-                {
-                    colorWithAlpha = new Color(SelectedColor.r, SelectedColor.g, SelectedColor.b, SelectedColor.a * AlphaOverVisibility.Evaluate(_visibility));
-                }
-                else if (IsPhantom)
-                {
-                    colorWithAlpha = new Color(DefaultColor.r, DefaultColor.g, DefaultColor.b, DefaultColor.a * AlphaOverVisibility.Evaluate(_visibility * PhantomFactor / 4f));
-                    // Debug.Log("PhantomFactor:" + PhantomFactor);
+                    if (Hovered)
+                        color = HoverSelectedColor;
+                    else
+                        color = SelectedColor;
                 }
                 else
                 {
-                    // render last color with current alpha
-                    var lastColor = r.material.color;
-                    colorWithAlpha = new Color(lastColor.r, lastColor.g, lastColor.b, AlphaOverVisibility.Evaluate(_visibility));
+                    if (Hovered)
+                        color = HoverColor;
+                    else
+                        color = DefaultColor;
                 }
 
+                var colorWithAlpha = new Color(color.r, color.g, color.b, color.a * AlphaOverVisibility.Evaluate(_visibility));
                 r.material.SetColor("_Color", colorWithAlpha);
                 r.material.SetColor("_EmissionColor", colorWithAlpha);
             }
@@ -157,12 +152,6 @@ namespace ff.vr.interaction
             }
         }
 
-        public void SetPhantom(float factor)
-        {
-            IsPhantom = factor > 0f;
-            PhantomFactor = factor;
-        }
-
         // todo should be Constructor
         public void SetAnnotationData(AnnotationGizmo annotationGizmo)
         {
@@ -175,16 +164,6 @@ namespace ff.vr.interaction
 
             _lineToAnnotation.SetPosition(0, _lineStartPosition);
             _lineToAnnotation.SetPosition(1, _lineEndPosition);
-        }
-
-        public void Show()
-        {
-            _shouldHaveVisibility = 1;
-        }
-
-        public void Hide()
-        {
-            _shouldHaveVisibility = 0;
         }
 
         private float _shouldHaveVisibility = 1;

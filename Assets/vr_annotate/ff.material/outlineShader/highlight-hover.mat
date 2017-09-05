@@ -71,5 +71,5 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 0.2923875, g: 0.4519983, b: 0.7647059, a: 0.497}
+    - _FillColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.228}
     - _LineColor: {r: 0.18247189, g: 0.67526233, b: 0.9191176, a: 1}

@@ -335,9 +335,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee781a09b9c9a34797c09b265d30be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.328}
+  DefaultColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.241}
+  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.753}
   SelectedColor: {r: 1, g: 1, b: 1, a: 0.134}
-  DefaultColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.384}
+  HoverSelectedColor: {r: 1, g: 1, b: 1, a: 0.678}
   AlphaOverVisibility:
     serializedVersion: 2
     m_Curve:
@@ -398,7 +399,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  LinePaddingOnEndPoints: 0
   RenderedAnnotationGizmo: {fileID: 0}
   _lineToAnnotation: {fileID: 120184211032092782}
   _target: {fileID: 1838908991638186}

@@ -196,7 +196,7 @@ namespace ff.nodegraph.interaction
 
             if (closestHitNode == _selectedNode)
             {
-                return null;
+                return closestHitNode;
             }
 
             // Walk up to find child of context

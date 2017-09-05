@@ -20,6 +20,7 @@ public class AnnotationPositionButton : MonoBehaviour, IClickableLaserPointerTar
         var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
         arrivalHelp.SetAnnotationData(_gizmo.Annotation);
         teleportation.JumpToPosition(GetTeleportationTarget(_gizmo));
+        SelectionManager.Instance.SetSelectedItem(_gizmo);
     }
 
     void ITeleportationTrigger.PadUnclicked(Teleportation teleportation)

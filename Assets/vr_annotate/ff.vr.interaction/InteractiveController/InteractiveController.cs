@@ -93,8 +93,6 @@ namespace ff.vr.interaction
         }
 
         private List<BoxCollider> GizmoColliders = new List<BoxCollider>();
-
-
         protected virtual void Update()
         {
             // Debug.Log(_state);
@@ -137,8 +135,6 @@ namespace ff.vr.interaction
             }
             else if (_state == States.PointerCapturedOnTeleporter && !(_laserPointer.PointingAt is ITeleportationTrigger))
             {
-                // _capturedAnnotationTeleporter.SetPerspectiveHighlight(false);
-                // _capturedAnnotationTeleporter = null;
                 _state = States.Default;
             }
         }

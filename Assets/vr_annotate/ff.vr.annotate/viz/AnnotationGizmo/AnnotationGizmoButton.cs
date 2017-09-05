@@ -76,6 +76,7 @@ namespace ff.vr.interaction
             var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
             arrivalHelp.SetAnnotationData(_annotationGizmo.Annotation);
             teleportation.JumpToPosition(GetTeleportationTarget());
+            SelectionManager.Instance.SetSelectedItem(_annotationGizmo);
         }
 
         public void PadUnclicked(Teleportation teleportation)

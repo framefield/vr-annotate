@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using ff.nodegraph;
 using ff.nodegraph.interaction;
@@ -28,9 +29,11 @@ namespace ff.vr.interaction
         [SerializeField]
         LineRenderer _connectionLine;
 
+        private bool forceMoveIntoView;
 
         void Start()
         {
+            _initialScale = transform.localScale;
 
             foreach (SteamVR_TrackedController controller in Resources.FindObjectsOfTypeAll(typeof(SteamVR_TrackedController)))
             {
@@ -48,11 +51,51 @@ namespace ff.vr.interaction
             {
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
+
+
             SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHandler;
             SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += GizmoSelectionChangedHandler;
+            SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
+            SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
         }
 
-        private bool forceMoveIntoView;
+        // void OnDisable()
+        // {
+        //     SelectionManager.Instance.SelectedNodeChangedEvent -= NodeSelectionChangedHandler;
+        //     SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= GizmoSelectionChangedHandler;
+        //     SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
+        //     SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
+        // }
+
+        private void OnAnnotationGizmoHoverHandler(AnnotationGizmo hoveredGizmo)
+        {
+            _annotationInfoPanel.gameObject.SetActive(true);
+            _annotationInfoPanel.ForwardSelectionFromInfoPanel(hoveredGizmo);
+            _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(hoveredGizmo.Annotation.TargetNode);
+
+            if (!IsVisibleInView || forceMoveIntoView)
+                MoveIntoView();
+        }
+
+        private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo obj)
+        {
+            var selectedGizmo = SelectionManager.Instance.SelectedAnnotationGizmo;
+            if (selectedGizmo != null)
+            {
+                _annotationInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo);
+                _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo.Annotation.TargetNode);
+            }
+            else
+            {
+                _annotationInfoPanel.ForwardSelectionFromInfoPanel(null);
+                _annotationInfoPanel.gameObject.SetActive(false);
+
+                var selectedNode = SelectionManager.Instance.SelectedNode;
+                _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedNode);
+            }
+
+        }
+
         private void NodeSelectionChangedHandler(Node selectedNode)
         {
             _selectedItem = selectedNode;
@@ -71,22 +114,24 @@ namespace ff.vr.interaction
 
         private void GizmoSelectionChangedHandler(AnnotationGizmo selectedGizmo)
         {
-            _selectedItem = selectedGizmo;
-            if (_selectedItem == null)
-                return;
+            _annotationInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo);
+            if (selectedGizmo == null)
+            {
+                _annotationInfoPanel.gameObject.SetActive(false);
+                var selectedNode = SelectionManager.Instance.SelectedNode;
+                _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedNode);
+            }
+            else
+            {
+                _annotationInfoPanel.gameObject.SetActive(true);
 
-            if (!IsVisibleInView || forceMoveIntoView)
-                MoveIntoView();
-
-            // _nodeGraphInfoPanel.gameObject.SetActive(false);
-            _annotationInfoPanel.gameObject.SetActive(true);
-
-            _annotationInfoPanel.ForwardSelectionFromInfoPanel(_selectedItem);
-
-            var annotation = selectedGizmo.Annotation;
-            var annotatedNode = annotation != null ? annotation.TargetNode : null;
-
-            _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(annotatedNode);
+                if (!IsVisibleInView || forceMoveIntoView)
+                {
+                    Debug.Log("move into view");
+                    MoveIntoView();
+                }
+                _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo.Annotation.TargetNode);
+            }
         }
 
 
@@ -106,7 +151,7 @@ namespace ff.vr.interaction
                     {
                         SetState(States.Closed);
                     }
-                    transform.localScale = Vector3.one * (1 - TransitionProgress);
+                    transform.localScale = _initialScale * (1 - TransitionProgress);
                     break;
 
                 case States.Closed:
@@ -118,7 +163,7 @@ namespace ff.vr.interaction
                         SetState(States.Open);
                     }
 
-                    this.transform.localScale = Vector3.one * TransitionProgress;
+                    this.transform.localScale = _initialScale * TransitionProgress;
                     if (_pressedMenuButtonController != null)
                     {
                         transform.position = PositionFromController;
@@ -126,10 +171,17 @@ namespace ff.vr.interaction
                     }
                     break;
                 case States.Open:
-                    if (_pressedMenuButtonController != null)
+                    if (ShouldRenderInfoPanel())
                     {
-                        transform.position = PositionFromController;
-                        transform.rotation = RotationFromController;
+                        if (_pressedMenuButtonController != null)
+                        {
+                            transform.position = PositionFromController;
+                            transform.rotation = RotationFromController;
+                        }
+                    }
+                    else
+                    {
+                        SetState(States.Closing);
                     }
 
                     break;
@@ -172,7 +224,7 @@ namespace ff.vr.interaction
 
         private void UpdateConnectionLine()
         {
-            var selectionLineVisible = _selectedItem != null && ShouldRenderLine();
+            var selectionLineVisible = _selectedItem != null && ShouldRenderInfoPanel();
 
             _connectionLine.gameObject.SetActive(selectionLineVisible);
             if (!selectionLineVisible)
@@ -285,7 +337,6 @@ namespace ff.vr.interaction
             _state = newState;
         }
 
-
         private const float DISTANCE_FROM_CAMERA = 1.5f;
         private const float OFFSET_TO_RIGHT = 0.5f;
         public void MoveIntoView()
@@ -298,14 +349,13 @@ namespace ff.vr.interaction
             var ea = Camera.main.transform.eulerAngles;
             ea.z = 0;
             ea.y += 30;
-            //ea.x += 10;
             var rot = Quaternion.Euler(ea);
             _lastValidRotation = rot;
 
         }
 
 
-        private bool ShouldRenderLine()
+        private bool ShouldRenderInfoPanel()
         {
             var distanceToCam = transform.InverseTransformPoint(Camera.main.transform.position).magnitude;
 
@@ -317,7 +367,7 @@ namespace ff.vr.interaction
             && thisInViewPort.y < 1.5
             && thisInViewPort.z > -0.5;
 
-            return isVisible && distanceToCam < 2f;
+            return isVisible && distanceToCam < 5f;
         }
 
 
@@ -371,12 +421,10 @@ namespace ff.vr.interaction
         }
 
         SteamVR_TrackedController _pressedMenuButtonController;
-
         private ISelectable _selectedItem;
-
-        private const float TRANSITION_DURATION = 0.35f;
+        private const float TRANSITION_DURATION = 0.05f;
         private float _interactionStartTime = 0;
-
         private NodeSelectionMarker _selectionMarker;
+        private Vector3 _initialScale;
     }
 }
