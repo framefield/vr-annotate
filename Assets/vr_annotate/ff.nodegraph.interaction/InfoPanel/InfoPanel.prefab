@@ -137,8 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f106a4cdeb949cd4380cd01b23140b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _contentForNodes: {fileID: 0}
-  _contentForAnnotations: {fileID: 0}
+  _nodeGraphInfoPanel: {fileID: 0}
+  _annotationInfoPanel: {fileID: 0}
   _connectionLine: {fileID: 120044213307378248}
   _state: 0
 --- !u!120 &120044213307378248
@@ -224,5 +224,6 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
+    generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0

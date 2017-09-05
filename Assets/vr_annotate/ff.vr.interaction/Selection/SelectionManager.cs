@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ff.nodegraph;
 using ff.nodegraph.interaction;
 using ff.utils;
-using ff.vr.annotate;
+using ff.vr.annotate.viz;
 using UnityEngine;
 
 

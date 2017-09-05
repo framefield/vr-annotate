@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using ff.nodegraph;
-using ff.nodegraph.interaction;
-using ff.utils;
-using ff.vr.annotate;
 using UnityEngine;
+using ff.nodegraph;
+using ff.utils;
+using ff.vr.annotate.viz;
+using ff.vr.interaction;
 
-
-namespace ff.vr.interaction
+namespace ff.nodegraph.interaction
 {
 
     public interface IInfoPanelContent
@@ -52,21 +51,73 @@ namespace ff.vr.interaction
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
 
-
             SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHandler;
             SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += GizmoSelectionChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
         }
 
-        // void OnDisable()
-        // {
-        //     SelectionManager.Instance.SelectedNodeChangedEvent -= NodeSelectionChangedHandler;
-        //     SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= GizmoSelectionChangedHandler;
-        //     SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
-        //     SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
-        // }
+        void Update()
+        {
+            var transitionComplete = TransitionProgress == 1;
 
+            UpdateConnectionLine();
+
+            switch (_state)
+            {
+                case States.Undefined:
+                    break;
+
+                case States.Closing:
+                    if (transitionComplete)
+                    {
+                        SetState(States.Closed);
+                    }
+                    transform.localScale = _initialScale * (1 - TransitionProgress);
+                    break;
+
+                case States.Closed:
+                    break;
+
+                case States.Opening:
+                    if (transitionComplete)
+                    {
+                        SetState(States.Open);
+                    }
+
+                    this.transform.localScale = _initialScale * TransitionProgress;
+                    if (_pressedMenuButtonController != null)
+                    {
+                        transform.position = PositionFromController;
+                        transform.rotation = RotationFromController;
+                    }
+                    break;
+                case States.Open:
+                    if (ShouldRenderInfoPanel())
+                    {
+                        if (_pressedMenuButtonController != null)
+                        {
+                            transform.position = PositionFromController;
+                            transform.rotation = RotationFromController;
+                        }
+                    }
+                    else
+                    {
+                        SetState(States.Closing);
+                    }
+
+                    break;
+
+                case States.MovingIntoView:
+                    if (transitionComplete)
+                    {
+                        SetState(States.Open);
+                    }
+                    this.transform.position = Vector3.Lerp(transform.position, PositionFromController, 0.1f);
+                    this.transform.rotation = Quaternion.Lerp(transform.rotation, RotationFromController, 0.1f);
+                    break;
+            }
+        }
         private void OnAnnotationGizmoHoverHandler(AnnotationGizmo hoveredGizmo)
         {
             _annotationInfoPanel.gameObject.SetActive(true);
@@ -133,70 +184,6 @@ namespace ff.vr.interaction
                 _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo.Annotation.TargetNode);
             }
         }
-
-
-        void Update()
-        {
-            var transitionComplete = TransitionProgress == 1;
-
-            UpdateConnectionLine();
-
-            switch (_state)
-            {
-                case States.Undefined:
-                    break;
-
-                case States.Closing:
-                    if (transitionComplete)
-                    {
-                        SetState(States.Closed);
-                    }
-                    transform.localScale = _initialScale * (1 - TransitionProgress);
-                    break;
-
-                case States.Closed:
-                    break;
-
-                case States.Opening:
-                    if (transitionComplete)
-                    {
-                        SetState(States.Open);
-                    }
-
-                    this.transform.localScale = _initialScale * TransitionProgress;
-                    if (_pressedMenuButtonController != null)
-                    {
-                        transform.position = PositionFromController;
-                        transform.rotation = RotationFromController;
-                    }
-                    break;
-                case States.Open:
-                    if (ShouldRenderInfoPanel())
-                    {
-                        if (_pressedMenuButtonController != null)
-                        {
-                            transform.position = PositionFromController;
-                            transform.rotation = RotationFromController;
-                        }
-                    }
-                    else
-                    {
-                        SetState(States.Closing);
-                    }
-
-                    break;
-
-                case States.MovingIntoView:
-                    if (transitionComplete)
-                    {
-                        SetState(States.Open);
-                    }
-                    this.transform.position = Vector3.Lerp(transform.position, PositionFromController, 0.1f);
-                    this.transform.rotation = Quaternion.Lerp(transform.rotation, RotationFromController, 0.1f);
-                    break;
-            }
-        }
-
 
         private void MenuButtonClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {

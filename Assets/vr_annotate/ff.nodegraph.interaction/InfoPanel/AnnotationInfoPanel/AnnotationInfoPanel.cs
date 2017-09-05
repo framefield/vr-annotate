@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ff.nodegraph;
 using ff.nodegraph.interaction;
-using ff.vr.annotate;
+using ff.vr.annotate.viz;
 using ff.vr.annotate.datamodel;
 using UnityEngine;
 

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114350361259618600}
   - component: {fileID: 114347569595755970}
   m_Layer: 0
-  m_Name: NodeSelectionManager
+  m_Name: NodeSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -252,13 +252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bd18bcedec6706408f1eecf39a18575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectedNode:
-    IsAnnotatable: 0
-    HasGeometry: 0
-    Name: 
-    HasBounds: 0
-    HitDistance: 0
-  SelectedAnnotationGizmo: {fileID: 0}
+  _allActiveAnnotationPositionRenderer: []
 --- !u!114 &114347569595755970
 MonoBehaviour:
   m_ObjectHideFlags: 1

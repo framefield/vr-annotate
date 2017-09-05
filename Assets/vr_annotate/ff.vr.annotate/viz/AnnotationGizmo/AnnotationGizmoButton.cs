@@ -1,5 +1,5 @@
 ﻿using System;
-using ff.vr.annotate;
+using ff.vr.annotate.viz;
 using UnityEngine;
 using UnityEngine.Events;
 

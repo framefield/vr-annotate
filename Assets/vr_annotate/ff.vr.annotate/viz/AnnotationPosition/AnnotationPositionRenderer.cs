@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using ff.utils;
-using ff.vr.annotate;
-using ff.vr.annotate.datamodel;
 using UnityEngine;
+using ff.utils;
+using ff.vr.annotate.datamodel;
+using ff.vr.interaction;
 
-namespace ff.vr.interaction
+namespace ff.vr.annotate.viz
 {
     public class AnnotationPositionRenderer : MonoBehaviour
     {
-        private bool Selected;
-        private bool Hovered = true;
 
         [Header("--- configuration -----")]
 
@@ -63,27 +61,10 @@ namespace ff.vr.interaction
             SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
         }
 
-        private void SelectedAnnotationGizmoChangedHandler(AnnotationGizmo annotationGizmo)
-        {
-            Selected = (annotationGizmo != null) && (annotationGizmo == RenderedAnnotationGizmo);
-        }
-
-        private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo annotationGizmo)
-        {
-            if (RenderedAnnotationGizmo == annotationGizmo && RenderedAnnotationGizmo != null)
-                Hovered = false;
-        }
-
-        private void OnAnnotationGizmoHoverHandler(AnnotationGizmo annotationGizmo)
-        {
-            if (RenderedAnnotationGizmo == annotationGizmo && RenderedAnnotationGizmo != null)
-                Hovered = true;
-        }
-
         void Update()
         {
 
-            if (Hovered || Selected)
+            if (_hovered || _selected)
                 _shouldHaveVisibility = 1;
             else
                 _shouldHaveVisibility = 0;
@@ -92,12 +73,28 @@ namespace ff.vr.interaction
             _visibility = _shouldHaveVisibility;
             var isVisible = _visibility > 0.001f;
 
-            if (Hovered || Selected || isVisible)
+            if (_hovered || _selected || isVisible)
                 RenderAnnotationPositionForCurrentVisibility();
             else
                 GameObject.Destroy(gameObject);
         }
 
+        private void SelectedAnnotationGizmoChangedHandler(AnnotationGizmo annotationGizmo)
+        {
+            _selected = (annotationGizmo != null) && (annotationGizmo == RenderedAnnotationGizmo);
+        }
+
+        private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo annotationGizmo)
+        {
+            if (RenderedAnnotationGizmo == annotationGizmo && RenderedAnnotationGizmo != null)
+                _hovered = false;
+        }
+
+        private void OnAnnotationGizmoHoverHandler(AnnotationGizmo annotationGizmo)
+        {
+            if (RenderedAnnotationGizmo == annotationGizmo && RenderedAnnotationGizmo != null)
+                _hovered = true;
+        }
 
         private void RenderAnnotationPositionForCurrentVisibility()
         {
@@ -107,7 +104,7 @@ namespace ff.vr.interaction
             _target.transform.localScale = _initialScale * (MINSIZE + _visibility * (1 - MINSIZE));
 
 
-            if (Hovered || Selected)
+            if (_hovered || _selected)
             {
                 _silhouette.SetActive(true);
                 _silhouette.transform.LookAt(Camera.main.transform.position);
@@ -119,12 +116,8 @@ namespace ff.vr.interaction
                     {
                         _silhouette.transform.localScale = new Vector3(-1, 1, 1);
                         UpdateLine();
-
                     }
-
                 }
-                // _silhouette.transform.localRotation = Quaternion.Euler(0, _silhouette.transform.localRotation.y, 0);
-
             }
             else
             {
@@ -134,16 +127,17 @@ namespace ff.vr.interaction
             foreach (var r in _allRenderers)
             {
                 Color color;
-                if (Selected)
+
+                if (_selected)
                 {
-                    if (Hovered)
+                    if (_hovered)
                         color = HoverSelectedColor;
                     else
                         color = SelectedColor;
                 }
                 else
                 {
-                    if (Hovered)
+                    if (_hovered)
                         color = HoverColor;
                     else
                         color = DefaultColor;
@@ -153,7 +147,8 @@ namespace ff.vr.interaction
                 r.material.SetColor("_Color", colorWithAlpha);
                 r.material.SetColor("_EmissionColor", colorWithAlpha);
             }
-            if (Hovered)
+
+            if (_hovered)
             {
                 _lineToAnnotation.gameObject.SetActive(true);
                 _lineToAnnotation.widthMultiplier = LineWidthOverVisibility.Evaluate(_visibility);
@@ -165,24 +160,26 @@ namespace ff.vr.interaction
             }
         }
 
-        // todo should be Constructor
         public void SetAnnotationData(AnnotationGizmo annotationGizmo)
         {
             RenderedAnnotationGizmo = annotationGizmo;
             var annotation = RenderedAnnotationGizmo.Annotation;
             transform.position = new Vector3(annotation.ViewPointPosition.position.x, 0, annotation.ViewPointPosition.position.z);
+
             UpdateLine();
         }
 
         public void UpdateLine()
         {
-
             _lineStartPosition = _lineAnchor.position;
             _lineEndPosition = RenderedAnnotationGizmo.Annotation.AnnotationPosition.position;
 
             _lineToAnnotation.SetPosition(0, _lineStartPosition);
             _lineToAnnotation.SetPosition(1, _lineEndPosition);
         }
+
+        private bool _selected;
+        private bool _hovered = true;
 
         private float _shouldHaveVisibility = 1;
         private float _visibility = 0;

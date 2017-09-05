@@ -5,7 +5,7 @@ using ff.vr.interaction;
 using System;
 using ff.vr.annotate.datamodel;
 
-namespace ff.vr.annotate
+namespace ff.vr.annotate.viz
 {
     public class AnnotationGizmo : MonoBehaviour, ISelectable
     {
