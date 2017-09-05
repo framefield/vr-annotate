@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 
 namespace ff.nodegraph
@@ -11,24 +12,34 @@ namespace ff.nodegraph
     {
         public static string GUIDPattern = "(\\s+)(\\[)(.{36})(\\])";
 
-        public void GenerateGUIDsForAllChildren()
+        [MenuItem("vr-annotate/Generate GUIDs for all Children")]
+        public static void GenerateGUIDsForAllChildren()
         {
-            foreach (var node in GetComponentsInChildren<Transform>())
+            NodeGraph[] nodeGraphs = FindObjectsOfType(typeof(NodeGraph)) as NodeGraph[];
+            foreach (var ng in nodeGraphs)
             {
-                var hasID = Regex.Match(node.name, GUIDPattern).Success;
-                if (!hasID)
+                foreach (var node in ng.GetComponentsInChildren<Transform>())
                 {
-                    var id = System.Guid.NewGuid();
-                    node.name = node.name + " [" + id + "]";
+                    var hasID = Regex.Match(node.name, GUIDPattern).Success;
+                    if (!hasID)
+                    {
+                        var id = System.Guid.NewGuid();
+                        node.name = node.name + " [" + id + "]";
+                    }
                 }
             }
         }
 
-        public void RemoveGUIDFromAllChildren()
+        [MenuItem("vr-annotate/Remove GUID from all Children")]
+        public static void RemoveGUIDFromAllChildren()
         {
-            foreach (var node in GetComponentsInChildren<Transform>())
+            NodeGraph[] nodeGraphs = FindObjectsOfType(typeof(NodeGraph)) as NodeGraph[];
+            foreach (var ng in nodeGraphs)
             {
-                node.name = RemoveGUIDFromName(node.name);
+                foreach (var node in ng.GetComponentsInChildren<Transform>())
+                {
+                    node.name = RemoveGUIDFromName(node.name);
+                }
             }
         }
 
