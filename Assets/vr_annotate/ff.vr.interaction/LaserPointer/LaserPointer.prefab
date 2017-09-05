@@ -128,8 +128,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d69ce41d7a393c64390c069bb5d26d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NonHitMaterial: {fileID: 2100000, guid: 6c36495059dc2fc41b4c3e829eb81915, type: 2}
-  HoverColor: {r: 0.27058825, g: 0.57254905, b: 1, a: 1}
+  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}
   Controller: {fileID: 0}
   LastHitPoint: {x: 0, y: 0, z: 0}
   IsLockedAtTarget: 0
@@ -235,6 +234,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
+    generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
 --- !u!1001 &100100000

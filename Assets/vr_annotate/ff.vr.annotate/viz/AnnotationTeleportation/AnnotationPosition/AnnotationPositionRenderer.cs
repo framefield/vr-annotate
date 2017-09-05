@@ -111,7 +111,20 @@ namespace ff.vr.interaction
             {
                 _silhouette.SetActive(true);
                 _silhouette.transform.LookAt(Camera.main.transform.position);
-                _silhouette.transform.localRotation = Quaternion.Euler(0, _silhouette.transform.localRotation.y, 0);
+
+                if (RenderedAnnotationGizmo != null)
+                {
+                    var annotationInSilhouetteSpace = _silhouette.transform.InverseTransformPoint(RenderedAnnotationGizmo.Annotation.AnnotationPosition.position);
+                    if (annotationInSilhouetteSpace.x > 0)
+                    {
+                        _silhouette.transform.localScale = new Vector3(-1, 1, 1);
+                        UpdateLine();
+
+                    }
+
+                }
+                // _silhouette.transform.localRotation = Quaternion.Euler(0, _silhouette.transform.localRotation.y, 0);
+
             }
             else
             {
@@ -158,9 +171,14 @@ namespace ff.vr.interaction
             RenderedAnnotationGizmo = annotationGizmo;
             var annotation = RenderedAnnotationGizmo.Annotation;
             transform.position = new Vector3(annotation.ViewPointPosition.position.x, 0, annotation.ViewPointPosition.position.z);
+            UpdateLine();
+        }
+
+        public void UpdateLine()
+        {
 
             _lineStartPosition = _lineAnchor.position;
-            _lineEndPosition = annotation.AnnotationPosition.position;
+            _lineEndPosition = RenderedAnnotationGizmo.Annotation.AnnotationPosition.position;
 
             _lineToAnnotation.SetPosition(0, _lineStartPosition);
             _lineToAnnotation.SetPosition(1, _lineEndPosition);

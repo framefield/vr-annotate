@@ -336,7 +336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.241}
-  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.753}
+  HoverColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 0.428}
   SelectedColor: {r: 1, g: 1, b: 1, a: 0.134}
   HoverSelectedColor: {r: 1, g: 1, b: 1, a: 0.678}
   AlphaOverVisibility:
@@ -386,13 +386,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0.00054971053
+      value: 0.0005497105
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 1
-      value: 0.019564057
+      value: 0.013827421
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -441,7 +441,7 @@ LineRenderer:
   - {x: 4.2494264, y: 1.7513652, z: 0.53060627}
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 0.02
+    widthMultiplier: 0.015
     widthCurve:
       serializedVersion: 2
       m_Curve:
