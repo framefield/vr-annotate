@@ -14,7 +14,8 @@ public class HapticFeedback : MonoBehaviour
     void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        device = SteamVR_Controller.Input((int)trackedObj.index);
+        if (trackedObj != null)
+            device = SteamVR_Controller.Input((int)trackedObj.index);
     }
 
     void OnEnable()
@@ -27,26 +28,6 @@ public class HapticFeedback : MonoBehaviour
         SelectionManager.Instance.OnNodeUnhover += OnNodeUnhoverHandler;
     }
 
-    private void OnNodeUnhoverHandler(ISelectable obj)
-    {
-        device.TriggerHapticPulse(150);
-    }
-
-    private void OnNodeHoverHandler(ISelectable obj)
-    {
-        device.TriggerHapticPulse(150);
-    }
-
-    private void SelectedNodeChangedHandler(Node obj)
-    {
-        device.TriggerHapticPulse(1000);
-    }
-
-    private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo obj)
-    {
-        device.TriggerHapticPulse(150);
-    }
-
     void OnDisable()
     {
         SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= SelectedAnnotationGizmoChangedHandler;
@@ -57,14 +38,40 @@ public class HapticFeedback : MonoBehaviour
         SelectionManager.Instance.OnNodeUnhover -= OnNodeUnhoverHandler;
     }
 
+    private void OnNodeUnhoverHandler(ISelectable obj)
+    {
+        if (device != null)
+            device.TriggerHapticPulse(150);
+    }
+
+    private void OnNodeHoverHandler(ISelectable obj)
+    {
+        if (device != null)
+            device.TriggerHapticPulse(150);
+    }
+
+    private void SelectedNodeChangedHandler(Node obj)
+    {
+        if (device != null)
+            device.TriggerHapticPulse(1000);
+    }
+
+    private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo obj)
+    {
+        if (device != null)
+            device.TriggerHapticPulse(150);
+    }
+
     private void OnAnnotationGizmoHoverHandler(AnnotationGizmo obj)
     {
-        device.TriggerHapticPulse(150);
+        if (device != null)
+            device.TriggerHapticPulse(150);
     }
 
     private void SelectedAnnotationGizmoChangedHandler(AnnotationGizmo obj)
     {
-        device.TriggerHapticPulse(1000);
+        if (device != null)
+            device.TriggerHapticPulse(1000);
     }
 
 }

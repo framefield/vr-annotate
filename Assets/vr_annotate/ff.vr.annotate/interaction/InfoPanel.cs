@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ff.nodegraph;
 using ff.nodegraph.interaction;
+using ff.utils;
 using ff.vr.annotate;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace ff.vr.interaction
         void ForwardSelectionFromInfoPanel(ISelectable newSelection);
     }
 
-    public class InfoPanel : MonoBehaviour
+    public class InfoPanel : Singleton<InfoPanel>
     {
         [SerializeField]
         NodeGraphInfoPanel _nodeGraphInfoPanel;
@@ -30,11 +31,6 @@ namespace ff.vr.interaction
 
         void Start()
         {
-            if (_instance != null)
-            {
-                throw new UnityException("" + this + " can only be added once");
-            }
-            _instance = this;
 
             foreach (SteamVR_TrackedController controller in Resources.FindObjectsOfTypeAll(typeof(SteamVR_TrackedController)))
             {
@@ -82,7 +78,7 @@ namespace ff.vr.interaction
             if (!IsVisibleInView || forceMoveIntoView)
                 MoveIntoView();
 
-            _nodeGraphInfoPanel.gameObject.SetActive(false);
+            // _nodeGraphInfoPanel.gameObject.SetActive(false);
             _annotationInfoPanel.gameObject.SetActive(true);
 
             _annotationInfoPanel.ForwardSelectionFromInfoPanel(_selectedItem);
@@ -176,7 +172,7 @@ namespace ff.vr.interaction
 
         private void UpdateConnectionLine()
         {
-            var selectionLineVisible = _selectedItem != null;
+            var selectionLineVisible = _selectedItem != null && ShouldRenderLine();
 
             _connectionLine.gameObject.SetActive(selectionLineVisible);
             if (!selectionLineVisible)
@@ -309,6 +305,22 @@ namespace ff.vr.interaction
         }
 
 
+        private bool ShouldRenderLine()
+        {
+            var distanceToCam = transform.InverseTransformPoint(Camera.main.transform.position).magnitude;
+
+            var thisInViewPort = Camera.main.WorldToViewportPoint(this.transform.position);
+            var isVisible
+            = thisInViewPort.x > -0.5
+            && thisInViewPort.x < 1.5
+            && thisInViewPort.y > -0.5
+            && thisInViewPort.y < 1.5
+            && thisInViewPort.z > -0.5;
+
+            return isVisible && distanceToCam < 2f;
+        }
+
+
         private Vector3 PositionFromController
         {
             get
@@ -366,6 +378,5 @@ namespace ff.vr.interaction
         private float _interactionStartTime = 0;
 
         private NodeSelectionMarker _selectionMarker;
-        public static InfoPanel _instance;
     }
 }

@@ -4,22 +4,20 @@ using ff.vr.annotate;
 using ff.vr.interaction;
 using UnityEngine;
 
-[RequireComponent(typeof(AnnotationPositionRenderer))]
-public class AnnotationPositionButton : MonoBehaviour, IClickableLaserPointerTarget, ITeleportationTrigger
+public class AnnotationTourNeighbourButton : MonoBehaviour, IClickableLaserPointerTarget, ITeleportationTrigger
 {
     [SerializeField]
     private OnTeleportationArrivalOrientation _onTeleportationArrivalOrientationPrefab;
+    [SerializeField]
+    private AnnotationGizmo _attachedGizmo;
 
-    void Start()
-    {
-        _gizmo = GetComponent<AnnotationPositionRenderer>().RenderedAnnotationGizmo;
-    }
+    public bool InverseDirection;
 
     void ITeleportationTrigger.PadClicked(Teleportation teleportation)
     {
         var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
-        arrivalHelp.SetAnnotationData(_gizmo.Annotation);
-        teleportation.JumpToPosition(GetTeleportationTarget(_gizmo));
+        arrivalHelp.SetAnnotationData(GetTargetGizmo().Annotation);
+        teleportation.JumpToPosition(GetTeleportationTarget(GetTargetGizmo()));
     }
 
     void ITeleportationTrigger.PadUnclicked(Teleportation teleportation)
@@ -28,17 +26,17 @@ public class AnnotationPositionButton : MonoBehaviour, IClickableLaserPointerTar
 
     void ILaserPointerTarget.PointerEnter(LaserPointer pointer)
     {
-        SelectionManager.Instance.SetOnAnnotationGizmoHover(_gizmo);
+        SelectionManager.Instance.SetOnAnnotationGizmoHover(GetTargetGizmo());
     }
 
     void ILaserPointerTarget.PointerExit(LaserPointer pointer)
     {
-        SelectionManager.Instance.SetOnAnnotationGizmoUnhover(_gizmo);
+        SelectionManager.Instance.SetOnAnnotationGizmoUnhover(GetTargetGizmo());
     }
 
     void IClickableLaserPointerTarget.PointerTriggered(LaserPointer pointer)
     {
-        SelectionManager.Instance.SetSelectedItem(_gizmo);
+        SelectionManager.Instance.SetSelectedItem(GetTargetGizmo());
     }
 
     void IClickableLaserPointerTarget.PointerUntriggered(LaserPointer pointer)
@@ -49,11 +47,19 @@ public class AnnotationPositionButton : MonoBehaviour, IClickableLaserPointerTar
     {
     }
 
+    public AnnotationGizmo GetTargetGizmo()
+    {
+        return
+        InverseDirection ?
+        AnnotationTour.Instance.GetPreviousGizmo(_attachedGizmo) :
+        AnnotationTour.Instance.GetNextGizmo(_attachedGizmo);
+    }
+
     public Vector3 GetTeleportationTarget(AnnotationGizmo gizmo)
     {
         var teleportationTarget = gizmo.Annotation.ViewPointPosition.position;
         return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
     }
 
-    private AnnotationGizmo _gizmo;
 }
+

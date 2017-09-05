@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace ff.vr.interaction
 {
-    public class AnnotationGizmoButton : LaserPointerButton, ITeleportationTrigger
+    public class AnnotationGizmoButton : MonoBehaviour, IClickableLaserPointerTarget, ITeleportationTrigger
     {
         [Header("--- internal prefab references -----")]
         [SerializeField]
@@ -18,20 +18,28 @@ namespace ff.vr.interaction
             _annotationGizmo = GetComponentInParent<AnnotationGizmo>();
         }
 
+        void OnEnable()
+        {
+            SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
+        }
+
+        void OnDisable()
+        {
+            SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
+        }
+
+        private void OnAnnotationGizmoHoverHandler(AnnotationGizmo obj)
+        {
+            if (_spawnedRenderer == null && obj == _annotationGizmo)
+            {
+                SpawnAnnotationPositionRenderer();
+            }
+        }
+
         public Vector3 GetTeleportationTarget()
         {
             var teleportationTarget = _annotationGizmo.Annotation.ViewPointPosition.position;
             return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
-        }
-
-        public override void PointerEnter(LaserPointer pointer)
-        {
-            base.PointerEnter(pointer);
-            if (_spawnedRenderer == null)
-            {
-                SpawnAnnotationPositionRenderer();
-            }
-            SelectionManager.Instance.SetOnAnnotationGizmoHover(_annotationGizmo);
         }
 
         private void SpawnAnnotationPositionRenderer()
@@ -40,16 +48,27 @@ namespace ff.vr.interaction
             _spawnedRenderer.SetAnnotationData(_annotationGizmo);
         }
 
-        public override void PointerExit(LaserPointer pointer)
+        public void PointerEnter(LaserPointer pointer)
         {
-            SelectionManager.Instance.SetOnAnnotationGizmoUnhover(GetComponentInParent<AnnotationGizmo>());
-            base.PointerExit(pointer);
+            SelectionManager.Instance.SetOnAnnotationGizmoHover(_annotationGizmo);
         }
 
-        public override void PointerUntriggered(LaserPointer pointer)
+        public void PointerExit(LaserPointer pointer)
         {
-            SelectionManager.Instance.SetSelectedItem(GetComponentInParent<AnnotationGizmo>());
-            base.PointerUntriggered(pointer);
+            SelectionManager.Instance.SetOnAnnotationGizmoUnhover(_annotationGizmo);
+        }
+
+        public void PointerUntriggered(LaserPointer pointer)
+        {
+            SelectionManager.Instance.SetSelectedItem(_annotationGizmo);
+        }
+
+        public void PointerTriggered(LaserPointer pointer)
+        {
+        }
+
+        public void PointerUpdate(LaserPointer pointer)
+        {
         }
 
         public void PadClicked(Teleportation teleportation)

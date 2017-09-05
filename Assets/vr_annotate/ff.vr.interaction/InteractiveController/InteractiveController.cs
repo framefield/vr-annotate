@@ -59,10 +59,11 @@ namespace ff.vr.interaction
             _controller.PadClicked += PadClickedHandler;
             _controller.PadUnclicked += PadUnclickedHandler;
             _controller.Gripped += ControllerGrippedHandler;
+            _controller.MenuButtonClicked += MenuButtonClickedHandler;
+            _controller.MenuButtonUnclicked += MenuButtonUnclickedHandler;
 
             UpdateListofGizmoColliders();
         }
-
 
         protected virtual void OnDisable()
         {
@@ -74,6 +75,8 @@ namespace ff.vr.interaction
             _controller.PadClicked -= PadClickedHandler;
             _controller.PadUnclicked -= PadUnclickedHandler;
             _controller.Gripped -= ControllerGrippedHandler;
+            _controller.MenuButtonClicked -= MenuButtonClickedHandler;
+            _controller.MenuButtonUnclicked -= MenuButtonUnclickedHandler;
         }
 
 
@@ -224,6 +227,17 @@ namespace ff.vr.interaction
         {
             if (_state == States.Default)
                 AnnotationManager.Instance.GoToNextAnnotation(_teleportation);
+        }
+
+
+        private void MenuButtonUnclickedHandler(object sender, ClickedEventArgs e)
+        {
+            _laserPointer.SetLaserpointerEnabled(true);
+        }
+
+        private void MenuButtonClickedHandler(object sender, ClickedEventArgs e)
+        {
+            _laserPointer.SetLaserpointerEnabled(false);
         }
 
         InteractiveGizmo GetGizmoUnderController()

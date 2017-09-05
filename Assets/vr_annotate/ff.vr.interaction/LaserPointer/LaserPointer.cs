@@ -97,10 +97,14 @@ namespace ff.vr.interaction
             ILaserPointerTarget newTarget = null;
 
             Ray = new Ray(transform.position, transform.forward);
-            //LayerMask layerMask = LayerMask.GetMask(new[] { "_AnnotationTarget", "_TeleportationTarget" });
 
+            int uiLayerMask = LayerMask.GetMask("_AnnotationUI");
+            RaycastHit uiHit = new RaycastHit();
+            var hasUIHit = (Physics.Raycast(Ray, out uiHit, 1000, uiLayerMask));
+
+            int notUILayerMask = ~uiLayerMask;
             RaycastHit physicsHit = new RaycastHit();
-            var hasPhysicsHit = (Physics.Raycast(Ray, out physicsHit, 1000));
+            var hasPhysicsHit = (Physics.Raycast(Ray, out physicsHit, 1000, notUILayerMask));
 
             var nodeHit = (_nodeSelector != null) ? _nodeSelector.FindHit(Ray) : null;
             var hasNodeHit = (nodeHit != null);
@@ -108,7 +112,18 @@ namespace ff.vr.interaction
             // var hitGizmo = physicsHit.collider.GetComponent<IClickableLaserPointerTarget>();
 
             // Physics ray wins
-            if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
+            if (hasUIHit)
+            {
+                LastHitPoint = uiHit.point;
+                _lastHitDistance = uiHit.distance;
+
+                var hitCollider = uiHit.collider;
+                var newTargetInterface = hitCollider.attachedRigidbody
+                                     ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
+                                     : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
+                newTarget = newTargetInterface as ILaserPointerTarget;
+            }
+            else if (hasPhysicsHit && (!hasNodeHit || physicsHit.distance < nodeHit.HitDistance - 0.1f))
             {
                 LastHitPoint = physicsHit.point;
                 _lastHitDistance = physicsHit.distance;
@@ -118,7 +133,6 @@ namespace ff.vr.interaction
                                      ? hitCollider.attachedRigidbody.GetComponent<ILaserPointerTarget>()
                                      : hitCollider.gameObject.GetComponent<ILaserPointerTarget>();
                 newTarget = newTargetInterface as ILaserPointerTarget;
-                // }
             }
             // NodeHit wins...
             else if (hasNodeHit)

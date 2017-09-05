@@ -21,14 +21,17 @@ namespace ff.vr.annotate
         TMPro.TextMeshPro _annotationDateLabel;
 
         [SerializeField]
-        LaserPointerButton _icon;
+        Renderer _icon;
 
 
         [SerializeField]
         GameObject _hoverGroup;
+        [SerializeField]
+        GameObject _tourGroup;
 
-        public Color SelectedColor = Color.white;
-        public Color Color = Color.gray;
+        public Color SelectedColor;
+        public Color HoveredColor;
+        public Color Color;
 
         void Update()
         {
@@ -56,7 +59,62 @@ namespace ff.vr.annotate
             }
         }
 
+        void OnEnable()
+        {
+            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
+            SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
+        }
 
+        void OnDisable()
+        {
+            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
+            SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
+        }
+
+
+        private void OnAnnotationGizmoHoverHandler(AnnotationGizmo obj)
+        {
+            if (obj == this)
+            {
+                _isHovered = true;
+                UpdateUI();
+            }
+        }
+
+        private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo obj)
+        {
+            if (obj == this)
+            {
+                _isHovered = false;
+                UpdateUI();
+            }
+        }
+
+        private void SelectedAnnotationGizmoChangedHandler(AnnotationGizmo obj)
+        {
+            if (obj == this)
+            {
+                _isSelected = true;
+                UpdateUI();
+            }
+        }
+
+        public void OnHover()
+        {
+            SelectionManager.Instance.SetOnAnnotationGizmoHover(this);
+        }
+
+        public void OnUnhover()
+        {
+            SelectionManager.Instance.SetOnAnnotationGizmoUnhover(this);
+        }
+
+        public void OnClicked()
+        {
+            SelectionManager.Instance.SetSelectedItem(this);
+        }
 
         private void UpdateUI()
         {
@@ -67,31 +125,21 @@ namespace ff.vr.annotate
                 _authorLabel.text = _annotation.Author.name;
                 _annotationDateLabel.text = _annotation.CreatedAt.ToString("yyyy/MM/dd");
             }
-            _icon.SetColor(_isSelected ? SelectedColor : Color);
+
+            if (_isSelected)
+                _icon.material.SetColor("_tintColor", SelectedColor);
+            else if (_isHovered)
+                _icon.material.SetColor("_tintColor", HoveredColor);
+            else
+                _icon.material.SetColor("_tintColor", Color);
+
             _hoverGroup.SetActive(_isHovered && !_isSelected);
+            _tourGroup.SetActive(_isSelected);
         }
 
         public void UpdateBodyText(string newText)
         {
             _annotationBodyLabel.text = newText;
-        }
-
-
-        public void OnHover()
-        {
-            _isHovered = true;
-            UpdateUI();
-        }
-
-        public void OnUnhover()
-        {
-            _isHovered = false;
-            UpdateUI();
-        }
-
-        public void OnClicked()
-        {
-            SelectionManager.Instance.SetSelectedItem(this);
         }
         #region implemented ISelectable
 
@@ -102,9 +150,9 @@ namespace ff.vr.annotate
         }
         #endregion
 
-        private bool _isHovered = false;
+        public bool _isHovered = false;
+        public bool _isSelected = false;
         private float _startTime;
-        private bool _isSelected = false;
         private Annotation _annotation;
         private const float DEFAULT_SIZE = 0.3f;
     }
