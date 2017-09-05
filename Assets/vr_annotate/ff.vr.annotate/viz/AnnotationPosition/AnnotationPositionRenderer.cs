@@ -25,6 +25,8 @@ namespace ff.vr.annotate.viz
         [SerializeField]
         private AnimationCurve AlphaOverVisibility;
         [SerializeField]
+        private AnimationCurve AlphaOverCameraDistance;
+        [SerializeField]
         private AnimationCurve LineLengthOverVisibility;
         [SerializeField]
         private AnimationCurve LineWidthOverVisibility;
@@ -143,7 +145,9 @@ namespace ff.vr.annotate.viz
                         color = DefaultColor;
                 }
 
-                var colorWithAlpha = new Color(color.r, color.g, color.b, color.a * AlphaOverVisibility.Evaluate(_visibility));
+                var alphaFromCameraDistance = Camera.main.transform.InverseTransformPoint(transform.position).magnitude;
+                alphaFromCameraDistance = AlphaOverCameraDistance.Evaluate(alphaFromCameraDistance);
+                var colorWithAlpha = new Color(color.r, color.g, color.b, color.a * AlphaOverVisibility.Evaluate(_visibility) * alphaFromCameraDistance);
                 r.material.SetColor("_Color", colorWithAlpha);
                 r.material.SetColor("_EmissionColor", colorWithAlpha);
             }

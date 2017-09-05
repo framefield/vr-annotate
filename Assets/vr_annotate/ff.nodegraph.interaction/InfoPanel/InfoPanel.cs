@@ -55,6 +55,8 @@ namespace ff.nodegraph.interaction
             SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += GizmoSelectionChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
+
+            SetState(States.Closing);
         }
 
         void Update()
@@ -62,6 +64,7 @@ namespace ff.nodegraph.interaction
             var transitionComplete = TransitionProgress == 1;
 
             UpdateConnectionLine();
+
 
             switch (_state)
             {
@@ -95,6 +98,7 @@ namespace ff.nodegraph.interaction
                 case States.Open:
                     if (ShouldRenderInfoPanel())
                     {
+
                         if (_pressedMenuButtonController != null)
                         {
                             transform.position = PositionFromController;
@@ -354,7 +358,7 @@ namespace ff.nodegraph.interaction
             && thisInViewPort.y < 1.5
             && thisInViewPort.z > -0.5;
 
-            return isVisible && distanceToCam < 5f;
+            return isVisible || distanceToCam < 2f;
         }
 
 

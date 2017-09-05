@@ -136,7 +136,7 @@ namespace ff.vr.annotate.viz
         }
 
 
-        private List<AnnotationGizmo> GetAllAnnotationsGizmosOnNode(Node node)
+        public List<AnnotationGizmo> GetAllAnnotationsGizmosOnNode(Node node)
         {
             List<AnnotationGizmo> annotationsThatTargetNode = new List<AnnotationGizmo>();
             foreach (var a in GetComponentsInChildren<AnnotationGizmo>())

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using ff.vr.annotate.viz;
 using ff.vr.interaction;
 using UnityEngine;
 
@@ -26,7 +27,6 @@ namespace ff.nodegraph
         public string Name;
         public bool HasBounds = false;
         public System.Guid GUID;
-
         public float HitDistance;
 
         [System.NonSerializedAttribute]

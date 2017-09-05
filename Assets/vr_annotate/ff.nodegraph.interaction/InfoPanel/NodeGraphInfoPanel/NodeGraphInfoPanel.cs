@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ff.vr.annotate.viz;
 using ff.vr.interaction;
 using UnityEngine;
 
@@ -112,8 +113,9 @@ namespace ff.nodegraph.interaction
             newItem.name += "-" + node.Name;
             newItem.Node = node;
 
-            var prefix = (node.Children.Length == 0) ? "- " : "+ ";
+            var prefix = (node.Children.Length == 0) ? "-  " : "+ ";
             newItem.Text = prefix + node.Name;
+            newItem.InitNumberOfAnnotations();
 
             newItem.transform.SetParent(_itemsContainer, false);
             newItem.SceneGraphPanel = this;

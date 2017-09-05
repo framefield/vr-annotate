@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using ff.vr.annotate.viz;
 using ff.vr.interaction;
 using UnityEngine;
 
@@ -26,6 +27,8 @@ namespace ff.nodegraph.interaction
 
         [SerializeField]
         TMPro.TextMeshPro _label;
+        [SerializeField]
+        TMPro.TextMeshPro _annotationCount;
 
         public NodeGraphInfoPanel SceneGraphPanel { get; set; }
 
@@ -77,9 +80,21 @@ namespace ff.nodegraph.interaction
             set { _label.text = value; }
         }
 
+
+        public void InitNumberOfAnnotations()
+        {
+            _annotationCount.text = "" + GetNumberOfAnnotations();
+        }
+
         public int Indentation
         {
             set { _label.transform.localPosition = Vector3.right * value * INDENTATION_WIDHT; }
+        }
+
+        public int GetNumberOfAnnotations()
+        {
+            var nodesAnnotations = AnnotationManager.Instance.GetAllAnnotationsGizmosOnNode(_node);
+            return nodesAnnotations.Count;
         }
 
         private void UpdateUI()
@@ -109,6 +124,7 @@ namespace ff.nodegraph.interaction
                 renderer.material.SetFloat("_tintAmount", 1f);
             }
             _label.color = labelColor;
+            _annotationCount.color = labelColor;
         }
 
 
