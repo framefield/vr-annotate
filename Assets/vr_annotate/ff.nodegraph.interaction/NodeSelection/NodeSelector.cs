@@ -15,7 +15,6 @@ namespace ff.nodegraph.interaction
     {
         public bool DeepPickingEnabled = false;
         public Node LastNodeHitByRay;
-        public NodeSelectionMarker _selectionMarker;
 
         [HideInInspector]
         public NodeGraph[] NodeGraphs;
@@ -32,7 +31,7 @@ namespace ff.nodegraph.interaction
 
         void Start()
         {
-            SelectionManager.Instance.SelectedNodeChangedEvent += SelectionChangedHander;
+            SelectionManager.Instance.OnSelectedNodeChanged += SelectionChangedHander;
         }
 
 
@@ -44,6 +43,7 @@ namespace ff.nodegraph.interaction
             _selectedNode = selectedNode;
 
         }
+
 
 
         public Node FindNodeFromPath(string rootNodeId, string nodePath)
@@ -134,8 +134,11 @@ namespace ff.nodegraph.interaction
         {
             if (LastNodeHitByRay != null)
             {
+                var hitParentOfSelected = SelectionManager.Instance.SelectedNode != null && LastNodeHitByRay == SelectionManager.Instance.SelectedNode.Parent;
+                if (!hitParentOfSelected)
+                    SelectionManager.Instance.SetNodeSelectionMarkerPosition(_lastHoverPosition);
+
                 SelectionManager.Instance.SetSelectedItem(LastNodeHitByRay);
-                _selectionMarker.SetPosition(_lastHoverPosition);
             }
         }
 
@@ -146,7 +149,7 @@ namespace ff.nodegraph.interaction
         }
 
 
-        public void SelectParentNode()
+        public void HandleNullHit()
         {
             if (this._selectedNode == null)
             {
@@ -160,6 +163,8 @@ namespace ff.nodegraph.interaction
                 return;
             }
             SelectionManager.Instance.SetSelectedItem(_selectedNode.Parent);
+            SelectionManager.Instance.SetSelectedItem(null);
+
         }
 
 

@@ -24,7 +24,7 @@ namespace ff.nodegraph.interaction
         // Use this for initialization
         void Start()
         {
-            SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHander;
+            SelectionManager.Instance.OnSelectedNodeChanged += NodeSelectionChangedHander;
             SelectionManager.Instance.OnNodeHover += OnNodeHoverHandler;
             SelectionManager.Instance.OnNodeUnhover += OnNodeUnhoverHandler;
 

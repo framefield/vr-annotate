@@ -51,14 +51,14 @@ namespace ff.vr.annotate.viz
 
         void OnEnable()
         {
-            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += SelectedAnnotationGizmoChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
         }
 
         void OnDisable()
         {
-            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged -= SelectedAnnotationGizmoChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
         }

@@ -88,7 +88,6 @@ namespace ff.vr.interaction
 
             SetNewHitTarget(newTarget);
             SetLaserLength(_lastHitDistance);
-
             _laserHitSphere.transform.position = LastHitPoint;
         }
 
@@ -208,8 +207,8 @@ namespace ff.vr.interaction
                 newColor = Style != null ? Style.LaserColor : HoverColor;
             }
 
-            _lineMaterial.color = newColor;
-            _laserHitSphereMaterial.color = newColor;
+            _lineMaterial.SetColor("_tintColor", newColor);
+            _laserHitSphereMaterial.SetColor("_tintColor", newColor);
 
             _lineRenderer.startWidth = newLineWidth;
             _lineRenderer.endWidth = newLineWidth;
@@ -259,14 +258,17 @@ namespace ff.vr.interaction
                 _pointingAt = value;
 
                 if (PointingAtChangedEvent != null)
+                {
                     PointingAtChangedEvent(this, new PointingAtChangedEventArgs(old, _pointingAt));
+                    UpdateStyleIfTargetChanged();
+                }
             }
         }
 
         const float VALID_TARGET_LINE_WIDTH = 0.01f;
         const float INVALID_TARGET_LINE_WIDTH = 0.004f;
 
-        const float TARGET_SPOT_SIZE = 0.02f;
+        const float TARGET_SPOT_SIZE = 0.04f;
         const float NON_TARGET_SPOT_SIZE = 0.01f;
 
         private bool _laserIsEnabled = true;

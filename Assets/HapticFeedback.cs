@@ -20,20 +20,20 @@ public class HapticFeedback : MonoBehaviour
 
     void OnEnable()
     {
-        SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += SelectedAnnotationGizmoChangedHandler;
+        SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += SelectedAnnotationGizmoChangedHandler;
         SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
         SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
-        SelectionManager.Instance.SelectedNodeChangedEvent += SelectedNodeChangedHandler;
+        SelectionManager.Instance.OnSelectedNodeChanged += SelectedNodeChangedHandler;
         SelectionManager.Instance.OnNodeHover += OnNodeHoverHandler;
         SelectionManager.Instance.OnNodeUnhover += OnNodeUnhoverHandler;
     }
 
     void OnDisable()
     {
-        SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= SelectedAnnotationGizmoChangedHandler;
+        SelectionManager.Instance.OnSelectedAnnotationGizmoChanged -= SelectedAnnotationGizmoChangedHandler;
         SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
         SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
-        SelectionManager.Instance.SelectedNodeChangedEvent -= SelectedNodeChangedHandler;
+        SelectionManager.Instance.OnSelectedNodeChanged -= SelectedNodeChangedHandler;
         SelectionManager.Instance.OnNodeHover -= OnNodeHoverHandler;
         SelectionManager.Instance.OnNodeUnhover -= OnNodeUnhoverHandler;
     }

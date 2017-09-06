@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using ff.vr.interaction;
 using System;
+using ff.vr.annotate.viz;
 
 namespace ff.nodegraph.interaction
 {
     public class NodeSelectionMarker : MonoBehaviour
     {
         public Node _currentNode;
-        public NodeSelector _nodeSelectionManager;
+        public NodeSelector _nodeSelector;
 
         [SerializeField] TMPro.TextMeshPro _selectionLabel;
-        [SerializeField] TMPro.TextMeshPro _parentLabel;
-        [SerializeField] LaserPointerButton _exitButton;
+        [SerializeField] TMPro.TextMeshPro[] _parentLabel;
         [SerializeField] Transform _markerQuad;
         [SerializeField] Transform[] _toolIcons;
+        [SerializeField] GameObject _commentIcon;
 
         void Awake()
         {
-            _nodeSelectionManager = FindObjectOfType<NodeSelector>();
+            _nodeSelector = FindObjectOfType<NodeSelector>();
         }
 
         void Start()
@@ -28,10 +29,16 @@ namespace ff.nodegraph.interaction
             {
                 throw new UnityException("NodeSelectManager Requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
-            SelectionManager.Instance.SelectedNodeChangedEvent += SelectionChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += AnnotationSelectionChangedHandler;
+            SelectionManager.Instance.OnSelectedNodeChanged += NodeSelectionChangedHandler;
+            SelectionManager.Instance.OnNodeSelectionMarkerPositionChanged += NodeSelectionMarkerPositionChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += AnnotationGizmoSelectionChangedHandler;
         }
 
-        public bool IsSelected { get; set; }
+        private void AnnotationGizmoSelectionChangedHandler(AnnotationGizmo obj)
+        {
+            _commentIcon.SetActive(obj == null);
+        }
 
         void Update()
         {
@@ -41,10 +48,11 @@ namespace ff.nodegraph.interaction
             _dampedSelectionLabelPositionY = Mathf.Lerp(_dampedSelectionLabelPositionY, SELECTION_LABEL_POS_Y, BLEND_SPEED);
             _dampedSelectionLabelSize = Mathf.Lerp(_dampedSelectionLabelSize, SELECTION_LABEL_SIZE, BLEND_SPEED);
 
-            _parentLabel.transform.localPosition = new Vector3(0.5f, _dampedParentLabelPositionY, 0);
-            _parentLabel.transform.localScale = Vector3.one * _dampedParentLabelSize;
-            _selectionLabel.transform.localPosition = new Vector3(0.5f, _dampedSelectionLabelPositionY, 0);
-            _selectionLabel.transform.localScale = Vector3.one * _dampedSelectionLabelSize;
+            //todo: fix fade in
+            // _parentLabel.transform.localPosition = new Vector3(0.5f, _dampedParentLabelPositionY, 0);
+            // _parentLabel.transform.localScale = Vector3.one * _dampedParentLabelSize;
+            // _selectionLabel.transform.localPosition = new Vector3(0.5f, _dampedSelectionLabelPositionY, 0);
+            // _selectionLabel.transform.localScale = Vector3.one * _dampedSelectionLabelSize;
 
             _dampedMarkerSize = Mathf.Lerp(_dampedMarkerSize, DEFAULT_MARKER_SIZE, BLEND_SPEED);
             _markerQuad.transform.localScale = Vector3.one * _dampedMarkerSize;
@@ -53,14 +61,6 @@ namespace ff.nodegraph.interaction
             // Scale and orient for camera
             transform.position = Vector3.Lerp(transform.position, _targetPosition, 0.3f);
             utils.Helpers.FaceCameraAndKeepSize(this.transform, DEFAULT_SIZE);
-
-            var s = _exitButton.transform.localScale;
-            s.x = (_parentLabel.renderedWidth + 0.2f) / 2.0f;
-            _exitButton.transform.localScale = s;
-
-            var p = _exitButton.transform.localPosition;
-            p.x = (s.x * 0.5f) + 0.5f - 0.05f;
-            _exitButton.transform.localPosition = p;
 
             var progress = (Time.time - _selectionTime) / TRANSITION_DURATION;
 
@@ -71,45 +71,56 @@ namespace ff.nodegraph.interaction
                 item.transform.localScale = Vector3.one * smoothed * DEFAULT_ICON_SIZE;
                 item.transform.localPosition = Vector3.left * smoothed * (index + 1.2f) * DEFAULT_ICON_SIZE;
             }
+            WriteParentButtons();
         }
 
-        private void SelectionChangedHandler(Node newNode)
+        private void AnnotationSelectionChangedHandler(AnnotationGizmo newGizmo)
         {
+            if (newGizmo == null)
+                return;
+            var newNode = newGizmo.Annotation.TargetNode;
             PrepareLabelTransition(newNode);
 
             var isValid = newNode != null;
-            var hasParent = newNode != null && newNode.Parent != null;
-
             this.gameObject.SetActive(isValid);
-
-            // Move to boundingbox center if not parent
-            if (isValid && _currentNode != null)
-            {
-                var parent = _currentNode.Parent;
-                bool newNodeIsParent = false;
-                while (parent != null)
-                {
-                    if (newNode == parent)
-                    {
-                        newNodeIsParent = true;
-                        break;
-                    }
-                    parent = parent.Parent;
-                }
-
-                if (!newNodeIsParent)
-                {
-                    _targetPosition = newNode.BoundsWithContext.Bounds.center;
-                }
-            }
-
             _selectionLabel.text = isValid ? newNode.Name : "";
-            _parentLabel.text = hasParent ? newNode.Parent.Name + " /" : "";
-            _exitButton.gameObject.SetActive(hasParent);
+            WriteParentButtons();
 
             _currentNode = newNode;
         }
 
+        private void NodeSelectionChangedHandler(Node node)
+        {
+            PrepareLabelTransition(node);
+
+            var isValid = node != null;
+            this.gameObject.SetActive(isValid);
+            _selectionLabel.text = isValid ? node.Name : "";
+            WriteParentButtons();
+
+            _currentNode = node;
+        }
+        private void WriteParentButtons()
+        {
+            Node parentNode = _currentNode;
+            for (int i = 0; i < _parentLabel.Length; i++)
+            {
+                if (parentNode != null)
+                    parentNode = parentNode.Parent;
+
+                var label = _parentLabel[i];
+                if (parentNode != null)
+                {
+                    label.text = parentNode.Name + " /";
+                    label.gameObject.SetActive(true);
+                }
+                else
+                {
+                    label.GetComponent<TMPro.TextMeshPro>().text = "";
+                    label.gameObject.SetActive(false);
+                }
+            }
+        }
 
         private void PrepareLabelTransition(Node newNode)
         {
@@ -140,14 +151,13 @@ namespace ff.nodegraph.interaction
             transform.localScale = Vector3.zero;
         }
 
-
-        public void OnParentClicked()
+        // is called from Button
+        public void CreateAnnotationAtCurrentNode()
         {
-            _nodeSelectionManager.SelectParentNode();
+            AnnotationManager.Instance.CreateAnnotation(SelectionManager.Instance.SelectedNode, _targetPosition);
         }
 
-
-        public void SetPosition(Vector3 newPosition)
+        public void NodeSelectionMarkerPositionChangedHandler(Vector3 newPosition)
         {
             _targetPosition = newPosition;
             _dampedMarkerSize = 2;

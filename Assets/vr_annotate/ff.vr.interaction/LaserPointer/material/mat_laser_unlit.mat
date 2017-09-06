@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: mat_laser_unlit
-  m_Shader: {fileID: 10755, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 09d2a72ae35a3a4468f633365404f6a5, type: 3}
   m_ShaderKeywords: _EMISSION
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -67,6 +67,8 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - _tintAmount: 1
     m_Colors:
     - _Color: {r: 0.27058825, g: 0.57254905, b: 1, a: 1}
     - _EmissionColor: {r: 0.27058825, g: 0.57254905, b: 1, a: 1}
+    - _tintColor: {r: 0, g: 0.6087919, b: 0.8088235, a: 1}

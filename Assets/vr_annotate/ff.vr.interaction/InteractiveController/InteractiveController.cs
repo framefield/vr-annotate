@@ -158,7 +158,8 @@ namespace ff.vr.interaction
                 }
                 else
                 {
-                    NodeSelector.Instance.SelectParentNode();
+                    // _capturedClickTarget = null;
+                    NodeSelector.Instance.HandleNullHit();
                 }
             }
             else if (_state == States.IsCollidingWithGizmo)

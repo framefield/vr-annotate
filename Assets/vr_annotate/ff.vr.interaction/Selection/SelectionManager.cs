@@ -13,13 +13,15 @@ namespace ff.vr.interaction
     /** Handles and broadcasts information about the current selection */
     public class SelectionManager : Singleton<SelectionManager>
     {
-        public event Action<Node> SelectedNodeChangedEvent;
+        public event Action<Node> OnSelectedNodeChanged;
         public event Action<ISelectable> OnNodeHover;
         public event Action<ISelectable> OnNodeUnhover;
 
-        public event Action<AnnotationGizmo> SelectedAnnotationGizmoChangedEvent;
+        public event Action<AnnotationGizmo> OnSelectedAnnotationGizmoChanged;
         public event Action<AnnotationGizmo> OnAnnotationGizmoHover;
         public event Action<AnnotationGizmo> OnAnnotationGizmoUnhover;
+
+        public event Action<Vector3> OnNodeSelectionMarkerPositionChanged;
 
         public Node SelectedNode { get { return _selectedNode; } }
         public AnnotationGizmo SelectedAnnotationGizmo { get { return _selectedAnnotationGizmo; } }
@@ -35,11 +37,12 @@ namespace ff.vr.interaction
                 if (_selectedNode != null)
                     _selectedNode.IsSelected = false;
 
+                _selectedAnnotationGizmo = null;
+                OnSelectedAnnotationGizmoChanged(null);
+
                 _selectedNode = item as Node;
                 _selectedNode.IsSelected = true;
-                // Debug.Log("Selected Node Changed Event");
-
-                SelectedNodeChangedEvent(_selectedNode);
+                OnSelectedNodeChanged(_selectedNode);
             }
             else if (item is AnnotationGizmo)
             {
@@ -50,7 +53,14 @@ namespace ff.vr.interaction
                 _selectedAnnotationGizmo.IsSelected = true;
                 // Debug.Log("Selected Gizmo Changed Event");
 
-                SelectedAnnotationGizmoChangedEvent(_selectedAnnotationGizmo);
+                OnSelectedAnnotationGizmoChanged(_selectedAnnotationGizmo);
+                OnSelectedNodeChanged(_selectedAnnotationGizmo.Annotation.TargetNode);
+
+                SetNodeSelectionMarkerPosition(_selectedAnnotationGizmo.transform.position);
+            }
+            else if (item == null)
+            {
+                OnSelectedAnnotationGizmoChanged(null);
             }
         }
 
@@ -96,6 +106,17 @@ namespace ff.vr.interaction
             OnAnnotationGizmoUnhover(_hoveredAnnotationGizmo);
             _hoveredAnnotationGizmo = null;
         }
+
+        public void SetNodeSelectionMarkerPosition(Vector3 pos)
+        {
+            if (pos != _nodeSelectionMarkerPosition)
+            {
+                _nodeSelectionMarkerPosition = pos;
+                OnNodeSelectionMarkerPositionChanged(_nodeSelectionMarkerPosition);
+            }
+        }
+
+        private Vector3 _nodeSelectionMarkerPosition;
 
         private Node _hoveredNode;
         private Node _selectedNode;

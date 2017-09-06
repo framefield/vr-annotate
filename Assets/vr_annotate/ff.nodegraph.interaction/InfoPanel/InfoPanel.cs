@@ -51,12 +51,12 @@ namespace ff.nodegraph.interaction
                 throw new UnityException("" + this + " requires a SelectionManager to be initialized. Are you missing an instance of SelectionManager or is the script execution order incorrect?");
             }
 
-            SelectionManager.Instance.SelectedNodeChangedEvent += NodeSelectionChangedHandler;
-            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += GizmoSelectionChangedHandler;
+            SelectionManager.Instance.OnSelectedNodeChanged += NodeSelectionChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += GizmoSelectionChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
 
-            SetState(States.Closing);
+            // SetState(States.Closing);
         }
 
         void Update()
@@ -107,7 +107,7 @@ namespace ff.nodegraph.interaction
                     }
                     else
                     {
-                        SetState(States.Closing);
+                        // SetState(States.Closing);
                     }
 
                     break;
@@ -128,8 +128,6 @@ namespace ff.nodegraph.interaction
             _annotationInfoPanel.ForwardSelectionFromInfoPanel(hoveredGizmo);
             _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(hoveredGizmo.Annotation.TargetNode);
 
-            if (!IsVisibleInView || forceMoveIntoView)
-                MoveIntoView();
         }
 
         private void OnAnnotationGizmoUnhoverHandler(AnnotationGizmo obj)
@@ -157,8 +155,6 @@ namespace ff.nodegraph.interaction
             if (_selectedItem == null)
                 return;
 
-            if (!IsVisibleInView || forceMoveIntoView)
-                MoveIntoView();
 
             _annotationInfoPanel.gameObject.SetActive(false);
             _nodeGraphInfoPanel.gameObject.SetActive(true);
@@ -179,12 +175,6 @@ namespace ff.nodegraph.interaction
             else
             {
                 _annotationInfoPanel.gameObject.SetActive(true);
-
-                if (!IsVisibleInView || forceMoveIntoView)
-                {
-                    Debug.Log("move into view");
-                    MoveIntoView();
-                }
                 _nodeGraphInfoPanel.ForwardSelectionFromInfoPanel(selectedGizmo.Annotation.TargetNode);
             }
         }

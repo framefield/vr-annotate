@@ -24,17 +24,28 @@ namespace ff.vr.annotate.viz
             return _annotationGizmos[(iGizmo - 1 + _annotationGizmos.Length) % _annotationGizmos.Length];
         }
 
-        private int GetIndexOfGizmoInList(AnnotationGizmo gizmo)
+        public int GetIndexOfGizmoInList(AnnotationGizmo gizmo)
         {
+            if (gizmo == null)
+            {
+                Debug.Log("trying to find null in gizmo list");
+                return -1;
+            }
             if (_annotationGizmos == null || _annotationGizmos.Length < 1)
                 _annotationGizmos = _annotationContainer.GetComponentsInChildren<AnnotationGizmo>();
 
             for (int iGizmo = 0; iGizmo < _annotationGizmos.Length; iGizmo++)
             {
+                // Debug.Log(_annotationGizmos[iGizmo].Annotation.GUID + " =?= " + gizmo.Annotation.GUID);
                 if (_annotationGizmos[iGizmo] == gizmo)
                     return iGizmo;
             }
             return -1;
+        }
+
+        public int GetLengthOfTour()
+        {
+            return _annotationGizmos.Length;
         }
     }
 }

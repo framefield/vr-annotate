@@ -19,6 +19,8 @@ namespace ff.vr.annotate.viz
         TMPro.TextMeshPro _authorLabel;
         [SerializeField]
         TMPro.TextMeshPro _annotationDateLabel;
+        [SerializeField]
+        TMPro.TextMeshPro _tourPositionLabel;
 
         [SerializeField]
         Renderer _icon;
@@ -61,14 +63,14 @@ namespace ff.vr.annotate.viz
 
         void OnEnable()
         {
-            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent += SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += SelectedAnnotationGizmoChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
         }
 
         void OnDisable()
         {
-            SelectionManager.Instance.SelectedAnnotationGizmoChangedEvent -= SelectedAnnotationGizmoChangedHandler;
+            SelectionManager.Instance.OnSelectedAnnotationGizmoChanged -= SelectedAnnotationGizmoChangedHandler;
             SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
             SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
         }
@@ -94,11 +96,8 @@ namespace ff.vr.annotate.viz
 
         private void SelectedAnnotationGizmoChangedHandler(AnnotationGizmo obj)
         {
-            if (obj == this)
-            {
-                _isSelected = true;
-                UpdateUI();
-            }
+            _isSelected = (obj == this);
+            UpdateUI();
         }
 
         public void OnHover()
@@ -124,6 +123,7 @@ namespace ff.vr.annotate.viz
                 _annotationBodyLabel.text = _annotation.Text;
                 _authorLabel.text = _annotation.Author.name;
                 _annotationDateLabel.text = _annotation.CreatedAt.ToString("yyyy/MM/dd");
+                // _tourPositionLabel.text = AnnotationTour.Instance.GetIndexOfGizmoInList(this) + " / " + AnnotationTour.Instance.GetLengthOfTour();
             }
 
             if (_isSelected)
@@ -133,7 +133,7 @@ namespace ff.vr.annotate.viz
             else
                 _icon.material.SetColor("_tintColor", Color);
 
-            _hoverGroup.SetActive(_isHovered && !_isSelected);
+            _hoverGroup.SetActive(_isHovered | _isSelected);
             _tourGroup.SetActive(_isSelected);
         }
 
