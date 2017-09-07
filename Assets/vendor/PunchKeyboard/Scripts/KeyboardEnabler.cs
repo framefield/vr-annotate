@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,9 +13,6 @@ namespace ff.vr.interaction
     public class KeyboardEnabler : MonoBehaviour
     {
         public bool IsVisible = false;
-        public float ThresholdDistance = 0.6f;
-
-        public InteractiveController[] _controllers;
         public KeyboardControllerStick[] _sticks;
 
 
@@ -23,20 +21,37 @@ namespace ff.vr.interaction
         public InputField _inputField;
         public GameObject _inputFieldCanvas;
 
-        public delegate void OnInputCompleted();
-        public OnInputCompleted InputCompleted;
+        public event Action InputCompleted;
 
-        public delegate void OnInputChanged(string newText);
-        public OnInputChanged InputChanged;
-
+        public event Action<string> InputChanged;
 
         void Start()
         {
             UpdateKeyboardVisibility(forceUpdate: true);
+
+
+            var controllerManager = FindObjectOfType(typeof(SteamVR_ControllerManager)) as SteamVR_ControllerManager;
+            _controllers = controllerManager.GetComponentsInChildren<InteractiveController>(true);
+            foreach (var controller in controllerManager.GetComponentsInChildren<SteamVR_TrackedController>(true))
+            {
+                Debug.Log("register handler to controller");
+                controller.TriggerClicked += new ClickedEventHandler
+                (
+                    delegate (object o, ClickedEventArgs a)
+                    {
+                        if (IsVisible)
+                            InputCompleted();
+                        // _keyboardEnabler.Hide();
+                    }
+                );
+            }
         }
 
         public void Show()
         {
+            foreach (var c in _controllers)
+                c.SetLaserPointerEnabled(false);
+
             IsVisible = true;
             UpdateKeyboardVisibility();
             PositionInFrontOfCamera();
@@ -51,6 +66,9 @@ namespace ff.vr.interaction
 
         public void Hide()
         {
+            foreach (var c in _controllers)
+                c.SetLaserPointerEnabled(true);
+
             IsVisible = false;
         }
 
@@ -112,5 +130,6 @@ namespace ff.vr.interaction
         }
 
         private bool _wasEnabled = false;
+        private InteractiveController[] _controllers;
     }
 }

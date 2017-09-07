@@ -10,32 +10,19 @@ public class HapticFeedback : MonoBehaviour
 {
     SteamVR_TrackedObject trackedObj;
     SteamVR_Controller.Device device;
-    // Use this for initialization
+
     void Start()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
         if (trackedObj != null)
             device = SteamVR_Controller.Input((int)trackedObj.index);
-    }
 
-    void OnEnable()
-    {
         SelectionManager.Instance.OnSelectedAnnotationGizmoChanged += SelectedAnnotationGizmoChangedHandler;
         SelectionManager.Instance.OnAnnotationGizmoHover += OnAnnotationGizmoHoverHandler;
         SelectionManager.Instance.OnAnnotationGizmoUnhover += OnAnnotationGizmoUnhoverHandler;
         SelectionManager.Instance.OnSelectedNodeChanged += SelectedNodeChangedHandler;
         SelectionManager.Instance.OnNodeHover += OnNodeHoverHandler;
         SelectionManager.Instance.OnNodeUnhover += OnNodeUnhoverHandler;
-    }
-
-    void OnDisable()
-    {
-        SelectionManager.Instance.OnSelectedAnnotationGizmoChanged -= SelectedAnnotationGizmoChangedHandler;
-        SelectionManager.Instance.OnAnnotationGizmoHover -= OnAnnotationGizmoHoverHandler;
-        SelectionManager.Instance.OnAnnotationGizmoUnhover -= OnAnnotationGizmoUnhoverHandler;
-        SelectionManager.Instance.OnSelectedNodeChanged -= SelectedNodeChangedHandler;
-        SelectionManager.Instance.OnNodeHover -= OnNodeHoverHandler;
-        SelectionManager.Instance.OnNodeUnhover -= OnNodeUnhoverHandler;
     }
 
     private void OnNodeUnhoverHandler(ISelectable obj)

@@ -92,6 +92,12 @@ namespace ff.vr.interaction
             }
         }
 
+        public void SetLaserPointerEnabled(bool enabled)
+        {
+            if (_laserPointer)
+                _laserPointer.SetLaserpointerEnabled(enabled);
+        }
+
         private List<BoxCollider> GizmoColliders = new List<BoxCollider>();
         protected virtual void Update()
         {
