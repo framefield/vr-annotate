@@ -126,7 +126,7 @@ namespace ff.vr.interaction
 
         private Vector3 _selectionMarkerPosition;
 
-        public List<AnnotationPositionRenderer> _allActiveAnnotationPositionRenderer = new List<AnnotationPositionRenderer>();
+        private List<AnnotationPositionRenderer> _allActiveAnnotationPositionRenderer = new List<AnnotationPositionRenderer>();
 
     }
 }
