@@ -41,7 +41,7 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.InputCompleted += HandleInputCompleted;
             _keyboardEnabler.InputChanged += HandleInputChanged;
 
-            ReadAllAnnotationsFromDatabase();
+            // ReadAllAnnotationsFromDatabase();
         }
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
@@ -75,6 +75,30 @@ namespace ff.vr.annotate.viz
         {
             if (_focusedAnnotationGizmo)
                 _focusedAnnotationGizmo.UpdateBodyText(newText);
+        }
+
+        public void CreateDummyAnnotation(Node contextNode, Vector3 position)
+        {
+            var newAnnotation = new Annotation()
+            {
+                TargetNodeId = contextNode.GUID,
+                TargetNode = contextNode,
+                GUID = System.Guid.NewGuid(),
+                ViewPointPosition = new GeoCoordinate()
+                {
+                    position = Camera.main.transform.position,
+                    rotation = Camera.main.transform.eulerAngles,
+                },
+                AnnotationPosition = new GeoCoordinate() { position = position },
+                Author = CurrentUserDefinition._instance != null
+                                  ? CurrentUserDefinition._instance.CurrentUser
+                                  : Person.AnonymousUser,
+                CreatedAt = DateTime.Now,
+            };
+
+            AllAnnotations.Add(newAnnotation);
+            _lastCreatedAnnotation = newAnnotation;
+            _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
         }
 
 

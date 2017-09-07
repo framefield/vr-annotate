@@ -1,0 +1,13 @@
+
+
+temple      tris        frametime       batches
+
+0           77k         8ms             82
+1           12m         8ms             1835
+2           24m         19ms            3535
+3           36m         27ms            5247
+4           48m         28ms            6937
+5           60m         20ms            8700
+6           71m         33ms            10500
+7           83m         38ms            12100
+
