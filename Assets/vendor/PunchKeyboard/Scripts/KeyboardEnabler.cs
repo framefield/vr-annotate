@@ -34,14 +34,12 @@ namespace ff.vr.interaction
             _controllers = controllerManager.GetComponentsInChildren<InteractiveController>(true);
             foreach (var controller in controllerManager.GetComponentsInChildren<SteamVR_TrackedController>(true))
             {
-                Debug.Log("register handler to controller");
                 controller.TriggerClicked += new ClickedEventHandler
                 (
                     delegate (object o, ClickedEventArgs a)
                     {
                         if (IsVisible)
                             InputCompleted();
-                        // _keyboardEnabler.Hide();
                     }
                 );
             }
@@ -66,8 +64,9 @@ namespace ff.vr.interaction
 
         public void Hide()
         {
-            foreach (var c in _controllers)
-                c.SetLaserPointerEnabled(true);
+            if (_controllers != null)
+                foreach (var c in _controllers)
+                    c.SetLaserPointerEnabled(true);
 
             IsVisible = false;
         }
