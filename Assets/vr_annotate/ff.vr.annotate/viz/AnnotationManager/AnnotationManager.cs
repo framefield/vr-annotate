@@ -51,7 +51,6 @@ namespace ff.vr.annotate.viz
 
         private void ReadAllAnnotationsFromDatabase()
         {
-
             var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
             foreach (var file in filesInDirectory)
             {

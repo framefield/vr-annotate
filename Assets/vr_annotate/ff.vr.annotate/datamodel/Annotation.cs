@@ -44,12 +44,17 @@ namespace ff.vr.annotate.datamodel
 
         public static string StaticToJson(Annotation annotation)
         {
-            var rootNodeId = annotation.TargetNode.NodeGraphRoot != null ? annotation.TargetNode.NodeGraphRoot.RootNodeId : "Annotations requires NodeGraphRoot";
-            var targetNodeId = annotation.TargetNode != null ? annotation.TargetNodeId.ToString() : "Annotations requires TargetNode";
-            var targetNodeName = annotation.TargetNode != null ? annotation.TargetNode.Name : "Annotations requires TargetNode";
+            var hasTargetNode = annotation.TargetNode != null;
+            var hasNodeGraph = hasTargetNode && annotation.TargetNode.NodeGraphRoot != null;
+
+            var rootNodeId = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.RootNodeId : "Annotations requires NodeGraphRoot";
+            var targetNodeId = hasTargetNode ? annotation.TargetNodeId.ToString() : "Annotations requires TargetNode";
+            var targetNodeName = hasTargetNode ? annotation.TargetNode.Name : "Annotations requires TargetNode";
             var simulatedDate = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedYear : "AnnotationManager not running";
             var simulatedTimeofDay = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedTimeOfDay : "AnnotationManager not running";
-            var sceneGraphPath = annotation.TargetNode != null ? annotation.TargetNode.NodePath : "Annotations requires TargetNode";
+            var sceneGraphPath = hasTargetNode ? annotation.TargetNode.NodePath : "Annotations requires TargetNode";
+            var modelAuthor = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.modelAuthor : "Annotations requires NodeGraphRoot";
+            var modelVersion = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.modelVersion : "Annotations requires NodeGraphRoot";
 
 
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
@@ -67,8 +72,8 @@ namespace ff.vr.annotate.datamodel
                 {"sceneGraphPath",sceneGraphPath},
                 {"viewPointPositionJSON", JsonUtility.ToJson(annotation.ViewPointPosition)},
                 {"annotationPositionJSON", JsonUtility.ToJson(annotation.AnnotationPosition)},
-                {"modelAuthor", annotation.TargetNode.NodeGraphRoot.modelAuthor},
-                {"modelVersion", annotation.TargetNode.NodeGraphRoot.modelVersion},
+                {"modelAuthor", modelAuthor},
+                {"modelVersion",modelVersion},
             });
         }
 
@@ -171,7 +176,7 @@ namespace ff.vr.annotate.datamodel
             },
             {
                 'type': 'InterpretiveReconstruction',
-                'refinedBy': {interpretationStateJSON},
+                'refinedBy': '{interpretationStateJSON}',
             },
             {
                 'type': 'model',

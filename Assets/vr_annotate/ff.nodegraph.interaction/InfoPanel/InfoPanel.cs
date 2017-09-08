@@ -63,7 +63,8 @@ namespace ff.nodegraph.interaction
         {
             var transitionComplete = TransitionProgress == 1;
 
-            UpdateConnectionLine();
+            if (_lineVisibile)
+                UpdateConnectionLine();
 
 
             switch (_state)
@@ -96,18 +97,10 @@ namespace ff.nodegraph.interaction
                     }
                     break;
                 case States.Open:
-                    if (ShouldRenderInfoPanel())
+                    if (_pressedMenuButtonController != null)
                     {
-
-                        if (_pressedMenuButtonController != null)
-                        {
-                            transform.position = PositionFromController;
-                            transform.rotation = RotationFromController;
-                        }
-                    }
-                    else
-                    {
-                        // SetState(States.Closing);
+                        transform.position = PositionFromController;
+                        transform.rotation = RotationFromController;
                     }
 
                     break;
@@ -179,33 +172,9 @@ namespace ff.nodegraph.interaction
             }
         }
 
-        private void MenuButtonClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
-        {
-            var controller = sender as SteamVR_TrackedController;
-            if (controller == null)
-                return;
-
-            if (_pressedMenuButtonController != null)
-            {
-                Debug.LogWarning("Ignoring inconsistent menu button presses", this);
-                return;
-            }
-
-            _pressedMenuButtonController = controller;
-
-            switch (_state)
-            {
-                case States.Undefined:
-                case States.Closing:
-                case States.Closed:
-                    SetState(States.Opening);
-                    break;
-            }
-        }
-
         private void UpdateConnectionLine()
         {
-            var selectionLineVisible = _selectedItem != null && ShouldRenderInfoPanel();
+            var selectionLineVisible = _selectedItem != null && _lineVisibile;
 
             _connectionLine.gameObject.SetActive(selectionLineVisible);
             if (!selectionLineVisible)
@@ -238,8 +207,37 @@ namespace ff.nodegraph.interaction
         }
 
 
+        private void MenuButtonClickedHandler(object sender, ClickedEventArgs clickedEventArgs)
+        {
+            _lineVisibile = true;
+            var controller = sender as SteamVR_TrackedController;
+            if (controller == null)
+                return;
+
+            if (_pressedMenuButtonController != null)
+            {
+                Debug.LogWarning("Ignoring inconsistent menu button presses", this);
+                return;
+            }
+
+            _pressedMenuButtonController = controller;
+
+            switch (_state)
+            {
+                case States.Undefined:
+                case States.Closing:
+                case States.Closed:
+                    SetState(States.Opening);
+                    break;
+            }
+        }
+
+
         private void MenuButtonUnclickedHandler(object sender, ClickedEventArgs clickedEventArgs)
         {
+            _lineVisibile = false;
+            UpdateConnectionLine();
+
             var controller = sender as SteamVR_TrackedController;
             if (controller == null)
                 return;
@@ -292,7 +290,6 @@ namespace ff.nodegraph.interaction
                     break;
 
                 case States.Closed:
-                    _connectionLine.gameObject.SetActive(false);
                     break;
 
                 case States.Opening:
@@ -300,7 +297,6 @@ namespace ff.nodegraph.interaction
                     break;
 
                 case States.Open:
-                    _connectionLine.gameObject.SetActive(true);
                     break;
 
                 case States.MovingIntoView:
@@ -407,5 +403,6 @@ namespace ff.nodegraph.interaction
         private float _interactionStartTime = 0;
         private NodeSelectionMarker _selectionMarker;
         private Vector3 _initialScale;
+        private bool _lineVisibile;
     }
 }
