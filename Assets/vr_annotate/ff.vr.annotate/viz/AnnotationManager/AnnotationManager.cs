@@ -29,6 +29,7 @@ namespace ff.vr.annotate.viz
         private List<AnnotationGizmo> AllAnnotationGizmos = new List<AnnotationGizmo>();
 
         public AnnotationGizmo _annotationGizmoPrefab;
+        public bool OnStartupReadAllAnnotationFromDataBase;
 
 
         void Start()
@@ -41,10 +42,12 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.InputCompleted += HandleInputCompleted;
             _keyboardEnabler.InputChanged += HandleInputChanged;
 
-            // ReadAllAnnotationsFromDatabase();
+            if (OnStartupReadAllAnnotationFromDataBase)
+                ReadAllAnnotationsFromDatabase();
         }
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
+
 
         private void ReadAllAnnotationsFromDatabase()
         {
@@ -150,13 +153,33 @@ namespace ff.vr.annotate.viz
             teleportation.JumpToPosition(nextGizmo.Annotation.ViewPointPosition.position);
         }
 
-        private AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
+        public AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
         {
             var relevantAnnotations = GetAllAnnotationsGizmosOnNode(gizmo.Annotation.TargetNode);
             int i = 0;
             while (relevantAnnotations[i] != gizmo)
                 i++;
             return relevantAnnotations[(i + 1) % relevantAnnotations.Count];
+        }
+
+        public void GoToPreviousAnnotation(Teleportation teleportation)
+        {
+            var selectedAnnotationGizmo = SelectionManager.Instance.SelectedAnnotationGizmo;
+            if (selectedAnnotationGizmo == null)
+                return;
+
+            var nextGizmo = GetPreviousAnnotationGizmoOnNode(selectedAnnotationGizmo);
+            SelectionManager.Instance.SetSelectedItem(nextGizmo);
+            teleportation.JumpToPosition(nextGizmo.Annotation.ViewPointPosition.position);
+        }
+
+        public AnnotationGizmo GetPreviousAnnotationGizmoOnNode(AnnotationGizmo gizmo)
+        {
+            var relevantAnnotations = GetAllAnnotationsGizmosOnNode(gizmo.Annotation.TargetNode);
+            int i = 0;
+            while (relevantAnnotations[i] != gizmo)
+                i++;
+            return relevantAnnotations[(i - 1 + relevantAnnotations.Count) % relevantAnnotations.Count];
         }
 
 

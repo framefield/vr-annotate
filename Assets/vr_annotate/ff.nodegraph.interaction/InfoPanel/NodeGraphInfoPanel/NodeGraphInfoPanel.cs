@@ -35,6 +35,7 @@ namespace ff.nodegraph.interaction
         public void ForwardSelectionFromInfoPanel(ISelectable newSelection)
         {
             _selectedNode = newSelection as Node;
+
             RebuildUI();
         }
 

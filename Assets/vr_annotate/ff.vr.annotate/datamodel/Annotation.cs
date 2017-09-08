@@ -24,11 +24,11 @@ namespace ff.vr.annotate.datamodel
         const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
 
         public Guid GUID;
-        public string ID
+        public string id
         {
             get { return GUID.ToString(); }
         }
-        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + ID; } }
+        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + id; } }
         public string Text;
 
         [System.NonSerializedAttribute]
@@ -41,6 +41,36 @@ namespace ff.vr.annotate.datamodel
         public GeoCoordinate ViewPointPosition;
         public GeoCoordinate AnnotationPosition;
         public DateTime CreatedAt;
+
+        public static string StaticToJson(Annotation annotation)
+        {
+            var rootNodeId = annotation.TargetNode.NodeGraphRoot != null ? annotation.TargetNode.NodeGraphRoot.RootNodeId : "Annotations requires NodeGraphRoot";
+            var targetNodeId = annotation.TargetNode != null ? annotation.TargetNodeId.ToString() : "Annotations requires TargetNode";
+            var targetNodeName = annotation.TargetNode != null ? annotation.TargetNode.Name : "Annotations requires TargetNode";
+            var simulatedDate = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedYear : "AnnotationManager not running";
+            var simulatedTimeofDay = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedTimeOfDay : "AnnotationManager not running";
+            var sceneGraphPath = annotation.TargetNode != null ? annotation.TargetNode.NodePath : "Annotations requires TargetNode";
+
+
+            return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
+
+                {"annotationGUID", annotation.JsonLdId},
+                {"authorJSON", JsonUtility.ToJson(annotation.Author)},
+                {"createdTimestamp", annotation.CreatedAt.ToString()},
+                {"annotationText", annotation.Text},
+                {"rootNodeId", rootNodeId},
+                {"targetNodeId",targetNodeId},
+                {"targetNodeName", targetNodeName},
+                {"simulatedDate", simulatedDate},
+                {"simulatedTimeofDay",simulatedTimeofDay},
+                {"interpretationStateJSON", "{}"},
+                {"sceneGraphPath",sceneGraphPath},
+                {"viewPointPositionJSON", JsonUtility.ToJson(annotation.ViewPointPosition)},
+                {"annotationPositionJSON", JsonUtility.ToJson(annotation.AnnotationPosition)},
+                {"modelAuthor", annotation.TargetNode.NodeGraphRoot.modelAuthor},
+                {"modelVersion", annotation.TargetNode.NodeGraphRoot.modelVersion},
+            });
+        }
 
         public string ToJson()
         {
@@ -79,7 +109,8 @@ namespace ff.vr.annotate.datamodel
             // Initialize Target Object
             RootNodeId = j["target"]["rootNodeId"].str;
             var nodePath = j["target"]["selector"]["value"].str;
-            TargetNode = NodeSelector.Instance.FindNodeFromPath(RootNodeId, nodePath);
+            if (NodeSelector.Instance != null)
+                TargetNode = NodeSelector.Instance.FindNodeFromPath(RootNodeId, nodePath);
 
             ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
             AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
@@ -105,7 +136,7 @@ namespace ff.vr.annotate.datamodel
 
         private const string DateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 
-        private string JSONTemplate = @"
+        private static string JSONTemplate = @"
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
     'id': '{annotationGUID}',

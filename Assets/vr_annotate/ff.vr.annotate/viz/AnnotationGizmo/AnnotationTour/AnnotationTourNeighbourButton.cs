@@ -18,7 +18,10 @@ namespace ff.vr.annotate.viz
         {
             var arrivalHelp = Instantiate(_onTeleportationArrivalOrientationPrefab);
             arrivalHelp.SetAnnotationData(GetTargetGizmo().Annotation);
+            SelectionManager.Instance.SetSelectedItem(GetTargetGizmo());
             teleportation.JumpToPosition(GetTeleportationTarget(GetTargetGizmo()));
+
+
         }
 
         void ITeleportationTrigger.PadUnclicked(Teleportation teleportation)
@@ -52,8 +55,8 @@ namespace ff.vr.annotate.viz
         {
             return
             InverseDirection ?
-            AnnotationTour.Instance.GetPreviousGizmo(_attachedGizmo) :
-            AnnotationTour.Instance.GetNextGizmo(_attachedGizmo);
+            AnnotationManager.Instance.GetPreviousAnnotationGizmoOnNode(_attachedGizmo) :
+            AnnotationManager.Instance.GetNextAnnotationGizmoOnNode(_attachedGizmo);
         }
 
         public Vector3 GetTeleportationTarget(AnnotationGizmo gizmo)

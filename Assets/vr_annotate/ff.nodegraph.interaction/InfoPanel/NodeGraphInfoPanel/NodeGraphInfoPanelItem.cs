@@ -131,6 +131,8 @@ namespace ff.nodegraph.interaction
         public void PointerTriggered(LaserPointer pointer)
         {
             SelectionManager.Instance.SetSelectedItem(_node);
+            if (_node != null)
+                SelectionManager.Instance.SetNodeSelectionMarkerPosition(_node.GetPosition());
         }
 
         public void PointerUntriggered(LaserPointer pointer)
