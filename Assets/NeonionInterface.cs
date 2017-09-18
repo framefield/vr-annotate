@@ -32,26 +32,26 @@ public class NeonionInterface : MonoBehaviour
     public static IEnumerator Upload(string targetName)
     {
 
-        var filesInDirectory = Directory.GetFiles("E:/_users/dominik/vr-annotate/Assets/db/annotationsOnServer", "*.json");
+        var filesInDirectory = Directory.GetFiles("E:/_users/dominik/vr-annotate/Assets/db/annotationCopiesForRESTTest", "*.json");
         foreach (var file in filesInDirectory)
         {
             var a = new Annotation(File.ReadAllText(file));
             Debug.Log(a);
-            var aJson = Annotation.StaticToJson(a);
+            var aJson = ""; // Annotation.StaticToJson(a);
             Debug.Log(aJson);
 
-            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + a.id, System.Text.Encoding.UTF8.GetBytes(aJson));
+            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + a.Guid, System.Text.Encoding.UTF8.GetBytes(aJson));
             www.SetRequestHeader("Content-Type", "application/json");
             yield return www.Send();
 
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                Debug.Log("Upload complete with: " + www.error);
-            }
+            // if (www.isNetworkError)
+            // {
+            //     Debug.Log(www.error);
+            // }
+            // else
+            // {
+            //     Debug.Log("Upload complete with: " + www.error);
+            // }
         }
     }
 

@@ -44,7 +44,7 @@ namespace ff.vr.interaction
 
         public void SetAnnotationData(Annotation annotation)
         {
-            transform.position = new Vector3(annotation.ViewPointPosition.position.x, 0, annotation.ViewPointPosition.position.z);
+            transform.position = new Vector3(annotation.AnnotationFrame.ViewPortPosition.position.x, 0, annotation.AnnotationFrame.ViewPortPosition.position.z);
         }
 
         private float _visibility = 0;

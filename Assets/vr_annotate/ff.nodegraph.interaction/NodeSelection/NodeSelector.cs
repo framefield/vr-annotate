@@ -46,45 +46,35 @@ namespace ff.nodegraph.interaction
 
 
 
-        public Node FindNodeFromPath(string rootNodeId, string nodePath)
+        public Node FindNodeFromGuidPath(string path)
         {
+            var guids = new List<string>(path.Split('/'));
             foreach (var ng in NodeGraphs)
             {
-                if (ng.RootNodeId == rootNodeId)
+                if (ng.RootNodeId.ToString() == guids[0])
                 {
-                    var nodeNames = new List<string>(nodePath.Split('/'));
+                    var guidsCopy = guids;
                     var node = ng.Node;
+                    guidsCopy.RemoveAt(0);
 
-                    // remove rootnode
-                    if (node.Name == nodeNames[0])
+                    while (guidsCopy.Count != 0)
                     {
-                        nodeNames.RemoveAt(0);
-                        if (nodeNames.Count == 0)
-                            return node;
-                    }
-
-                    var stillSearching = true;
-                    while (stillSearching)
-                    {
-                        stillSearching = false;
+                        var foundNextChild = false;
                         foreach (var child in node.Children)
                         {
-                            if (child.Name == nodeNames[0])
+                            if (child.GUID.ToString() == guidsCopy[0])
                             {
-                                nodeNames.RemoveAt(0);
-                                if (nodeNames.Count == 0)
-                                    return child;
-
+                                guidsCopy.RemoveAt(0);
                                 node = child;
-                                stillSearching = true;
-                                break;
+                                foundNextChild = true;
                             }
                         }
+                        if (!foundNextChild)
+                            Debug.LogWarningFormat("Scene does not contain reference to: {0} -> {1}", node, path);
                     }
+                    return node;
                 }
             }
-            Debug.LogWarningFormat("Scene does not contain reference to: {0} -> {1}", rootNodeId, nodePath);
-
             return null;
         }
 

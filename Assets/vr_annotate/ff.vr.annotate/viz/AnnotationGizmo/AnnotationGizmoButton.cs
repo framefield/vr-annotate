@@ -38,7 +38,7 @@ namespace ff.vr.interaction
 
         public Vector3 GetTeleportationTarget()
         {
-            var teleportationTarget = _annotationGizmo.Annotation.ViewPointPosition.position;
+            var teleportationTarget = _annotationGizmo.Annotation.AnnotationFrame.ViewPortPosition.position;
             return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
         }
 

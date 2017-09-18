@@ -73,22 +73,18 @@ namespace ff.nodegraph
             }
         }
 
-        public string NodePath
+        public string GuidPath
         {
             get
             {
-                var sb = new StringBuilder();
-
-                var n = this;
-                sb.Append(n.Name);
-                while (n.Parent != null)
+                var path = "";
+                var node = this;
+                while (node != null)
                 {
-                    n = n.Parent;
-                    sb.Insert(0, "/");
-                    sb.Insert(0, n.Name);
+                    path = node.GUID.ToString() + "/" + path;
+                    node = node.Parent;
                 }
-
-                return sb.ToString();
+                return path;
             }
         }
 

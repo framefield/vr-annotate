@@ -21,14 +21,10 @@ namespace ff.vr.annotate.datamodel
             DeserializeFromJson(jsonString);
         }
 
+        public Guid Guid;
         const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
-
-        public Guid GUID;
-        public string id
-        {
-            get { return GUID.ToString(); }
-        }
-        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + id; } }
+        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + Guid; } }
+        public Person Author;
         public string Text;
 
         [System.NonSerializedAttribute]
@@ -37,88 +33,92 @@ namespace ff.vr.annotate.datamodel
         public string TargetNodeName;
         public string RootNodeId;
 
-        public Person Author;
-        public GeoCoordinate ViewPointPosition;
-        public GeoCoordinate AnnotationPosition;
+        public AnnotationAndViewPortPosition AnnotationFrame;
         public DateTime CreatedAt;
 
-        public static string StaticToJson(Annotation annotation)
+        public struct AnnotationAndViewPortPosition
         {
-            var hasTargetNode = annotation.TargetNode != null;
-            var hasNodeGraph = hasTargetNode && annotation.TargetNode.NodeGraphRoot != null;
-
-            var rootNodeId = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.RootNodeId : "Annotations requires NodeGraphRoot";
-            var targetNodeId = hasTargetNode ? annotation.TargetNodeId.ToString() : "Annotations requires TargetNode";
-            var targetNodeName = hasTargetNode ? annotation.TargetNode.Name : "Annotations requires TargetNode";
-            var simulatedDate = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedYear : "AnnotationManager not running";
-            var simulatedTimeofDay = AnnotationManager.Instance != null ? AnnotationManager.Instance.SimulatedTimeOfDay : "AnnotationManager not running";
-            var sceneGraphPath = hasTargetNode ? annotation.TargetNode.NodePath : "Annotations requires TargetNode";
-            var modelAuthor = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.modelAuthor : "Annotations requires NodeGraphRoot";
-            var modelVersion = hasNodeGraph ? annotation.TargetNode.NodeGraphRoot.modelVersion : "Annotations requires NodeGraphRoot";
-
-
-            return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
-
-                {"annotationGUID", annotation.JsonLdId},
-                {"authorJSON", JsonUtility.ToJson(annotation.Author)},
-                {"createdTimestamp", annotation.CreatedAt.ToString()},
-                {"annotationText", annotation.Text},
-                {"rootNodeId", rootNodeId},
-                {"targetNodeId",targetNodeId},
-                {"targetNodeName", targetNodeName},
-                {"simulatedDate", simulatedDate},
-                {"simulatedTimeofDay",simulatedTimeofDay},
-                {"interpretationStateJSON", "{}"},
-                {"sceneGraphPath",sceneGraphPath},
-                {"viewPointPositionJSON", JsonUtility.ToJson(annotation.ViewPointPosition)},
-                {"annotationPositionJSON", JsonUtility.ToJson(annotation.AnnotationPosition)},
-                {"modelAuthor", modelAuthor},
-                {"modelVersion",modelVersion},
-            });
+            public GeoCoordinate AnnotationPosition;
+            public GeoCoordinate ViewPortPosition;
         }
 
         public string ToJson()
         {
+
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
+
                 {"annotationGUID", JsonLdId},
                 {"authorJSON", JsonUtility.ToJson(Author)},
                 {"createdTimestamp", CreatedAt.ToString()},
                 {"annotationText", Text},
-                {"rootNodeId", TargetNode.NodeGraphRoot.RootNodeId},
-                {"targetNodeId", TargetNodeId.ToString()},
+                {"targetID", TargetNodeId.ToString()},
                 {"targetNodeName", TargetNode.Name},
                 {"simulatedDate", AnnotationManager.Instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
-                {"interpretationStateJSON", "{}"},
-                {"sceneGraphPath", TargetNode.NodePath},
-                {"viewPointPositionJSON", JsonUtility.ToJson(ViewPointPosition)},
-                {"annotationPositionJSON", JsonUtility.ToJson(AnnotationPosition)},
-                {"modelAuthor", TargetNode.NodeGraphRoot.modelAuthor},
-                {"modelVersion", TargetNode.NodeGraphRoot.modelVersion},
+                // {"interpretationStateJSON", "{}"},
+                {"guidPath", TargetNode.GuidPath},
+                { "annotationLatitude",AnnotationFrame.AnnotationPosition.latitude.ToString()},
+                { "annotationLongitude",AnnotationFrame.AnnotationPosition.longitude.ToString()},
+                { "annotationElevation",AnnotationFrame.AnnotationPosition.elevation.ToString()},
+                { "viewportLatitude", AnnotationFrame.ViewPortPosition.latitude.ToString()},
+                { "viewportLongitude", AnnotationFrame.ViewPortPosition.longitude.ToString()},
+                { "viewportElevation", AnnotationFrame.ViewPortPosition.elevation.ToString()},
+                { "AnnotableNodeCoordinates",BuildAnnotatableNodeCoordinates()},
             });
         }
+
+        private string BuildAnnotatableNodeCoordinates()
+        {
+            string annotableNodeCoordinates = "";
+            var node = TargetNode;
+            while (node != null)
+            {
+                annotableNodeCoordinates += BuildAnnotatableNodeCoordinateForNode(node);
+                node = node.Parent;
+            }
+            return annotableNodeCoordinates;
+        }
+
+        private string BuildAnnotatableNodeCoordinateForNode(Node annotatableNode)
+        {
+            var annotationPositionLocal = annotatableNode.UnityObj.transform.InverseTransformPoint(AnnotationFrame.AnnotationPosition.position);
+            var viewPortPositionLocal = annotatableNode.UnityObj.transform.InverseTransformPoint(AnnotationFrame.ViewPortPosition.position);
+            var jsonSnippet = @"
+            {
+            'type':'AnnotableNodeCoordinate',
+            'annotatableNodeId':'{" + annotatableNode.GUID + @"}',
+            'annotationPosition':{ 'x':" + annotationPositionLocal.x + @",'y':" + annotationPositionLocal.y + @", 'z':" + annotationPositionLocal.z + @"},
+            'viewPortPosition':{ 'x':" + viewPortPositionLocal.x + @",'y':" + viewPortPositionLocal.y + @", 'z':" + viewPortPositionLocal.z + @"},
+            },";
+            return jsonSnippet;
+        }
+
 
         public void DeserializeFromJson(string jsonString)
         {
             JSONObject j = new JSONObject(jsonString);
 
-            var uidMatchResult = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["id"].ToString());
+            var uidMatchResult = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["@id"].ToString());
             if (uidMatchResult.Success)
             {
-                GUID = new Guid(uidMatchResult.Groups[1].Value);
+                Guid = new Guid(uidMatchResult.Groups[1].Value);
             }
 
             DateTime.TryParse(j["created"].str, out CreatedAt);
             Text = j["body"][0]["value"].str;
 
             // Initialize Target Object
-            RootNodeId = j["target"]["rootNodeId"].str;
-            var nodePath = j["target"]["selector"]["value"].str;
-            if (NodeSelector.Instance != null)
-                TargetNode = NodeSelector.Instance.FindNodeFromPath(RootNodeId, nodePath);
+            var nodePath = j["target"]["selector"]["guidPath"].str;
 
-            ViewPointPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPoint"].ToString());
-            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
+
+            if (NodeSelector.Instance != null)
+                TargetNode = NodeSelector.Instance.FindNodeFromGuidPath(nodePath);
+
+            var viewportPosition = new GeoCoordinate();
+
+
+            AnnotationFrame.ViewPortPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPort"].ToString());
+            AnnotationFrame.AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
 
             // Initialize Author
             var authorId = j["creator"]["id"].str;
@@ -142,9 +142,10 @@ namespace ff.vr.annotate.datamodel
         private const string DateTimeFormat = "yyyy-MM-dd hh:mm:ss";
 
         private static string JSONTemplate = @"
+
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
-    'id': '{annotationGUID}',
+    '@id': '{annotationGUID}',
     'type': 'Annotation',
     'creator': {authorJSON},
     'created': '{createdTimestamp}',
@@ -161,10 +162,9 @@ namespace ff.vr.annotate.datamodel
         }
     ],
     'target': {
+        'id': '{{targetID}}',
         'type': 'http://vr-annotator/feature/',
-        'rootNodeId': '{rootNodeId}',
-        'targetNodeId': '{targetNodeId}',
-        'targetNodeName': '{targetNodeName}',
+        'targetNodeName':  '{targetNodeName}',
         'state': [
             {
                 'type': 'VRSimulation',
@@ -174,30 +174,30 @@ namespace ff.vr.annotate.datamodel
                     'timeOfDay': '{simulatedTimeofDay}'
                 }
             },
-            {
-                'type': 'InterpretiveReconstruction',
-                'refinedBy': '{interpretationStateJSON}',
-            },
-            {
-                'type': 'model',
-                'refinedBy': {
-                    'author' : '{modelAuthor}',
-                    'version' : '{modelVersion}',
-                },
-            }
         ],
         'selector': {
-                'type': 'SceneGraphSelector',
-                'value': '{sceneGraphPath}'
+                'type': 'nodeGraphPath',
+                'value': 'Stoa_komplett_low/Nordanbau/Phase_2_3',
+                'guidPath': '{guidPath}',
+            }
         },
-        'position': {
-            'type':'AnnotationLocation',
-            'AnnotationViewPoint': {viewPointPositionJSON},
-            'AnnotationCoordinates' : {annotationPositionJSON}
-        }
+
+        'annotationCoordiantes':[
+        {
+            'type':'GeoCoordinates',          
+            'annotationLatitude':'{annotationLatitude}',
+            'annotationLongitude':'{annotationLongitude}',
+            'annotationElevation':'{annotationElevation}',
+            'viewportLatitude':'{viewportLatitude}',
+            'viewportLongitude':'{viewportLongitude}',
+            'viewportElevation':'{viewportElevation}'
+        },
+        '{AnnotableNodeCoordinates}'                  
+        ],    
     }
 }
 ";
+
+
     }
 }
-

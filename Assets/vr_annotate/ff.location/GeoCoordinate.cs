@@ -7,7 +7,6 @@ namespace ff.location
     public class GeoCoordinate : ISerializationCallbackReceiver
     {
         public Vector3 position;
-        public Vector3 rotation;
 
         [SerializeField] string type = "GeoCoordinates";
         [SerializeField] string coordinateSystem = "Unity.WorldSpace";

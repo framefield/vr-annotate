@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using ff.vr.annotate;
+using System;
 
 namespace ff.nodegraph
 {
     public class NodeGraph : MonoBehaviour
     {
-        public string RootNodeId; // Iri
+        public Guid RootNodeId; // Iri
         public string objStateDescription = "";
         public string modelAuthor = "email@address.com";
         public string modelVersion = "v1";

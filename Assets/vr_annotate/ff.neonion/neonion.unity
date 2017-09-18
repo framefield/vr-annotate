@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PutAnnotation: 0
   GetAnnotation: 0
-  TargetName: 
+  TargetName: target001
 --- !u!1 &1207891047
 GameObject:
   m_ObjectHideFlags: 0
