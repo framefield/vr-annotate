@@ -86,14 +86,9 @@ namespace ff.vr.annotate.viz
                 TargetNodeId = contextNode.GUID,
                 TargetNode = contextNode,
                 Guid = System.Guid.NewGuid(),
-                AnnotationFrame = new Annotation.AnnotationAndViewPortPosition()
-                {
-                    AnnotationPosition = new GeoCoordinate() { position = position },
-                    ViewPortPosition = new GeoCoordinate()
-                    {
-                        position = Camera.main.transform.position,
-                    },
-                },
+
+                AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
+
                 Author = CurrentUserDefinition._instance != null
                                   ? CurrentUserDefinition._instance.CurrentUser
                                   : Person.AnonymousUser,
@@ -113,14 +108,9 @@ namespace ff.vr.annotate.viz
                 TargetNodeId = contextNode.GUID,
                 TargetNode = contextNode,
                 Guid = System.Guid.NewGuid(),
-                AnnotationFrame = new Annotation.AnnotationAndViewPortPosition()
-                {
-                    AnnotationPosition = new GeoCoordinate() { position = position },
-                    ViewPortPosition = new GeoCoordinate()
-                    {
-                        position = Camera.main.transform.position,
-                    },
-                },
+
+                AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
+
                 Author = CurrentUserDefinition._instance != null
                         ? CurrentUserDefinition._instance.CurrentUser
                         : Person.AnonymousUser,
@@ -137,7 +127,7 @@ namespace ff.vr.annotate.viz
         private AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
         {
             var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
-            newAnnotationGizmo.transform.position = annotation.AnnotationFrame.AnnotationPosition.position;
+            newAnnotationGizmo.transform.position = annotation.AnnotationPosition.position;
             newAnnotationGizmo.transform.SetParent(_gizmoContainer.transform, false);
             newAnnotationGizmo.Annotation = annotation;
             AllAnnotationGizmos.Add(newAnnotationGizmo);
@@ -153,7 +143,7 @@ namespace ff.vr.annotate.viz
 
             var nextGizmo = GetNextAnnotationGizmoOnNode(selectedAnnotationGizmo);
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
-            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationFrame.ViewPortPosition.position);
+            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
         }
 
         public AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
@@ -173,7 +163,7 @@ namespace ff.vr.annotate.viz
 
             var nextGizmo = GetPreviousAnnotationGizmoOnNode(selectedAnnotationGizmo);
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
-            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationFrame.ViewPortPosition.position);
+            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
         }
 
         public AnnotationGizmo GetPreviousAnnotationGizmoOnNode(AnnotationGizmo gizmo)

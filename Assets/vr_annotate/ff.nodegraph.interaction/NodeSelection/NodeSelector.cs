@@ -25,7 +25,7 @@ namespace ff.nodegraph.interaction
             NodeGraphs = FindObjectsOfType<NodeGraph>();
             foreach (var ng in NodeGraphs)
             {
-                Debug.Log("initializing graph:" + ng.name + " / " + ng.RootNodeId);
+                Debug.Log("initializing graph:" + ng.GUID);
             }
         }
 
@@ -51,26 +51,39 @@ namespace ff.nodegraph.interaction
             var guids = new List<string>(path.Split('/'));
             foreach (var ng in NodeGraphs)
             {
-                if (ng.RootNodeId.ToString() == guids[0])
+                if (ng.GUID.ToString() == guids[0])
                 {
                     var guidsCopy = guids;
                     var node = ng.Node;
+                    Debug.Log("searching for path " + path + "/n in " + node.Children);
                     guidsCopy.RemoveAt(0);
+                    Debug.Log("searching  " + guidsCopy[0] + "/n in " + node.Children);
 
-                    while (guidsCopy.Count != 0)
+                    while (guidsCopy.Count > 1)
                     {
                         var foundNextChild = false;
                         foreach (var child in node.Children)
                         {
+                            Debug.Log(child.GUID.ToString() + "=  ?  =" + guidsCopy[0] + " ..... at " + +guidsCopy.Count);
                             if (child.GUID.ToString() == guidsCopy[0])
                             {
                                 guidsCopy.RemoveAt(0);
+                                Debug.Log("found node");
+                                Debug.Log(guidsCopy[0] + " Count: " + guidsCopy.Count);
                                 node = child;
                                 foundNextChild = true;
+                                if (guidsCopy.Count <= 1)
+                                {
+                                    Debug.Log("returning " + node.GUID);
+                                    return node;
+                                }
                             }
                         }
                         if (!foundNextChild)
-                            Debug.LogWarningFormat("Scene does not contain reference to: {0} -> {1}", node, path);
+                        {
+                            Debug.LogErrorFormat("Scene does not contain reference to: {0} -> {1}", node.GUID, path);
+                            return null;
+                        }
                     }
                     return node;
                 }

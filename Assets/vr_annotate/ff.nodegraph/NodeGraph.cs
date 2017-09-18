@@ -8,7 +8,7 @@ namespace ff.nodegraph
 {
     public class NodeGraph : MonoBehaviour
     {
-        public Guid RootNodeId; // Iri
+        public Guid GUID; // Iri
         public string objStateDescription = "";
         public string modelAuthor = "email@address.com";
         public string modelVersion = "v1";
@@ -20,6 +20,7 @@ namespace ff.nodegraph
         private void Awake()
         {
             CreateNodesFromHierachy();
+            GUID = new Guid(GUIDGenerator.ExtractGUIDFromName(this.name));
         }
 
         private void CreateNodesFromHierachy()

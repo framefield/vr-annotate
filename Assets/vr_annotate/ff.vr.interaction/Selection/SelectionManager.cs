@@ -125,8 +125,5 @@ namespace ff.vr.interaction
         private AnnotationGizmo _selectedAnnotationGizmo;
 
         private Vector3 _selectionMarkerPosition;
-
-        private List<AnnotationPositionRenderer> _allActiveAnnotationPositionRenderer = new List<AnnotationPositionRenderer>();
-
     }
 }

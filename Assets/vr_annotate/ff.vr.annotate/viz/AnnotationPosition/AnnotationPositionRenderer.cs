@@ -113,7 +113,7 @@ namespace ff.vr.annotate.viz
 
                 if (RenderedAnnotationGizmo != null)
                 {
-                    var annotationInSilhouetteSpace = _silhouette.transform.InverseTransformPoint(RenderedAnnotationGizmo.Annotation.AnnotationFrame.AnnotationPosition.position);
+                    var annotationInSilhouetteSpace = _silhouette.transform.InverseTransformPoint(RenderedAnnotationGizmo.Annotation.AnnotationPosition.position);
                     if (annotationInSilhouetteSpace.x > 0)
                     {
                         _silhouette.transform.localScale = new Vector3(-1, 1, 1);
@@ -168,7 +168,7 @@ namespace ff.vr.annotate.viz
         {
             RenderedAnnotationGizmo = annotationGizmo;
             var annotation = RenderedAnnotationGizmo.Annotation;
-            transform.position = new Vector3(annotation.AnnotationFrame.ViewPortPosition.position.x, 0, annotation.AnnotationFrame.ViewPortPosition.position.z);
+            transform.position = new Vector3(annotation.AnnotationPosition.positionViewport.x, 0, annotation.AnnotationPosition.positionViewport.z);
 
             UpdateLine();
         }
@@ -176,7 +176,7 @@ namespace ff.vr.annotate.viz
         public void UpdateLine()
         {
             _lineStartPosition = _lineAnchor.position;
-            _lineEndPosition = RenderedAnnotationGizmo.Annotation.AnnotationFrame.AnnotationPosition.position;
+            _lineEndPosition = RenderedAnnotationGizmo.Annotation.AnnotationPosition.position;
 
             _lineToAnnotation.SetPosition(0, _lineStartPosition);
             _lineToAnnotation.SetPosition(1, _lineEndPosition);

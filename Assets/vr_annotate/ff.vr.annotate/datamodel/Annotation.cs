@@ -33,18 +33,11 @@ namespace ff.vr.annotate.datamodel
         public string TargetNodeName;
         public string RootNodeId;
 
-        public AnnotationAndViewPortPosition AnnotationFrame;
         public DateTime CreatedAt;
-
-        public struct AnnotationAndViewPortPosition
-        {
-            public GeoCoordinate AnnotationPosition;
-            public GeoCoordinate ViewPortPosition;
-        }
+        public GeoCoordinate AnnotationPosition;
 
         public string ToJson()
         {
-
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
 
                 {"annotationGUID", JsonLdId},
@@ -57,13 +50,9 @@ namespace ff.vr.annotate.datamodel
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
                 // {"interpretationStateJSON", "{}"},
                 {"guidPath", TargetNode.GuidPath},
-                { "annotationLatitude",AnnotationFrame.AnnotationPosition.latitude.ToString()},
-                { "annotationLongitude",AnnotationFrame.AnnotationPosition.longitude.ToString()},
-                { "annotationElevation",AnnotationFrame.AnnotationPosition.elevation.ToString()},
-                { "viewportLatitude", AnnotationFrame.ViewPortPosition.latitude.ToString()},
-                { "viewportLongitude", AnnotationFrame.ViewPortPosition.longitude.ToString()},
-                { "viewportElevation", AnnotationFrame.ViewPortPosition.elevation.ToString()},
-                { "AnnotableNodeCoordinates",BuildAnnotatableNodeCoordinates()},
+
+                { "position",JsonUtility.ToJson(AnnotationPosition)},
+                // { "AnnotableNodeCoordinates",BuildAnnotatableNodeCoordinates()},
             });
         }
 
@@ -81,14 +70,12 @@ namespace ff.vr.annotate.datamodel
 
         private string BuildAnnotatableNodeCoordinateForNode(Node annotatableNode)
         {
-            var annotationPositionLocal = annotatableNode.UnityObj.transform.InverseTransformPoint(AnnotationFrame.AnnotationPosition.position);
-            var viewPortPositionLocal = annotatableNode.UnityObj.transform.InverseTransformPoint(AnnotationFrame.ViewPortPosition.position);
+            var annotationPositionLocal = annotatableNode.UnityObj.transform.InverseTransformPoint(AnnotationPosition.position);
             var jsonSnippet = @"
             {
             'type':'AnnotableNodeCoordinate',
             'annotatableNodeId':'{" + annotatableNode.GUID + @"}',
             'annotationPosition':{ 'x':" + annotationPositionLocal.x + @",'y':" + annotationPositionLocal.y + @", 'z':" + annotationPositionLocal.z + @"},
-            'viewPortPosition':{ 'x':" + viewPortPositionLocal.x + @",'y':" + viewPortPositionLocal.y + @", 'z':" + viewPortPositionLocal.z + @"},
             },";
             return jsonSnippet;
         }
@@ -114,11 +101,11 @@ namespace ff.vr.annotate.datamodel
             if (NodeSelector.Instance != null)
                 TargetNode = NodeSelector.Instance.FindNodeFromGuidPath(nodePath);
 
-            var viewportPosition = new GeoCoordinate();
-
-
-            AnnotationFrame.ViewPortPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationViewPort"].ToString());
-            AnnotationFrame.AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"]["AnnotationCoordinates"].ToString());
+            Debug.Log(j["body"].ToString());
+            Debug.Log(j["target"].ToString());
+            Debug.Log(j["target"]["position"].ToString());
+            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"].ToString());
+            Debug.Log("Deserialized Position " + AnnotationPosition.position);
 
             // Initialize Author
             var authorId = j["creator"]["id"].str;
@@ -165,7 +152,7 @@ namespace ff.vr.annotate.datamodel
         'id': '{{targetID}}',
         'type': 'http://vr-annotator/feature/',
         'targetNodeName':  '{targetNodeName}',
-        'state': [
+        'state': 
             {
                 'type': 'VRSimulation',
                 'refinedBy': {
@@ -174,30 +161,16 @@ namespace ff.vr.annotate.datamodel
                     'timeOfDay': '{simulatedTimeofDay}'
                 }
             },
-        ],
         'selector': {
-                'type': 'nodeGraphPath',
-                'value': 'Stoa_komplett_low/Nordanbau/Phase_2_3',
-                'guidPath': '{guidPath}',
-            }
+            'type': 'nodeGraphPath',
+            'value': 'Stoa_komplett_low/Nordanbau/Phase_2_3',
+            'guidPath': '{guidPath}'
         },
-
-        'annotationCoordiantes':[
-        {
-            'type':'GeoCoordinates',          
-            'annotationLatitude':'{annotationLatitude}',
-            'annotationLongitude':'{annotationLongitude}',
-            'annotationElevation':'{annotationElevation}',
-            'viewportLatitude':'{viewportLatitude}',
-            'viewportLongitude':'{viewportLongitude}',
-            'viewportElevation':'{viewportElevation}'
-        },
-        '{AnnotableNodeCoordinates}'                  
-        ],    
+        'position':  {position}
+        
     }
 }
 ";
-
 
     }
 }
