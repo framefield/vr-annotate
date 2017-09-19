@@ -83,6 +83,9 @@ namespace ff.vr.annotate.viz
                 JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
                 foreach (var singleAnnotationJSON in allAnnotationJSON)
                 {
+                    if (singleAnnotationJSON["type"].str != "Annotation")
+                        continue;
+
                     var newAnnotation = new Annotation(singleAnnotationJSON);
                     if (newAnnotation.TargetNode == null)
                         continue;
