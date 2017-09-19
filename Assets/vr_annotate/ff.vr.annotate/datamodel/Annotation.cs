@@ -18,7 +18,12 @@ namespace ff.vr.annotate.datamodel
         public Annotation() { }
         public Annotation(string jsonString)
         {
-            DeserializeFromJson(jsonString);
+            var jsonObject = new JSONObject(jsonString);
+            DeserializeFromJson(jsonObject);
+        }
+        public Annotation(JSONObject jsonObject)
+        {
+            DeserializeFromJson(jsonObject);
         }
 
         public Guid Guid;
@@ -40,7 +45,7 @@ namespace ff.vr.annotate.datamodel
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
 
-                {"annotationGUID", JsonLdId},
+                {"annotationGUID", Guid.ToString()},
                 {"authorJSON", JsonUtility.ToJson(Author)},
                 {"createdTimestamp", CreatedAt.ToString()},
                 {"annotationText", Text},
@@ -48,11 +53,8 @@ namespace ff.vr.annotate.datamodel
                 {"targetNodeName", TargetNode.Name},
                 {"simulatedDate", AnnotationManager.Instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
-                // {"interpretationStateJSON", "{}"},
                 {"guidPath", TargetNode.GuidPath},
-
                 { "position",JsonUtility.ToJson(AnnotationPosition)},
-                // { "AnnotableNodeCoordinates",BuildAnnotatableNodeCoordinates()},
             });
         }
 
@@ -81,34 +83,25 @@ namespace ff.vr.annotate.datamodel
         }
 
 
-        public void DeserializeFromJson(string jsonString)
+        public void DeserializeFromJson(JSONObject jsonObject)
         {
-            JSONObject j = new JSONObject(jsonString);
+            var id = jsonObject["id"].str;
 
-            var uidMatchResult = new Regex(@"/(\/\d[a-f]-)/+", RegexOptions.IgnoreCase).Match(j["@id"].ToString());
-            if (uidMatchResult.Success)
-            {
-                Guid = new Guid(uidMatchResult.Groups[1].Value);
-            }
+            Guid = new Guid(id);
 
-            DateTime.TryParse(j["created"].str, out CreatedAt);
-            Text = j["body"][0]["value"].str;
+            DateTime.TryParse(jsonObject["created"].str, out CreatedAt);
+            Text = jsonObject["body"][0]["value"].str;
 
             // Initialize Target Object
-            var nodePath = j["target"]["selector"]["guidPath"].str;
-
+            var nodePath = jsonObject["target"]["selector"]["guidPath"].str;
 
             if (NodeSelector.Instance != null)
                 TargetNode = NodeSelector.Instance.FindNodeFromGuidPath(nodePath);
 
-            Debug.Log(j["body"].ToString());
-            Debug.Log(j["target"].ToString());
-            Debug.Log(j["target"]["position"].ToString());
-            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(j["target"]["position"].ToString());
-            Debug.Log("Deserialized Position " + AnnotationPosition.position);
+            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(jsonObject["target"]["position"].ToString());
 
             // Initialize Author
-            var authorId = j["creator"]["id"].str;
+            var authorId = jsonObject["creator"]["id"].str;
             if (Person.PeopleById.ContainsKey(authorId))
             {
                 Author = Person.PeopleById[authorId];
@@ -118,21 +111,19 @@ namespace ff.vr.annotate.datamodel
                 Author = new Person()
                 {
                     id = authorId,
-                    name = j["creator"]["name"].str,
-                    email = j["creator"]["email"].str,
+                    name = jsonObject["creator"]["name"].str,
+                    email = jsonObject["creator"]["email"].str,
                 };
                 Person.PeopleById[authorId] = Author;
             }
-            // Find Object Reference 
         }
 
         private const string DateTimeFormat = "yyyy-MM-dd hh:mm:ss";
-
         private static string JSONTemplate = @"
 
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
-    '@id': '{annotationGUID}',
+    'id': '{annotationGUID}',
     'type': 'Annotation',
     'creator': {authorJSON},
     'created': '{createdTimestamp}',

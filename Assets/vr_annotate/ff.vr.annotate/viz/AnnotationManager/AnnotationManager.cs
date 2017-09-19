@@ -10,6 +10,8 @@ using ff.utils;
 using ff.vr.annotate.datamodel;
 using ff.vr.annotate.helpers;
 using ff.nodegraph.interaction;
+using System.Collections;
+using UnityEngine.Networking;
 
 namespace ff.vr.annotate.viz
 {
@@ -43,13 +45,13 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.InputChanged += HandleInputChanged;
 
             if (OnStartupReadAllAnnotationFromDataBase)
-                ReadAllAnnotationsFromDatabase();
+                StartCoroutine(ReadAnnotationFromServer());
         }
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
 
 
-        private void ReadAllAnnotationsFromDatabase()
+        private void ReadAllAnnotationsFromLocalDirectory()
         {
             var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
             foreach (var file in filesInDirectory)
@@ -63,13 +65,62 @@ namespace ff.vr.annotate.viz
         }
 
 
+        public IEnumerator ReadAnnotationFromServer()
+        {
+            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/");
+
+            yield return www.Send();
+
+            if (www.isNetworkError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                Debug.Log("Download complete: ");
+                var allAnnotationsJson = www.downloadHandler.text;
+                Debug.Log(allAnnotationsJson);
+                JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
+                foreach (var singleAnnotationJSON in allAnnotationJSON)
+                {
+                    var newAnnotation = new Annotation(singleAnnotationJSON);
+                    if (newAnnotation.TargetNode == null)
+                        continue;
+
+                    CreateAnnotationGizmo(newAnnotation);
+                }
+            }
+        }
+
+        private void WriteAnnotationToLocalDirectory(Annotation annotation)
+        {
+            var annotationJson = _lastCreatedAnnotation.ToJson();
+
+            File.WriteAllText(AnnotationDirectory + _lastCreatedAnnotation.Guid + ".json", annotationJson);
+        }
+
+        private IEnumerator WriteAnnotationToDataBase(Annotation annotation)
+        {
+            var annotationJson = _lastCreatedAnnotation.ToJson();
+
+            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + annotation.Guid.ToString(), System.Text.Encoding.UTF8.GetBytes(annotationJson));
+            www.SetRequestHeader("Content-Type", "application/json");
+
+            yield return www.Send();
+
+            if (www.isNetworkError)
+                Debug.Log(www.error);
+            else
+                Debug.Log("Upload complete with: " + www.error);
+        }
+
+
+
         private void HandleInputCompleted()
         {
             _keyboardEnabler.Hide();
             _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
-            _lastCreatedAnnotation.ToJson();
-
-            File.WriteAllText(AnnotationDirectory + _lastCreatedAnnotation.Guid + ".json", _lastCreatedAnnotation.ToJson());
+            StartCoroutine(WriteAnnotationToDataBase(_lastCreatedAnnotation));
         }
 
 
@@ -146,6 +197,7 @@ namespace ff.vr.annotate.viz
             teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
         }
 
+
         public AnnotationGizmo GetNextAnnotationGizmoOnNode(AnnotationGizmo gizmo)
         {
             var relevantAnnotations = GetAllAnnotationsGizmosOnNode(gizmo.Annotation.TargetNode);
@@ -154,6 +206,7 @@ namespace ff.vr.annotate.viz
                 i++;
             return relevantAnnotations[(i + 1) % relevantAnnotations.Count];
         }
+
 
         public void GoToPreviousAnnotation(Teleportation teleportation)
         {
@@ -165,6 +218,7 @@ namespace ff.vr.annotate.viz
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
             teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
         }
+
 
         public AnnotationGizmo GetPreviousAnnotationGizmoOnNode(AnnotationGizmo gizmo)
         {

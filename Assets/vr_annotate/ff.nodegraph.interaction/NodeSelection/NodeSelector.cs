@@ -45,7 +45,6 @@ namespace ff.nodegraph.interaction
         }
 
 
-
         public Node FindNodeFromGuidPath(string path)
         {
             var guids = new List<string>(path.Split('/'));
@@ -55,26 +54,20 @@ namespace ff.nodegraph.interaction
                 {
                     var guidsCopy = guids;
                     var node = ng.Node;
-                    Debug.Log("searching for path " + path + "/n in " + node.Children);
                     guidsCopy.RemoveAt(0);
-                    Debug.Log("searching  " + guidsCopy[0] + "/n in " + node.Children);
 
                     while (guidsCopy.Count > 1)
                     {
                         var foundNextChild = false;
                         foreach (var child in node.Children)
                         {
-                            Debug.Log(child.GUID.ToString() + "=  ?  =" + guidsCopy[0] + " ..... at " + +guidsCopy.Count);
                             if (child.GUID.ToString() == guidsCopy[0])
                             {
                                 guidsCopy.RemoveAt(0);
-                                Debug.Log("found node");
-                                Debug.Log(guidsCopy[0] + " Count: " + guidsCopy.Count);
                                 node = child;
                                 foundNextChild = true;
                                 if (guidsCopy.Count <= 1)
                                 {
-                                    Debug.Log("returning " + node.GUID);
                                     return node;
                                 }
                             }
