@@ -104,36 +104,23 @@ namespace ff.vr.annotate.datamodel
 
         #region deserialization
 
-
         private IEnumerator SyncCoroutine()
         {
-            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/");
+            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/" + Guid);
             yield return www.Send();
 
             if (www.isNetworkError)
                 Debug.Log(www.error);
-            else
-                Debug.Log("Download complete: " + www.downloadHandler.text);
 
-            var jsonObjectForServer = new JSONObject(www.downloadHandler.text);
-
-            bool targetExistsInDB = false;
-            foreach (var targetJSON in jsonObjectForServer)
-            {
-                if (targetJSON["id"].str == Guid.ToString())
-                    targetExistsInDB = true;
-            }
-
-            if (targetExistsInDB)
-            {
-                Debug.Log("Target " + Guid.ToString() + " allready exists in Database.");
-            }
-            else
+            if (www.responseCode == 404)
             {
                 yield return WriteTargetToServer();
                 Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
             }
-
+            else
+            {
+                Debug.Log("Found Target " + Guid.ToString() + " on  Server");
+            }
         }
 
         private List<JSONObject> ReadAllTargetsFromLocalDirectory()
@@ -183,7 +170,7 @@ namespace ff.vr.annotate.datamodel
                 '@base': 'http://annotator/target/'
             },
             'id' : '{id}',
-            '@type': '@AnnotationTarget',
+            'type': '@AnnotationTarget',
             'creator': {'id':'_alan','name':'Alan','email':'alan @google.com'},
             'created': '7/10/2017 7:02:44 PM',
             'generator': 
