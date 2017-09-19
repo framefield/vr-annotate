@@ -43,6 +43,16 @@ namespace ff.nodegraph
             }
         }
 
+        [MenuItem("vr-annotate/Sync all Targets with Server")]
+        public static void SyncAllTargetsWithServer()
+        {
+            Target[] targets = FindObjectsOfType(typeof(Target)) as Target[];
+            foreach (var t in targets)
+            {
+                t.SyncWithDataBase();
+            }
+        }
+
         public static String ExtractGUIDFromName(string name)
         {
             var match = Regex.Match(name, GUIDPattern);
