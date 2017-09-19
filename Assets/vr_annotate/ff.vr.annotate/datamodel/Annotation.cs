@@ -30,7 +30,7 @@ namespace ff.vr.annotate.datamodel
         const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
         public string JsonLdId { get { return ANNOTATION_ID_PREFIX + Guid; } }
         public Person Author;
-        public string Text;
+        public string Text = "";
 
         [System.NonSerializedAttribute]
         public Node TargetNode;

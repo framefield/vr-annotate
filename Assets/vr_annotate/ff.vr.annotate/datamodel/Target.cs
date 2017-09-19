@@ -42,30 +42,15 @@ namespace ff.vr.annotate.datamodel
                 SyncWithDataBase();
                 SyncWithDataBaseTrigger = false;
             }
-
         }
-        private JSONObject jsonObjectForServer;
+
         private void SyncWithDataBase()
         {
-            StartCoroutine(ReadAllTargetsFromServer());
+            StartCoroutine(SyncCoroutine());
 
-            bool targetExistsInDB = false;
-            foreach (var targetJSON in jsonObjectForServer)
-            {
-                if (targetJSON["@targetGUID"].str == Guid.ToString())
-                    targetExistsInDB = true;
-            }
 
-            if (targetExistsInDB)
-            {
-                Debug.Log("Target " + Guid.ToString() + " allready exists in Database.");
-            }
-            else
-            {
-                WriteTargetToServer();
-                Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
-            }
         }
+
 
 
         #region serialization
@@ -76,14 +61,14 @@ namespace ff.vr.annotate.datamodel
 
         }
 
-        private void WriteTargetToServer()
+        private IEnumerator WriteTargetToServer()
         {
             var targetJson = ToJson();
 
             UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + Guid, System.Text.Encoding.UTF8.GetBytes(targetJson));
             www.SetRequestHeader("Content-Type", "application/json");
 
-            www.Send();
+            yield return www.Send();
 
             if (www.isNetworkError)
                 Debug.Log(www.error);
@@ -94,7 +79,7 @@ namespace ff.vr.annotate.datamodel
         public string ToJson()
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
-                {"@id",  Guid.ToString()},
+                {"id",  Guid.ToString()},
                 {"nodeGraph", SerializeNodeTreeRecursive(Node).Replace("'", "\"")},
             });
         }
@@ -120,7 +105,7 @@ namespace ff.vr.annotate.datamodel
         #region deserialization
 
 
-        private IEnumerator ReadAllTargetsFromServer()
+        private IEnumerator SyncCoroutine()
         {
             UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/");
             yield return www.Send();
@@ -130,7 +115,24 @@ namespace ff.vr.annotate.datamodel
             else
                 Debug.Log("Download complete: " + www.downloadHandler.text);
 
-            jsonObjectForServer = new JSONObject(www.downloadHandler.text);
+            var jsonObjectForServer = new JSONObject(www.downloadHandler.text);
+
+            bool targetExistsInDB = false;
+            foreach (var targetJSON in jsonObjectForServer)
+            {
+                if (targetJSON["id"].str == Guid.ToString())
+                    targetExistsInDB = true;
+            }
+
+            if (targetExistsInDB)
+            {
+                Debug.Log("Target " + Guid.ToString() + " allready exists in Database.");
+            }
+            else
+            {
+                yield return WriteTargetToServer();
+                Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
+            }
 
         }
 
@@ -148,7 +150,7 @@ namespace ff.vr.annotate.datamodel
         public static Target DeserializeFromJson(JSONObject jsonObject)
         {
             var newTarget = new Target();
-            newTarget.GUID = new Guid(jsonObject["@id"].str);
+            newTarget.GUID = new Guid(jsonObject["id"].str);
             newTarget.Node = DeserializeGraph(jsonObject["nodeGraph"]);
             return newTarget;
         }
@@ -180,7 +182,7 @@ namespace ff.vr.annotate.datamodel
                 '@vocab':'http://www.w3.org/ns/target.jsonld',
                 '@base': 'http://annotator/target/'
             },
-            '@id' : '{@id}',
+            'id' : '{id}',
             '@type': '@AnnotationTarget',
             'creator': {'id':'_alan','name':'Alan','email':'alan @google.com'},
             'created': '7/10/2017 7:02:44 PM',
