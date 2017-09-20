@@ -127,7 +127,7 @@ namespace ff.nodegraph
                 foreach (var singleAnnotationJSON in allAnnotationJSON)
                 {
                     Debug.Log("Downloaded annotation: " + singleAnnotationJSON);
-                    if (singleAnnotationJSON["@type"].str != "Annotation")
+                    if (singleAnnotationJSON["type"].str != "Annotation")
                         continue;
 
                     var newAnnotation = new Annotation(singleAnnotationJSON);
