@@ -25,30 +25,43 @@ namespace ff.nodegraph
             DeserializeFromJson(jSONObject);
         }
 
-        public Guid Guid;
+        private Guid Guid;
 
-        const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
+        const string TARGET_ID_PREFIX = "target:";
 
-        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + Guid; } }
+        public string JsonLdId { get { return TARGET_ID_PREFIX + Guid; } }
 
-        public string TargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
+        public string LocalTargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
+
+        const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
+
+        public string TargetURI { get { return SERVER_TARGETS_URI + JsonLdId; } }
+
+        public DataBaseLocation DataBaseLocationToUse;
+        public enum DataBaseLocation
+        {
+            localDirectory,
+            rest
+        }
 
         public void SyncWithDataBase()
         {
-            StartCoroutine(SyncCoroutine());
+            if (DataBaseLocationToUse == DataBaseLocation.rest)
+                StartCoroutine(SyncCoroutine());
+            else
+                WriteTargetToLocalDirectory();
         }
 
         #region serialization
 
         private void WriteTargetToLocalDirectory()
         {
-            File.WriteAllText(TargetDirectory + Guid + ".json", ToJson());
-
+            File.WriteAllText(LocalTargetDirectory + JsonLdId + ".json", ToJson());
         }
 
         private IEnumerator SyncCoroutine()
         {
-            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/" + Guid);
+            UnityWebRequest www = UnityWebRequest.Get(TargetURI);
             yield return www.Send();
 
             if (www.isNetworkError)
@@ -62,6 +75,7 @@ namespace ff.nodegraph
                 yield return WriteTargetToServer();
                 Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
             }
+
             Debug.Log("Found Target " + Guid.ToString() + " on  Server");
         }
 
@@ -69,7 +83,7 @@ namespace ff.nodegraph
         {
             var targetJson = ToJson();
 
-            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + Guid, System.Text.Encoding.UTF8.GetBytes(targetJson));
+            UnityWebRequest www = UnityWebRequest.Put(TargetURI, System.Text.Encoding.UTF8.GetBytes(targetJson));
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.Send();
@@ -79,21 +93,20 @@ namespace ff.nodegraph
                 Debug.Log(www.error);
                 yield break;
             }
-
             Debug.Log("Upload complete with: " + www.error);
         }
 
         public string ToJson()
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
-                {"id",  Guid.ToString()},
+                {"@id",  Guid.ToString()},
                 {"nodeGraph", SerializeNodeTreeRecursive(Node).Replace("'", "\"")},
             });
         }
 
         private string SerializeNodeTreeRecursive(Node currentNode)
         {
-            var json = "{ \"@guid\" : \" " + currentNode.GUID.ToString() + " \",  \"children\" : [";
+            var json = "{ \"nodeId\" : \" " + currentNode.GUID.ToString() + " \",  \"children\" : [";
 
             for (int i = 0; i < currentNode.Children.Length; i++)
             {
@@ -115,7 +128,7 @@ namespace ff.nodegraph
         private List<JSONObject> ReadAllTargetsFromLocalDirectory()
         {
             var allNodes = new List<JSONObject>();
-            var filesInDirectory = Directory.GetFiles(TargetDirectory, "*.json");
+            var filesInDirectory = Directory.GetFiles(LocalTargetDirectory, "*.json");
             foreach (var file in filesInDirectory)
             {
                 allNodes.Add(new JSONObject(File.ReadAllText(file)));
@@ -126,7 +139,7 @@ namespace ff.nodegraph
         public static Target DeserializeFromJson(JSONObject jsonObject)
         {
             var newTarget = new Target();
-            newTarget.GUID = new Guid(jsonObject["id"].str);
+            newTarget.GUID = new Guid(jsonObject["@id"].str);
             newTarget.Node = DeserializeGraph(jsonObject["nodeGraph"]);
             return newTarget;
         }
@@ -135,7 +148,7 @@ namespace ff.nodegraph
         {
             var newNode = new Node();
 
-            var GUIDString = jsonObject["@guid"].str;
+            var GUIDString = jsonObject["nodeId"].str;
             newNode.GUID = new Guid(GUIDString);
 
             var children = new List<Node>();
@@ -143,8 +156,8 @@ namespace ff.nodegraph
             {
                 children.Add(DeserializeGraph(childJsonNode));
             }
-
             newNode.Children = children.ToArray();
+
             return newNode;
         }
 
@@ -158,7 +171,7 @@ namespace ff.nodegraph
                 '@vocab':'http://www.w3.org/ns/target.jsonld',
                 '@base': 'http://annotator/target/'
             },
-            'id' : '{id}',
+            '@id' : '{@id}',
             'type': '@AnnotationTarget',
             'creator': {'id':'_alan','name':'Alan','email':'alan @google.com'},
             'created': '7/10/2017 7:02:44 PM',

@@ -26,17 +26,23 @@ namespace ff.vr.annotate.datamodel
             DeserializeFromJson(jsonObject);
         }
 
-        public Guid Guid;
-        const string ANNOTATION_ID_PREFIX = "http://annotator/anno/";
-        public string JsonLdId { get { return ANNOTATION_ID_PREFIX + Guid; } }
+        public ID JsonLdId;
+
+        public string LocalAnnotationsDirectory { get { return Application.dataPath + "/db/targets/"; } }
+
+        public string AnnotationURILocal { get { return LocalAnnotationsDirectory + JsonLdId + ".json"; } }
+
+        const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
+
+        public string AnnotationURIRemote { get { return SERVER_TARGETS_URI + TargetNode.GUID + JsonLdId; } }
+
+
+
         public Person Author;
         public string Text;
 
         [System.NonSerializedAttribute]
         public Node TargetNode;
-        public System.Guid TargetNodeId;
-        public string TargetNodeName;
-        public string RootNodeId;
 
         public DateTime CreatedAt;
         public GeoCoordinate AnnotationPosition;
@@ -45,11 +51,11 @@ namespace ff.vr.annotate.datamodel
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
 
-                {"annotationGUID", Guid.ToString()},
+                {"@id", JsonLdId.ToString()},
                 {"authorJSON", JsonUtility.ToJson(Author)},
                 {"createdTimestamp", CreatedAt.ToString()},
                 {"annotationText", Text},
-                {"targetID", TargetNodeId.ToString()},
+                {"targetID", TargetNode.GUID.ToString()},
                 {"targetNodeName", TargetNode.Name},
                 {"simulatedDate", AnnotationManager.Instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
@@ -87,7 +93,7 @@ namespace ff.vr.annotate.datamodel
         {
             var id = jsonObject["id"].str;
 
-            Guid = new Guid(id);
+            JsonLdId = new ID(id);
 
             DateTime.TryParse(jsonObject["created"].str, out CreatedAt);
             Text = jsonObject["body"][0]["value"].str;
@@ -123,7 +129,7 @@ namespace ff.vr.annotate.datamodel
 
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
-    'id': '{annotationGUID}',
+    '@id': '{@id}',
     'type': 'Annotation',
     'creator': {authorJSON},
     'created': '{createdTimestamp}',
@@ -154,7 +160,6 @@ namespace ff.vr.annotate.datamodel
             },
         'selector': {
             'type': 'nodeGraphPath',
-            'value': 'Stoa_komplett_low/Nordanbau/Phase_2_3',
             'guidPath': '{guidPath}'
         },
         'position':  {position}

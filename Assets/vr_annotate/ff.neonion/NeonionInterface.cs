@@ -37,7 +37,7 @@ public class NeonionInterface : MonoBehaviour
             var a = new Annotation(File.ReadAllText(file));
             var aJson = a.ToJson();
 
-            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + a.Guid, System.Text.Encoding.UTF8.GetBytes(aJson));
+            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + a.JsonLdId, System.Text.Encoding.UTF8.GetBytes(aJson));
             www.SetRequestHeader("Content-Type", "application/json");
             yield return www.Send();
 

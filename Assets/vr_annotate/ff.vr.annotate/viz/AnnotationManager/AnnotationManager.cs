@@ -97,25 +97,25 @@ namespace ff.vr.annotate.viz
         {
             var annotationJson = _lastCreatedAnnotation.ToJson();
 
-            File.WriteAllText(AnnotationDirectory + _lastCreatedAnnotation.Guid + ".json", annotationJson);
+            File.WriteAllText(_lastCreatedAnnotation.AnnotationURILocal, annotationJson);
         }
 
         private IEnumerator WriteAnnotationToServer(Annotation annotation)
         {
             var annotationJson = _lastCreatedAnnotation.ToJson();
 
-            UnityWebRequest www = UnityWebRequest.Put("http://127.0.0.1:8301/targets/" + annotation.Guid.ToString(), System.Text.Encoding.UTF8.GetBytes(annotationJson));
+            UnityWebRequest www = UnityWebRequest.Put(annotation.AnnotationURIRemote, System.Text.Encoding.UTF8.GetBytes(annotationJson));
             www.SetRequestHeader("Content-Type", "application/json");
 
             yield return www.Send();
 
             if (www.isNetworkError)
+            {
                 Debug.Log(www.error);
-            else
-                Debug.Log("Upload complete with: " + www.error);
+                yield break;
+            }
+            Debug.Log("Upload complete with: " + www.error);
         }
-
-
 
         private void HandleInputCompleted()
         {
@@ -123,7 +123,6 @@ namespace ff.vr.annotate.viz
             _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
             StartCoroutine(WriteAnnotationToServer(_lastCreatedAnnotation));
         }
-
 
         private void HandleInputChanged(string newText)
         {
@@ -135,9 +134,8 @@ namespace ff.vr.annotate.viz
         {
             var newAnnotation = new Annotation()
             {
-                TargetNodeId = contextNode.GUID,
                 TargetNode = contextNode,
-                Guid = System.Guid.NewGuid(),
+                JsonLdId = new ID(ID.IDType.Annotation),
 
                 AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
 
@@ -156,9 +154,8 @@ namespace ff.vr.annotate.viz
         {
             var newAnnotation = new Annotation()
             {
-                TargetNodeId = contextNode.GUID,
                 TargetNode = contextNode,
-                Guid = System.Guid.NewGuid(),
+                JsonLdId = new ID(ID.IDType.Annotation),
 
                 AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
 
