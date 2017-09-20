@@ -26,7 +26,7 @@ namespace ff.vr.annotate.datamodel
             DeserializeFromJson(jsonObject);
         }
 
-        public ID JsonLdId;
+        public LinkedDataID JsonLdId;
 
         public string LocalAnnotationsDirectory { get { return Application.dataPath + "/db/targets/"; } }
 
@@ -48,6 +48,7 @@ namespace ff.vr.annotate.datamodel
 
         public DateTime CreatedAt;
         public GeoCoordinate AnnotationPosition;
+        public GeoCoordinate ViewPortPosition;
 
         public string ToJson()
         {
@@ -62,10 +63,12 @@ namespace ff.vr.annotate.datamodel
                 {"simulatedDate", AnnotationManager.Instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
                 {"guidPath", TargetNode.GuidPath},
-                { "position",JsonUtility.ToJson(AnnotationPosition)},
+                { "annotationPosition",JsonUtility.ToJson(AnnotationPosition)},
+                { "viewPortPosition",JsonUtility.ToJson(ViewPortPosition)},
             });
         }
 
+        // toDo: use this method to store annotations local position in each node along the graph
         private string BuildAnnotatableNodeCoordinates()
         {
             string annotableNodeCoordinates = "";
@@ -95,7 +98,7 @@ namespace ff.vr.annotate.datamodel
         {
             var id = jsonObject["id"].str;
 
-            JsonLdId = new ID(id);
+            JsonLdId = new LinkedDataID(id);
 
             DateTime.TryParse(jsonObject["created"].str, out CreatedAt);
             Text = jsonObject["body"][0]["value"].str;
@@ -106,7 +109,8 @@ namespace ff.vr.annotate.datamodel
             if (NodeSelector.Instance != null)
                 TargetNode = NodeSelector.Instance.FindNodeFromGuidPath(nodePath);
 
-            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(jsonObject["target"]["position"].ToString());
+            AnnotationPosition = JsonUtility.FromJson<GeoCoordinate>(jsonObject["target"]["annotationPosition"].ToString());
+            ViewPortPosition = JsonUtility.FromJson<GeoCoordinate>(jsonObject["target"]["viewPortPosition"].ToString());
 
             // Initialize Author
             var authorId = jsonObject["creator"]["id"].str;
@@ -164,7 +168,8 @@ namespace ff.vr.annotate.datamodel
             'type': 'nodeGraphPath',
             'guidPath': '{guidPath}'
         },
-        'position':  {position}
+        'annotationPosition':  {annotationPosition},
+        'viewPortPosition':  {viewPortPosition}
         
     }
 }

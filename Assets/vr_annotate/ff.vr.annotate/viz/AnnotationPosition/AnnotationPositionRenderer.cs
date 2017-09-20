@@ -168,7 +168,7 @@ namespace ff.vr.annotate.viz
         {
             RenderedAnnotationGizmo = annotationGizmo;
             var annotation = RenderedAnnotationGizmo.Annotation;
-            transform.position = new Vector3(annotation.AnnotationPosition.positionViewport.x, 0, annotation.AnnotationPosition.positionViewport.z);
+            transform.position = new Vector3(annotation.ViewPortPosition.position.x, 0, annotation.ViewPortPosition.position.z);
 
             UpdateLine();
         }

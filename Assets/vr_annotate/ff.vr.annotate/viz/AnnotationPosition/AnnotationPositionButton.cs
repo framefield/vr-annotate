@@ -53,7 +53,7 @@ namespace ff.vr.annotate.viz
 
         public Vector3 GetTeleportationTarget(AnnotationGizmo gizmo)
         {
-            var teleportationTarget = gizmo.Annotation.AnnotationPosition.positionViewport;
+            var teleportationTarget = gizmo.Annotation.ViewPortPosition.position;
             return new Vector3(teleportationTarget.x, 0, teleportationTarget.z);
         }
 
