@@ -13,7 +13,7 @@ using System.IO;
 using System.Collections;
 using UnityEngine.Networking;
 
-namespace ff.vr.annotate.datamodel
+namespace ff.nodegraph
 {
     [System.Serializable]
     public class Target : NodeGraph
@@ -33,25 +33,10 @@ namespace ff.vr.annotate.datamodel
 
         public string TargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
 
-        public bool SyncWithDataBaseTrigger;
-
-        void Update()
-        {
-            if (SyncWithDataBaseTrigger)
-            {
-                SyncWithDataBase();
-                SyncWithDataBaseTrigger = false;
-            }
-        }
-
-        private void SyncWithDataBase()
+        public void SyncWithDataBase()
         {
             StartCoroutine(SyncCoroutine());
-
-
         }
-
-
 
         #region serialization
 
@@ -59,6 +44,25 @@ namespace ff.vr.annotate.datamodel
         {
             File.WriteAllText(TargetDirectory + Guid + ".json", ToJson());
 
+        }
+
+        private IEnumerator SyncCoroutine()
+        {
+            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/" + Guid);
+            yield return www.Send();
+
+            if (www.isNetworkError)
+            {
+                Debug.Log(www.error);
+                yield break;
+            }
+
+            if (www.responseCode == 404)
+            {
+                yield return WriteTargetToServer();
+                Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
+            }
+            Debug.Log("Found Target " + Guid.ToString() + " on  Server");
         }
 
         private IEnumerator WriteTargetToServer()
@@ -71,9 +75,12 @@ namespace ff.vr.annotate.datamodel
             yield return www.Send();
 
             if (www.isNetworkError)
+            {
                 Debug.Log(www.error);
-            else
-                Debug.Log("Upload complete with: " + www.error);
+                yield break;
+            }
+
+            Debug.Log("Upload complete with: " + www.error);
         }
 
         public string ToJson()
@@ -104,24 +111,6 @@ namespace ff.vr.annotate.datamodel
 
         #region deserialization
 
-        private IEnumerator SyncCoroutine()
-        {
-            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/" + Guid);
-            yield return www.Send();
-
-            if (www.isNetworkError)
-                Debug.Log(www.error);
-
-            if (www.responseCode == 404)
-            {
-                yield return WriteTargetToServer();
-                Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
-            }
-            else
-            {
-                Debug.Log("Found Target " + Guid.ToString() + " on  Server");
-            }
-        }
 
         private List<JSONObject> ReadAllTargetsFromLocalDirectory()
         {

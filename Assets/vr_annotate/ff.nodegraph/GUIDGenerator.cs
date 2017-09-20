@@ -43,7 +43,7 @@ namespace ff.nodegraph
             }
         }
 
-        [MenuItem("vr-annotate/Sync all Targets with Server")]
+        [MenuItem("vr-annotate/Write all Target to Databse")]
         public static void SyncAllTargetsWithServer()
         {
             Target[] targets = FindObjectsOfType(typeof(Target)) as Target[];
@@ -56,7 +56,6 @@ namespace ff.nodegraph
         public static String ExtractGUIDFromName(string name)
         {
             var match = Regex.Match(name, GUIDPattern);
-            // Debug.Log("match " + GUIDPattern + " in " + name);
             if (match.Success)
             {
                 var guidString = match.Captures[0].Value;

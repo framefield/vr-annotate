@@ -15,24 +15,23 @@ using UnityEngine.Networking;
 
 namespace ff.vr.annotate.viz
 {
-    /* 
+    /** 
         A singleton, that handles loading and adding annotations
         - Can be selected.
         - Can be hovered.
         - We be generated on the fly
         - Is grouped under a Annotations-Group
     */
+
     public class AnnotationManager : Singleton<AnnotationManager>
     {
         public string SimulatedYear = "300 BC";
         public string SimulatedTimeOfDay = "18:23:12";
 
-        private List<Annotation> AllAnnotations = new List<Annotation>();
         private List<AnnotationGizmo> AllAnnotationGizmos = new List<AnnotationGizmo>();
 
         public AnnotationGizmo _annotationGizmoPrefab;
-        public bool OnStartupReadAllAnnotationFromDataBase;
-
+        public bool EnableInitializationFromDataBase;
 
         void Start()
         {
@@ -44,12 +43,11 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.InputCompleted += HandleInputCompleted;
             _keyboardEnabler.InputChanged += HandleInputChanged;
 
-            if (OnStartupReadAllAnnotationFromDataBase)
+            if (EnableInitializationFromDataBase)
                 StartCoroutine(ReadAnnotationFromServer());
         }
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
-
 
         private void ReadAllAnnotationsFromLocalDirectory()
         {
@@ -74,13 +72,13 @@ namespace ff.vr.annotate.viz
             if (www.isNetworkError)
             {
                 Debug.Log(www.error);
+                yield break;
             }
             else
             {
-                Debug.Log("Download complete: ");
                 var allAnnotationsJson = www.downloadHandler.text;
-                Debug.Log(allAnnotationsJson);
                 JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
+
                 foreach (var singleAnnotationJSON in allAnnotationJSON)
                 {
                     if (singleAnnotationJSON["type"].str != "Annotation")
@@ -102,7 +100,7 @@ namespace ff.vr.annotate.viz
             File.WriteAllText(AnnotationDirectory + _lastCreatedAnnotation.Guid + ".json", annotationJson);
         }
 
-        private IEnumerator WriteAnnotationToDataBase(Annotation annotation)
+        private IEnumerator WriteAnnotationToServer(Annotation annotation)
         {
             var annotationJson = _lastCreatedAnnotation.ToJson();
 
@@ -123,7 +121,7 @@ namespace ff.vr.annotate.viz
         {
             _keyboardEnabler.Hide();
             _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
-            StartCoroutine(WriteAnnotationToDataBase(_lastCreatedAnnotation));
+            StartCoroutine(WriteAnnotationToServer(_lastCreatedAnnotation));
         }
 
 
@@ -149,7 +147,6 @@ namespace ff.vr.annotate.viz
                 CreatedAt = DateTime.Now,
             };
 
-            AllAnnotations.Add(newAnnotation);
             _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
         }
@@ -171,7 +168,6 @@ namespace ff.vr.annotate.viz
                 CreatedAt = DateTime.Now,
             };
 
-            AllAnnotations.Add(newAnnotation);
             _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
             _keyboardEnabler.Show();
@@ -243,7 +239,6 @@ namespace ff.vr.annotate.viz
             }
             return annotationsThatTargetNode;
         }
-
 
         private Annotation _lastCreatedAnnotation;
         private AnnotationGizmo _focusedAnnotationGizmo;
