@@ -32,7 +32,7 @@ public class AnnotationGeneratorForPerformance : MonoBehaviour
                 _data.FrameTimeOverAnnotation.Add(Time.deltaTime);
                 _data.BatchesOverAnnotation.Add(UnityStats.batches);
             }
-            AnnotationManager.Instance.CreateDummyAnnotation(SelectionManager.Instance.SelectedNode, 5 * Random.insideUnitSphere);
+            AnnotationManager.Instance.CreateDummyAnnotationForPerformanceTest(SelectionManager.Instance.SelectedNode, 5 * Random.insideUnitSphere);
             GeneratedAnnotations++;
         }
         if (Input.GetKeyDown(KeyCode.Space))

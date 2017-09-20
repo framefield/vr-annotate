@@ -25,11 +25,14 @@ namespace ff.nodegraph
             DeserializeFromJson(jSONObject);
         }
 
-        private Guid Guid;
-
-        const string TARGET_ID_PREFIX = "target:";
-
-        public string JsonLdId { get { return TARGET_ID_PREFIX + Guid; } }
+        public ID JsonLdId
+        {
+            get
+            {
+                Debug.Log(Node.GUID);
+                return new ID(ID.IDType.Target, Node.GUID);
+            }
+        }
 
         public string LocalTargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
 
@@ -38,10 +41,11 @@ namespace ff.nodegraph
         public string TargetURI { get { return SERVER_TARGETS_URI + JsonLdId; } }
 
         public DataBaseLocation DataBaseLocationToUse;
+
         public enum DataBaseLocation
         {
-            localDirectory,
-            rest
+            rest,
+            localDirectory
         }
 
         public void SyncWithDataBase()
@@ -73,10 +77,10 @@ namespace ff.nodegraph
             if (www.responseCode == 404)
             {
                 yield return WriteTargetToServer();
-                Debug.Log("Wrote Target " + Guid.ToString() + " to  Server");
+                Debug.Log("Wrote Target " + JsonLdId.ToString() + " to  Server");
             }
 
-            Debug.Log("Found Target " + Guid.ToString() + " on  Server");
+            Debug.Log("Found Target " + JsonLdId.ToString() + " on  Server");
         }
 
         private IEnumerator WriteTargetToServer()
@@ -99,7 +103,7 @@ namespace ff.nodegraph
         public string ToJson()
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
-                {"@id",  Guid.ToString()},
+                {"@id",  JsonLdId.ToString()},
                 {"nodeGraph", SerializeNodeTreeRecursive(Node).Replace("'", "\"")},
             });
         }
@@ -171,7 +175,7 @@ namespace ff.nodegraph
                 '@vocab':'http://www.w3.org/ns/target.jsonld',
                 '@base': 'http://annotator/target/'
             },
-            '@id' : '{@id}',
+            'id' : '{@id}',
             'type': '@AnnotationTarget',
             'creator': {'id':'_alan','name':'Alan','email':'alan @google.com'},
             'created': '7/10/2017 7:02:44 PM',

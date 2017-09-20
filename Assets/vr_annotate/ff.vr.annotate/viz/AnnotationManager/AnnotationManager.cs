@@ -65,31 +65,37 @@ namespace ff.vr.annotate.viz
 
         public IEnumerator ReadAnnotationFromServer()
         {
-            UnityWebRequest www = UnityWebRequest.Get("http://127.0.0.1:8301/targets/");
-
-            yield return www.Send();
-
-            if (www.isNetworkError)
+            Debug.Log("ReadAnnotationFromServer");
+            foreach (var target in FindObjectsOfType<Target>())
             {
-                Debug.Log(www.error);
-                yield break;
-            }
-            else
-            {
-                var allAnnotationsJson = www.downloadHandler.text;
-                JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
+                Debug.Log("downloading ... " + target.TargetURI);
+                UnityWebRequest www = UnityWebRequest.Get(target.TargetURI + "/annotations/");
 
-                foreach (var singleAnnotationJSON in allAnnotationJSON)
+                yield return www.Send();
+
+                if (www.isNetworkError)
                 {
-                    if (singleAnnotationJSON["type"].str != "Annotation")
-                        continue;
-
-                    var newAnnotation = new Annotation(singleAnnotationJSON);
-                    if (newAnnotation.TargetNode == null)
-                        continue;
-
-                    CreateAnnotationGizmo(newAnnotation);
+                    Debug.Log(www.error);
+                    yield break;
                 }
+                else
+                {
+                    var allAnnotationsJson = www.downloadHandler.text;
+                    JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
+
+                    foreach (var singleAnnotationJSON in allAnnotationJSON)
+                    {
+                        if (singleAnnotationJSON["type"].str != "Annotation")
+                            continue;
+
+                        var newAnnotation = new Annotation(singleAnnotationJSON);
+                        if (newAnnotation.TargetNode == null)
+                            continue;
+
+                        CreateAnnotationGizmo(newAnnotation);
+                    }
+                }
+
             }
         }
 
@@ -130,7 +136,7 @@ namespace ff.vr.annotate.viz
                 _focusedAnnotationGizmo.UpdateBodyText(newText);
         }
 
-        public void CreateDummyAnnotation(Node contextNode, Vector3 position)
+        public void CreateDummyAnnotationForPerformanceTest(Node contextNode, Vector3 position)
         {
             var newAnnotation = new Annotation()
             {
@@ -144,7 +150,6 @@ namespace ff.vr.annotate.viz
                                   : Person.AnonymousUser,
                 CreatedAt = DateTime.Now,
             };
-
             _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
         }
@@ -152,6 +157,7 @@ namespace ff.vr.annotate.viz
 
         public void CreateAnnotation(Node contextNode, Vector3 position)
         {
+            Debug.Log("Creating Annotation... ");
             var newAnnotation = new Annotation()
             {
                 TargetNode = contextNode,
@@ -164,6 +170,7 @@ namespace ff.vr.annotate.viz
                         : Person.AnonymousUser,
                 CreatedAt = DateTime.Now,
             };
+            Debug.Log("Created Annotation: " + newAnnotation.JsonLdId);
 
             _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);

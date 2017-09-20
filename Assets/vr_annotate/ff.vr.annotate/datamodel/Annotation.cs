@@ -34,7 +34,7 @@ namespace ff.vr.annotate.datamodel
 
         const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
 
-        public string AnnotationURIRemote { get { return SERVER_TARGETS_URI + TargetNode.GUID + JsonLdId; } }
+        public string AnnotationURIRemote { get { return SERVER_TARGETS_URI + Target.JsonLdId + "/annotations/" + JsonLdId; } }
 
 
 
@@ -44,6 +44,8 @@ namespace ff.vr.annotate.datamodel
         [System.NonSerializedAttribute]
         public Node TargetNode;
 
+        public Target Target { get { return TargetNode.UnityObj.GetComponentInParent<Target>(); } }
+
         public DateTime CreatedAt;
         public GeoCoordinate AnnotationPosition;
 
@@ -51,11 +53,11 @@ namespace ff.vr.annotate.datamodel
         {
             return JsonTemplate.FillTemplate(JSONTemplate, new Dictionary<string, string>() {
 
-                {"@id", JsonLdId.ToString()},
+                {"id", JsonLdId.ToString()},
                 {"authorJSON", JsonUtility.ToJson(Author)},
                 {"createdTimestamp", CreatedAt.ToString()},
                 {"annotationText", Text},
-                {"targetID", TargetNode.GUID.ToString()},
+                {"targetID", Target.JsonLdId.ToString() },
                 {"targetNodeName", TargetNode.Name},
                 {"simulatedDate", AnnotationManager.Instance.SimulatedYear},
                 {"simulatedTimeofDay", AnnotationManager.Instance.SimulatedTimeOfDay},
@@ -129,7 +131,7 @@ namespace ff.vr.annotate.datamodel
 
 {
     '@context': 'http://www.w3.org/ns/anno.jsonld',
-    '@id': '{@id}',
+    'id': '{id}',
     'type': 'Annotation',
     'creator': {authorJSON},
     'created': '{createdTimestamp}',
