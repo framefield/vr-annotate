@@ -43,7 +43,7 @@ namespace ff.nodegraph
             }
         }
 
-        [MenuItem("vr-annotate/Write all Target to Databse")]
+        [MenuItem("vr-annotate/Synchronize all Targets with DataBase")]
         public static void SyncAllTargetsWithServer()
         {
             Target[] targets = FindObjectsOfType(typeof(Target)) as Target[];

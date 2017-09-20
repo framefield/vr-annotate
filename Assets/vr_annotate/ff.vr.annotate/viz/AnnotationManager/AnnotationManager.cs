@@ -31,7 +31,6 @@ namespace ff.vr.annotate.viz
         private List<AnnotationGizmo> AllAnnotationGizmos = new List<AnnotationGizmo>();
 
         public AnnotationGizmo _annotationGizmoPrefab;
-        public bool EnableInitializationFromDataBase;
 
         void Start()
         {
@@ -43,8 +42,6 @@ namespace ff.vr.annotate.viz
             _keyboardEnabler.InputCompleted += HandleInputCompleted;
             _keyboardEnabler.InputChanged += HandleInputChanged;
 
-            if (EnableInitializationFromDataBase)
-                StartCoroutine(ReadAnnotationFromServer());
         }
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
@@ -62,42 +59,6 @@ namespace ff.vr.annotate.viz
             }
         }
 
-
-        public IEnumerator ReadAnnotationFromServer()
-        {
-            Debug.Log("ReadAnnotationFromServer");
-            foreach (var target in FindObjectsOfType<Target>())
-            {
-                Debug.Log("downloading ... " + target.TargetURI);
-                UnityWebRequest www = UnityWebRequest.Get(target.TargetURI + "/annotations/");
-
-                yield return www.Send();
-
-                if (www.isNetworkError)
-                {
-                    Debug.Log(www.error);
-                    yield break;
-                }
-                else
-                {
-                    var allAnnotationsJson = www.downloadHandler.text;
-                    JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
-
-                    foreach (var singleAnnotationJSON in allAnnotationJSON)
-                    {
-                        if (singleAnnotationJSON["type"].str != "Annotation")
-                            continue;
-
-                        var newAnnotation = new Annotation(singleAnnotationJSON);
-                        if (newAnnotation.TargetNode == null)
-                            continue;
-
-                        CreateAnnotationGizmo(newAnnotation);
-                    }
-                }
-
-            }
-        }
 
         private void WriteAnnotationToLocalDirectory(Annotation annotation)
         {
@@ -120,7 +81,7 @@ namespace ff.vr.annotate.viz
                 Debug.Log(www.error);
                 yield break;
             }
-            Debug.Log("Upload complete with: " + www.error);
+            Debug.Log("Upload of Annotation complete with: " + www.error);
         }
 
         private void HandleInputCompleted()
@@ -141,9 +102,10 @@ namespace ff.vr.annotate.viz
             var newAnnotation = new Annotation()
             {
                 TargetNode = contextNode,
-                JsonLdId = new ID(ID.IDType.Annotation),
+                JsonLdId = new LinkedDataID(LinkedDataID.IDType.Annotation),
 
-                AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
+                AnnotationPosition = new GeoCoordinate() { position = position },
+                ViewPortPosition = new GeoCoordinate() { position = Camera.main.transform.position },
 
                 Author = CurrentUserDefinition._instance != null
                                   ? CurrentUserDefinition._instance.CurrentUser
@@ -157,13 +119,13 @@ namespace ff.vr.annotate.viz
 
         public void CreateAnnotation(Node contextNode, Vector3 position)
         {
-            Debug.Log("Creating Annotation... ");
             var newAnnotation = new Annotation()
             {
                 TargetNode = contextNode,
-                JsonLdId = new ID(ID.IDType.Annotation),
+                JsonLdId = new LinkedDataID(LinkedDataID.IDType.Annotation),
 
-                AnnotationPosition = new GeoCoordinate() { position = position, positionViewport = Camera.main.transform.position },
+                AnnotationPosition = new GeoCoordinate() { position = position },
+                ViewPortPosition = new GeoCoordinate() { position = Camera.main.transform.position },
 
                 Author = CurrentUserDefinition._instance != null
                         ? CurrentUserDefinition._instance.CurrentUser
@@ -178,7 +140,7 @@ namespace ff.vr.annotate.viz
         }
 
 
-        private AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
+        public AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
         {
             var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
             newAnnotationGizmo.transform.position = annotation.AnnotationPosition.position;
@@ -197,7 +159,7 @@ namespace ff.vr.annotate.viz
 
             var nextGizmo = GetNextAnnotationGizmoOnNode(selectedAnnotationGizmo);
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
-            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
+            teleportation.JumpToPosition(nextGizmo.Annotation.ViewPortPosition.position);
         }
 
 
@@ -219,7 +181,7 @@ namespace ff.vr.annotate.viz
 
             var nextGizmo = GetPreviousAnnotationGizmoOnNode(selectedAnnotationGizmo);
             SelectionManager.Instance.SetSelectedItem(nextGizmo);
-            teleportation.JumpToPosition(nextGizmo.Annotation.AnnotationPosition.positionViewport);
+            teleportation.JumpToPosition(nextGizmo.Annotation.ViewPortPosition.position);
         }
 
 

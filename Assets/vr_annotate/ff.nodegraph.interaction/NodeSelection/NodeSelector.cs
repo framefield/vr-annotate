@@ -23,10 +23,6 @@ namespace ff.nodegraph.interaction
         {
             base.Awake();
             NodeGraphs = FindObjectsOfType<NodeGraph>();
-            foreach (var ng in NodeGraphs)
-            {
-                Debug.Log("initializing graph:" + ng.GUID);
-            }
         }
 
         void Start()

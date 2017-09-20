@@ -4,6 +4,7 @@ using System.Text;
 using ff.location;
 using ff.nodegraph;
 using ff.vr.annotate.viz;
+using ff.vr.annotate.datamodel;
 using UnityEngine;
 using ff.utils;
 using System.Text.RegularExpressions;
@@ -25,12 +26,11 @@ namespace ff.nodegraph
             DeserializeFromJson(jSONObject);
         }
 
-        public ID JsonLdId
+        public LinkedDataID JsonLdId
         {
             get
             {
-                Debug.Log(Node.GUID);
-                return new ID(ID.IDType.Target, Node.GUID);
+                return new LinkedDataID(LinkedDataID.IDType.Target, Node.GUID);
             }
         }
 
@@ -46,6 +46,11 @@ namespace ff.nodegraph
         {
             rest,
             localDirectory
+        }
+
+        void Start()
+        {
+            SyncWithDataBase();
         }
 
         public void SyncWithDataBase()
@@ -80,7 +85,9 @@ namespace ff.nodegraph
                 Debug.Log("Wrote Target " + JsonLdId.ToString() + " to  Server");
             }
 
-            Debug.Log("Found Target " + JsonLdId.ToString() + " on  Server");
+            Debug.Log("Found Target " + JsonLdId.ToString() + " on  Server: ");
+            yield return GetAnnotationsForTargetFromServer();
+
         }
 
         private IEnumerator WriteTargetToServer()
@@ -98,6 +105,38 @@ namespace ff.nodegraph
                 yield break;
             }
             Debug.Log("Upload complete with: " + www.error);
+        }
+
+        private IEnumerator GetAnnotationsForTargetFromServer()
+        {
+            Debug.Log("ReadingAnnotationsFromServer ... downloading: " + TargetURI);
+            UnityWebRequest www = UnityWebRequest.Get(TargetURI + "/annotations/");
+
+            yield return www.Send();
+
+            if (www.isNetworkError)
+            {
+                Debug.Log(www.error);
+                yield break;
+            }
+            else
+            {
+                var allAnnotationsJson = www.downloadHandler.text;
+                JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
+
+                foreach (var singleAnnotationJSON in allAnnotationJSON)
+                {
+                    Debug.Log("Downloaded annotation: " + singleAnnotationJSON);
+                    if (singleAnnotationJSON["@type"].str != "Annotation")
+                        continue;
+
+                    var newAnnotation = new Annotation(singleAnnotationJSON);
+                    if (newAnnotation.TargetNode == null)
+                        continue;
+
+                    AnnotationManager.Instance.CreateAnnotationGizmo(newAnnotation);
+                }
+            }
         }
 
         public string ToJson()
@@ -176,7 +215,7 @@ namespace ff.nodegraph
                 '@base': 'http://annotator/target/'
             },
             'id' : '{@id}',
-            'type': '@AnnotationTarget',
+            '@type': 'AnnotationTarget',
             'creator': {'id':'_alan','name':'Alan','email':'alan @google.com'},
             'created': '7/10/2017 7:02:44 PM',
             'generator': 
