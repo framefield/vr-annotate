@@ -5,14 +5,17 @@
 This unity-package allows to make annotations on arbitrary Unity-scenes of architectural sites. The generated annotation-data can be transformed into real world coordinates and because the data-format is JSON-ld, it can be cross referenced with other open databases.
 
 ### Contact
+VR-Annotate is a research tool of the project »[Analogue Storage Media II - Auralisation of Archaeological Spaces](https://www.interdisciplinary-laboratory.hu-berlin.de/de/content/analogspeicher-ii-auralisierung-archaologischer-raume/)« run by the Cluster of Excellence »[Image Knowledge Gestaltung - Cluster of Excellence](https://www.interdisciplinary-laboratory.hu-berlin.de/en/bwg/)« at the Humboldt-University Berlin. 
 
-VR-Annotate is a project of the [Image Knowledge Gestaltung - Cluster of Excellence](https://www.interdisciplinary-laboratory.hu-berlin.de/en/bwg/) of the Humboldt-University Berlin.
-Developed by [Framefield.com](http://www.framefield.com)
+Research project contact: [Una Ulrike Schäfer](una.ulrike.schaefer@hu-berlin.de )
+
+It's developed by [Framefield.com](http://www.framefield.com).
+
 
 ### Version-History
 - **2017-07-19 /  v0.1.0** - initial release of unity package
-### License
 
+### License
 This project is released under M.I.T. license.
 
 
