@@ -18,6 +18,12 @@ It's developed by [Framefield.com](http://www.framefield.com).
 ### License
 This project is released under M.I.T. license.
 
+### Requirements
+
+- git-lfs https://help.github.com/articles/installing-git-large-file-storage/  
+- Do not download the repository via the DOWNLOAD zip link - (e.g. https://github.com/framefield/vr-annotate/archive/master.zip ). This will not include most of the resources, as these are stored elsewhere via git-lfs.
+- Unity Version `2017.1.0p4`
+
 
 ### Dependencies
 
@@ -356,6 +362,7 @@ Examples could be:
 - using voice recognition
 - using symbols or icons
 - Sketching in VR
+
 ### Export or link annotations into the real world
 
 With technology like HoloLens and location-markers it is very feasible to show markers created in VR within their context. You can also port the components to work on the HoloLens to generate annotations.
