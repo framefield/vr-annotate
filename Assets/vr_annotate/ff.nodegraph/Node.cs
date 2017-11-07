@@ -95,8 +95,8 @@ namespace ff.nodegraph
             {
                 Children = new Node[unityObj.transform.childCount],
                 UnityObj = unityObj,
-                GUID = new Guid(GUIDGenerator.ExtractGUIDFromName(unityObj.name)),
-                Name = GUIDGenerator.RemoveGUIDFromName(unityObj.name)
+                GUID = new Guid(GUIDHelper.ExtractGUIDFromName(unityObj.name)),
+                Name = GUIDHelper.RemoveGUIDFromName(unityObj.name)
             };
 
             // unityObj.name = node.Name; // write name without GUID back to Object

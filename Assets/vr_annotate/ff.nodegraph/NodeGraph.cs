@@ -20,7 +20,7 @@ namespace ff.nodegraph
         private void Awake()
         {
             CreateNodesFromHierachy();
-            GUID = new Guid(GUIDGenerator.ExtractGUIDFromName(this.name));
+            GUID = new Guid(GUIDHelper.ExtractGUIDFromName(this.name));
         }
 
         private void CreateNodesFromHierachy()
