@@ -7,7 +7,7 @@ namespace ff.vr.annotate.datamodel
 {
     public class LinkedDataID
     {
-        private Guid _guid;
+        public Guid _guid;
         private IDType _type;
         public enum IDType { Annotation, Target }
 

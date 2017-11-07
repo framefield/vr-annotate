@@ -65,7 +65,7 @@ namespace ff.nodegraph
 
         private void WriteTargetToLocalDirectory()
         {
-            File.WriteAllText(LocalTargetDirectory + JsonLdId + ".json", ToJson());
+            File.WriteAllText(LocalTargetDirectory + JsonLdId._guid + ".json", ToJson());
         }
 
         private IEnumerator SyncCoroutine()
