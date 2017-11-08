@@ -44,45 +44,6 @@ namespace ff.vr.annotate.viz
 
         }
 
-        public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
-
-        // private void ReadAllAnnotationsFromLocalDirectory()
-        // {
-        //     var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
-        //     foreach (var file in filesInDirectory)
-        //     {
-        //         var newAnnotation = new Annotation(File.ReadAllText(file));
-        //         if (newAnnotation.TargetNode == null)
-        //             continue;
-
-        //         CreateAnnotationGizmo(newAnnotation);
-        //     }
-        // }
-
-        private void WriteAnnotationToLocalDirectory(Annotation annotation)
-        {
-            var annotationJson = _lastCreatedAnnotation.ToJson();
-
-            File.WriteAllText(_lastCreatedAnnotation.AnnotationURILocal, annotationJson);
-        }
-
-        private IEnumerator WriteAnnotationToServer(Annotation annotation)
-        {
-            var annotationJson = _lastCreatedAnnotation.ToJson();
-
-            UnityWebRequest www = UnityWebRequest.Put(annotation.AnnotationURIRemote, System.Text.Encoding.UTF8.GetBytes(annotationJson));
-            www.SetRequestHeader("Content-Type", "application/json");
-
-            yield return www.Send();
-
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-                yield break;
-            }
-            Debug.Log("Upload of Annotation complete with: " + www.error);
-        }
-
         private void HandleInputCompleted()
         {
             _keyboardEnabler.Hide();
@@ -93,10 +54,10 @@ namespace ff.vr.annotate.viz
             switch (databaseLocation)
             {
                 case Target.DataBaseLocation.localDirectory:
-                    WriteAnnotationToLocalDirectory(_lastCreatedAnnotation);
+                    Serialization.WriteAnnotationToLocalDirectory(_lastCreatedAnnotation);
                     break;
                 case Target.DataBaseLocation.rest:
-                    StartCoroutine(WriteAnnotationToServer(_lastCreatedAnnotation));
+                    StartCoroutine(Serialization.WriteAnnotationToServer(_lastCreatedAnnotation));
                     break;
             }
         }
@@ -105,25 +66,6 @@ namespace ff.vr.annotate.viz
         {
             if (_focusedAnnotationGizmo)
                 _focusedAnnotationGizmo.UpdateBodyText(newText);
-        }
-
-        public void CreateDummyAnnotationForPerformanceTest(Node contextNode, Vector3 position)
-        {
-            var newAnnotation = new Annotation()
-            {
-                TargetNode = contextNode,
-                JsonLdId = new LinkedDataID(LinkedDataID.IDType.Annotation),
-
-                AnnotationPosition = new GeoCoordinate() { position = position },
-                ViewPortPosition = new GeoCoordinate() { position = Camera.main.transform.position },
-
-                Author = CurrentUserDefinition._instance != null
-                                  ? CurrentUserDefinition._instance.CurrentUser
-                                  : Person.AnonymousUser,
-                CreatedAt = DateTime.Now,
-            };
-            _lastCreatedAnnotation = newAnnotation;
-            _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
         }
 
 

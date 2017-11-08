@@ -28,17 +28,8 @@ namespace ff.vr.annotate.datamodel
 
         public LinkedDataID JsonLdId;
 
-        public string LocalAnnotationsDirectory { get { return Application.dataPath + "/db/targets/"; } }
-
-        public string AnnotationURILocal { get { return LocalAnnotationsDirectory + JsonLdId + ".json"; } }
-
-        const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
-
-        public string AnnotationURIRemote { get { return SERVER_TARGETS_URI + Target.JsonLdId + "/annotations/" + JsonLdId; } }
-
-
-
         public Person Author;
+
         public string Text;
 
         [System.NonSerializedAttribute]

@@ -34,14 +34,6 @@ namespace ff.nodegraph
             }
         }
 
-        //local
-        public string LocalTargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
-        public string LocalAnnotationDirectory { get { return LocalTargetDirectory + "/" + JsonLdId._guid + "/"; } }
-
-        //remote
-        const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
-        public string TargetURI { get { return SERVER_TARGETS_URI + JsonLdId; } }
-
         public DataBaseLocation DataBaseLocationToUse;
 
         public enum DataBaseLocation
@@ -60,89 +52,13 @@ namespace ff.nodegraph
             switch (DataBaseLocationToUse)
             {
                 case DataBaseLocation.localDirectory:
-                    SyncWithLocalDirectory();
+                    Serialization.SyncWithLocalDirectory(this);
                     break;
                 case DataBaseLocation.rest:
-                    StartCoroutine(SyncWithServerCoroutine());
+                    StartCoroutine(Serialization.SyncWithServerCoroutine(this));
                     break;
             }
         }
-
-
-
-
-        #region serialization local
-
-        private void WriteTargetToLocalDirectory()
-        {
-            var path = LocalTargetDirectory + JsonLdId._guid + ".json";
-
-            File.WriteAllText(path, ToJson());
-        }
-
-        private void SyncWithLocalDirectory()
-        {
-            var path = LocalTargetDirectory + JsonLdId._guid + ".json";
-
-            var targetExistsInDB = File.Exists(path);
-            if (!targetExistsInDB)
-            {
-                WriteTargetToLocalDirectory();
-            }
-
-            ReadAllAnnotationsFromLocalDirectory();
-
-        }
-
-        private void ReadAllAnnotationsFromLocalDirectory()
-        {
-            Debug.Log("ReadingAnnotationsFromLocalDirectory ... downloading: " + LocalAnnotationDirectory);
-
-            var filesInDirectory = Directory.GetFiles(LocalAnnotationDirectory, "*.json");
-            foreach (var file in filesInDirectory)
-            {
-                var newAnnotation = new Annotation(File.ReadAllText(file));
-                if (newAnnotation.TargetNode == null)
-                    continue;
-
-                AnnotationManager.Instance.CreateAnnotationGizmo(newAnnotation);
-            }
-        }
-
-
-
-        // private void GetAnnotationsForTargetFromLocalDirectory()
-        // {
-        //     Debug.Log("ReadingAnnotationsFromLocalDirectory ... downloading: " + LocalAnnotationDirectory);
-
-        //     var allAnnotationJSON = ReadAllAnnotationsFromLocalDirectory();
-
-        //     foreach (var singleAnnotationJSON in allAnnotationJSON)
-        //     {
-        //         if (singleAnnotationJSON["type"].str != "Annotation")
-        //             continue;
-
-        //         var newAnnotation = new Annotation(singleAnnotationJSON);
-        //         if (newAnnotation.TargetNode == null)
-        //             continue;
-
-        //         Debug.Log("Loaded from local directory: annotation: " + singleAnnotationJSON);
-
-        //         AnnotationManager.Instance.CreateAnnotationGizmo(newAnnotation);
-        //     }
-        // }
-
-        // private List<JSONObject> ReadAllAnnotationsFromLocalDirectory()
-        // {
-        //     var allNodes = new List<JSONObject>();
-
-        //     var filesInDirectory = Directory.GetFiles(LocalTargetDirectory, "*.json");
-        //     foreach (var file in filesInDirectory)
-        //     {
-        //         allNodes.Add(new JSONObject(File.ReadAllText(file)));
-        //     }
-        //     return allNodes;
-        // }
 
         public string ToJson()
         {
@@ -151,83 +67,6 @@ namespace ff.nodegraph
                 {"nodeGraph", SerializeNodeTreeRecursive(Node).Replace("'", "\"")},
             });
         }
-
-
-        #endregion
-
-        #region serialization remote
-
-        private IEnumerator SyncWithServerCoroutine()
-        {
-            UnityWebRequest www = UnityWebRequest.Get(TargetURI);
-            yield return www.Send();
-
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-                yield break;
-            }
-
-            if (www.responseCode == 404)
-            {
-                yield return WriteTargetToServer();
-                Debug.Log("Wrote Target " + JsonLdId.ToString() + " to  Server");
-            }
-
-            Debug.Log("Found Target " + JsonLdId.ToString() + " on  Server: ");
-            yield return GetAnnotationsForTargetFromServer();
-
-        }
-
-        private IEnumerator WriteTargetToServer()
-        {
-            var targetJson = ToJson();
-
-            UnityWebRequest www = UnityWebRequest.Put(TargetURI, System.Text.Encoding.UTF8.GetBytes(targetJson));
-            www.SetRequestHeader("Content-Type", "application/json");
-
-            yield return www.Send();
-
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-                yield break;
-            }
-            Debug.Log("Upload complete with: " + www.error);
-        }
-
-        private IEnumerator GetAnnotationsForTargetFromServer()
-        {
-            Debug.Log("ReadingAnnotationsFromServer ... downloading: " + TargetURI);
-            UnityWebRequest www = UnityWebRequest.Get(TargetURI + "/annotations/");
-
-            yield return www.Send();
-
-            if (www.isNetworkError)
-            {
-                Debug.Log(www.error);
-                yield break;
-            }
-            else
-            {
-                var allAnnotationsJson = www.downloadHandler.text;
-                JSONObject allAnnotationJSON = new JSONObject(allAnnotationsJson);
-                Debug.Log(allAnnotationJSON);
-                foreach (var singleAnnotationJSON in allAnnotationJSON)
-                {
-                    Debug.Log("Downloaded annotation: " + singleAnnotationJSON);
-                    if (singleAnnotationJSON["type"].str != "Annotation")
-                        continue;
-
-                    var newAnnotation = new Annotation(singleAnnotationJSON);
-                    if (newAnnotation.TargetNode == null)
-                        continue;
-
-                    AnnotationManager.Instance.CreateAnnotationGizmo(newAnnotation);
-                }
-            }
-        }
-
         private string SerializeNodeTreeRecursive(Node currentNode)
         {
             var json = "{ \"nodeId\" : \" " + currentNode.GUID.ToString() + " \",  \"children\" : [";
@@ -242,13 +81,6 @@ namespace ff.nodegraph
             json += "]}";
             return json;
         }
-
-        #endregion
-
-
-        #region deserialization
-
-
 
         public static Target DeserializeFromJson(JSONObject jsonObject)
         {
@@ -275,10 +107,7 @@ namespace ff.nodegraph
             return newNode;
         }
 
-        #endregion
-
-
-        private static string JSONTemplate = @"
+        public static string JSONTemplate = @"
         {
             '@context': 
             {
