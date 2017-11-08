@@ -46,19 +46,18 @@ namespace ff.vr.annotate.viz
 
         public string AnnotationDirectory { get { return Application.dataPath + "/db/annotations/"; } }
 
-        private void ReadAllAnnotationsFromLocalDirectory()
-        {
-            var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
-            foreach (var file in filesInDirectory)
-            {
-                var newAnnotation = new Annotation(File.ReadAllText(file));
-                if (newAnnotation.TargetNode == null)
-                    continue;
+        // private void ReadAllAnnotationsFromLocalDirectory()
+        // {
+        //     var filesInDirectory = Directory.GetFiles(AnnotationDirectory, "*.json");
+        //     foreach (var file in filesInDirectory)
+        //     {
+        //         var newAnnotation = new Annotation(File.ReadAllText(file));
+        //         if (newAnnotation.TargetNode == null)
+        //             continue;
 
-                CreateAnnotationGizmo(newAnnotation);
-            }
-        }
-
+        //         CreateAnnotationGizmo(newAnnotation);
+        //     }
+        // }
 
         private void WriteAnnotationToLocalDirectory(Annotation annotation)
         {
@@ -88,7 +87,18 @@ namespace ff.vr.annotate.viz
         {
             _keyboardEnabler.Hide();
             _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
-            StartCoroutine(WriteAnnotationToServer(_lastCreatedAnnotation));
+
+            var databaseLocation = _lastCreatedAnnotation.TargetNode.UnityObj.GetComponentInParent<Target>().DataBaseLocationToUse;
+
+            switch (databaseLocation)
+            {
+                case Target.DataBaseLocation.localDirectory:
+                    WriteAnnotationToLocalDirectory(_lastCreatedAnnotation);
+                    break;
+                case Target.DataBaseLocation.rest:
+                    StartCoroutine(WriteAnnotationToServer(_lastCreatedAnnotation));
+                    break;
+            }
         }
 
         private void HandleInputChanged(string newText)
