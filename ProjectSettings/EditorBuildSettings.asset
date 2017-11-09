@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/scenes/stoa-vr.unity
+    path: Assets/scenes/stoa-demo.unity
     guid: 6043a97b802f8e24287e5970768862ae
