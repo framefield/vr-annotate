@@ -31,6 +31,9 @@ public class TextFieldBehaviour : MonoBehaviour, ISelectHandler
 
     IEnumerator DisableHighlight()
     {
+        if (inputField == null)
+            inputField = gameObject.GetComponent<InputField>();
+
         Color originalTextColor = inputField.selectionColor;
         originalTextColor.a = 0f;
 

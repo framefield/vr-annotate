@@ -46,7 +46,7 @@ public static class Serialization
         Debug.Log("ReadingAnnotationsFromLocalDirectory ... downloading: " + GetLocalAnnotationDirectory(target));
 
         var filesInDirectory = Directory.GetFiles(GetLocalAnnotationDirectory(target), "*.json");
-        Debug.Log("found " + filesInDirectory.Length + " annotations");
+        Debug.Log("Found " + filesInDirectory.Length + " annotations in local directory.");
         foreach (var file in filesInDirectory)
         {
             var newAnnotation = new Annotation(File.ReadAllText(file));
@@ -54,7 +54,7 @@ public static class Serialization
                 continue;
 
             AnnotationManager.Instance.CreateAnnotationGizmo(newAnnotation);
-            Debug.Log("created annotations " + newAnnotation.JsonLdId);
+            Debug.Log("Read annotation from local directory: " + newAnnotation.JsonLdId);
         }
     }
 
@@ -62,7 +62,7 @@ public static class Serialization
     public static void WriteAnnotationToLocalDirectory(Annotation annotation)
     {
         var annotationJson = annotation.ToJson();
-        Debug.Log(GetLocalAnnotationDirectory(annotation));
+        Debug.Log("Writing Annotation to " + GetLocalAnnotationDirectory(annotation));
         File.WriteAllText(GetLocalAnnotationDirectory(annotation), annotationJson);
     }
 

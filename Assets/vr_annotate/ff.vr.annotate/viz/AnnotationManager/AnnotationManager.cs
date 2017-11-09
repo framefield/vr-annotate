@@ -34,21 +34,24 @@ namespace ff.vr.annotate.viz
 
         void Start()
         {
-            _gizmoContainer = new GameObject();
-            _gizmoContainer.name = "GizmoContainer";
-            _gizmoContainer.transform.SetParent(this.transform, false);
+            InitGizmoContainer();
             _keyboardEnabler = FindObjectOfType<KeyboardEnabler>();
             _keyboardEnabler.Hide();
             _keyboardEnabler.InputCompleted += HandleInputCompleted;
             _keyboardEnabler.InputChanged += HandleInputChanged;
+        }
 
+        private void InitGizmoContainer()
+        {
+            _gizmoContainer = new GameObject();
+            _gizmoContainer.name = "GizmoContainer";
+            _gizmoContainer.transform.SetParent(this.transform, false);
         }
 
         private void HandleInputCompleted()
         {
             _keyboardEnabler.Hide();
             _lastCreatedAnnotation.Text = _keyboardEnabler._inputField.text;
-
             var databaseLocation = _lastCreatedAnnotation.TargetNode.UnityObj.GetComponentInParent<Target>().DataBaseLocationToUse;
 
             switch (databaseLocation)
@@ -84,7 +87,7 @@ namespace ff.vr.annotate.viz
                         : Person.AnonymousUser,
                 CreatedAt = DateTime.Now,
             };
-            Debug.Log("Created Annotation: " + newAnnotation.JsonLdId);
+            Debug.Log("Created new annotation: " + newAnnotation.JsonLdId);
 
             _lastCreatedAnnotation = newAnnotation;
             _focusedAnnotationGizmo = CreateAnnotationGizmo(newAnnotation);
@@ -94,6 +97,9 @@ namespace ff.vr.annotate.viz
 
         public AnnotationGizmo CreateAnnotationGizmo(Annotation annotation)
         {
+            if (_gizmoContainer == null)
+                InitGizmoContainer();
+
             var newAnnotationGizmo = Instantiate(_annotationGizmoPrefab);
             newAnnotationGizmo.transform.position = annotation.AnnotationPosition.position;
             newAnnotationGizmo.transform.SetParent(_gizmoContainer.transform, false);
