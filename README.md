@@ -43,33 +43,35 @@ The package consists of several components:
 # Getting started 
 
 
-Open the demo scene
+Open the demo scene stoa-demo.unity
 
-1. Duplicate the scene `stoa-demo` to start with
-2. The `[geometry]` folder is where your annotatable geometry should go.
-3. It contains an example target `stoa_example`
+1. Duplicate the scene `stoa-demo` to start with.
+2. The `[geometry]` folder is where your annotatable geometry GameObject should go.
+3. It contains an example target `stoa_example`.
 
 
 Replace the geometry / annotation target 
 **(if you do not want to add your own custom target and just use the demo content, continue at step 9. )**
 
 
-4. Place the geometry you want to annotate within the folder `[geometry]`
-5. The geometry object should contain geometry only in its leafes.
-6. Use the menu entry `vr-annotate/Generate GUIDs for all Children` to generate a [unique id](/doc/vr-annotate-Documentation-YxSHjwYodKZkEP93F6NNX#:uid=952852267903414312223605&h2=Using-IDs-for-creating-a-netwo) for every node of the geometry. 
+4. Place the geometry you want to annotate within the folder `[geometry]`.
+5. The geometry object should contain geometry only in its leaves.
+6. Use the menu entry `vr-annotate/Generate GUIDs for all Children` to generate [unique ids](/doc/vr-annotate-Documentation-YxSHjwYodKZkEP93F6NNX#:uid=952852267903414312223605&h2=Using-IDs-for-creating-a-netwo) for every node of the geometry. 
+
+
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329855544_image.png)
 
 7. Select its root object and add the component `Target` to make it an annotatable target.
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510328402665_image.png)
 
-8. You can use a local directory or a rest-server to store and load Annotations and Targets. In the Target component on the root object of the Annotation Target set your Database Location.
-![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329207419_image.png)
+8. You can use a local directory or a REST-server to store and load annotations and targets. In the `Target` component on the root object of the annotation target set your database location.
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510332555171_image.png)
 
-9. Use the file `Assets/vr_annotate/ff.vr.annotate/helpers/Serialization.cs` to define the local or remote uri you want to use
+9. Use the file `Assets/vr_annotate/ff.vr.annotate/helpers/Serialization.cs` to define the local or remote uri you want to use.
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329724658_image.png)
 
 10. Your geometry is ready to be annotated.
-11. On startup Unity uses the GUIDs to check if the target exists in the Database, it will add it if necessary and load all Annotations that had been created in an other session.
+11. On app startup Unity uses the GUIDs to check if the target exists in the database. it will add it if necessary and load all annotations that you created in a previous session.
 
 
 # Making a scene annotatable
@@ -92,7 +94,7 @@ Replace the geometry / annotation target
 ## Add meta-information
 7. Make sure all TargetNodes have a GUID stored as an Suffix in their gameobject.name. 
   If necessary use the menu entry `vr-annotate/Generate GUIDs for all TargetNodes` to generate the missing GUIDs
-8. Distribute and scale instances of the `TeleportationPlane`-prefab in your scene.
+8. Distribute and scale instances of the `TeleportationZone`-prefab in your scene.
 9. Start the scene
 ## Describe which real world location the scene uses
 10. Insert the **GeoCoordinatesTransformer**-prefab to your scene

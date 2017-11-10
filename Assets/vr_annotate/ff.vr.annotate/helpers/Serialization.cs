@@ -10,7 +10,10 @@ using UnityEngine.Networking;
 
 public static class Serialization
 {
-    const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/";
+    // use this to configure the REST-API url
+    const string SERVER_TARGETS_URI = "http://127.0.0.1:8301/targets/"; //must contain a '/' in the end
+
+    // use this to configure local directory if you want to use local storage
     static string LocalTargetDirectory { get { return Application.dataPath + "/db/targets/"; } }
 
     static string GetLocalAnnotationDirectory(Target target) { return LocalTargetDirectory + "/" + target.JsonLdId._guid + "/"; }

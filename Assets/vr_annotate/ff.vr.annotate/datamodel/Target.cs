@@ -38,7 +38,7 @@ namespace ff.nodegraph
 
         public enum DataBaseLocation
         {
-            rest,
+            REST,
             localDirectory
         }
 
@@ -54,7 +54,7 @@ namespace ff.nodegraph
                 case DataBaseLocation.localDirectory:
                     Serialization.SyncWithLocalDirectory(this);
                     break;
-                case DataBaseLocation.rest:
+                case DataBaseLocation.REST:
                     StartCoroutine(Serialization.SyncWithServerCoroutine(this));
                     break;
             }

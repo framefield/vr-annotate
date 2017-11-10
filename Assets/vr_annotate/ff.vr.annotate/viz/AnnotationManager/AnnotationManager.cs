@@ -59,7 +59,7 @@ namespace ff.vr.annotate.viz
                 case Target.DataBaseLocation.localDirectory:
                     Serialization.WriteAnnotationToLocalDirectory(_lastCreatedAnnotation);
                     break;
-                case Target.DataBaseLocation.rest:
+                case Target.DataBaseLocation.REST:
                     StartCoroutine(Serialization.WriteAnnotationToServer(_lastCreatedAnnotation));
                     break;
             }
