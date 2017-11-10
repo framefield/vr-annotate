@@ -1,31 +1,22 @@
 # vr-annotate / Documentation
 
-## Overview
+# Overview
 
 This unity-package allows to make annotations on arbitrary Unity-scenes of architectural sites. The generated annotation-data can be transformed into real world coordinates and because the data-format is JSON-ld, it can be cross referenced with other open databases.
 
-### Contact
-VR-Annotate is a research tool of the project »[Analogue Storage Media II - Auralisation of Archaeological Spaces](https://www.interdisciplinary-laboratory.hu-berlin.de/de/content/analogspeicher-ii-auralisierung-archaologischer-raume/)« run by the Cluster of Excellence »[Image Knowledge Gestaltung - Cluster of Excellence](https://www.interdisciplinary-laboratory.hu-berlin.de/en/bwg/)« at the Humboldt-University Berlin. 
+## Contact
 
-Research project contact: [Una Ulrike Schäfer](una.ulrike.schaefer@hu-berlin.de )
+VR-Annotate is a project of the [Image Knowledge Gestaltung - Cluster of Excellence](https://www.interdisciplinary-laboratory.hu-berlin.de/en/bwg/) of the Humboldt-University Berlin.
+Developed by [Framefield.com](http://www.framefield.com)
 
-It's developed by [Framefield.com](http://www.framefield.com).
-
-
-### Version-History
+## Version-History
 - **2017-07-19 /  v0.1.0** - initial release of unity package
+# License
 
-### License
 This project is released under M.I.T. license.
 
-### Requirements
 
-- git-lfs https://help.github.com/articles/installing-git-large-file-storage/  
-- Do not download the repository via the DOWNLOAD zip link - (e.g. https://github.com/framefield/vr-annotate/archive/master.zip ). This will not include most of the resources, as these are stored elsewhere via git-lfs.
-- Unity Version `2017.1.0p4`
-
-
-### Dependencies
+# Dependencies
 
 Part of the package are the following non-unity dependencies:
 
@@ -34,7 +25,7 @@ Part of the package are the following non-unity dependencies:
 - [InputSimulator](https://github.com/michaelnoonan/inputsimulator) by Michael Noonan
 
 
-## What it does
+# What it does
 
 Once you added to required prefabs to a part of your scene, you use the Vive-controller to select it’s geometry, browse the hierarchical structure of the scene, place comments to certain parts of the geometry by pressing trigger and using a virtual keyboard or reading the comments of other users.
 
@@ -48,11 +39,45 @@ The package consists of several components:
 5. **PunchKeyboard** - an virtual keyboard for the SteamVR (open source 3rd party package) See [github-repository](https://github.com/rjth/Punchkeyboard)
 
 
-## Making a scene annotatable
-### Add annotation-features
+
+# Getting started 
+
+
+Open the demo scene
+
+1. Duplicate the scene `stoa-demo` to start with
+2. The `[geometry]` folder is where your annotatable geometry should go.
+3. It contains an example target `stoa_example`
+
+
+Replace the geometry / annotation target 
+**(if you do not want to add your own custom target and just use the demo content, continue at step 9. )**
+
+
+4. Place the geometry you want to annotate within the folder `[geometry]`
+5. The geometry object should contain geometry only in its leafes.
+6. Use the menu entry `vr-annotate/Generate GUIDs for all Children` to generate a [unique id](/doc/vr-annotate-Documentation-YxSHjwYodKZkEP93F6NNX#:uid=952852267903414312223605&h2=Using-IDs-for-creating-a-netwo) for every node of the geometry. 
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329855544_image.png)
+
+7. Select its root object and add the component `Target` to make it an annotatable target.
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510328402665_image.png)
+
+8. You can use a local directory or a rest-server to store and load Annotations and Targets. In the Target component on the root object of the Annotation Target set your Database Location.
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329207419_image.png)
+
+9. Use the file `Assets/vr_annotate/ff.vr.annotate/helpers/Serialization.cs` to define the local or remote uri you want to use
+![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1510329724658_image.png)
+
+10. Your geometry is ready to be annotated.
+11. On startup Unity uses the GUIDs to check if the target exists in the Database, it will add it if necessary and load all Annotations that had been created in an other session.
+
+
+# Making a scene annotatable
+## Add annotation-features
 1. Install the **vr-annotate-package** into your project
 2. Open a scene or create a new one
 3. Additionally open the scene `vr-annotate-example`  and copy the following groups into your scene:
+~~~~  - [vr-annotate]
   - [geoCoordinates]
   - optionally also copy the adjusted `[CameraRig]` for SteamVR. 
 4. **Alternatively** you can use to original CameraRig-prefab and…
@@ -63,60 +88,70 @@ The package consists of several components:
 5. Select the top-geometry nodes in your scene.
 6. In the Inspector select [Add Component], search for `T`arget and add it. This will scan the geometry of your node when starting the scene and make it annotatable.
 
-### Add meta-information
+
+## Add meta-information
 7. Make sure all TargetNodes have a GUID stored as an Suffix in their gameobject.name. 
   If necessary use the menu entry `vr-annotate/Generate GUIDs for all TargetNodes` to generate the missing GUIDs
 8. Distribute and scale instances of the `TeleportationPlane`-prefab in your scene.
 9. Start the scene
-
-### Describe which real world location the scene uses
+## Describe which real world location the scene uses
 10. Insert the **GeoCoordinatesTransformer**-prefab to your scene
 11. find two or more representative structures in your scene for which you have very precise longitude and latitude data: things like corners or buildings, centers of columns. You can get the geo-coordinates from satellite images.
 12. For each of these features insert a `GeolocationMarker`-prefab.
 13. position the GeolocationMarker at the features
 14. enter the geo-coordinates for this feature
 
-### Define the current user
+
+## Define the current user
+
 Until we have a proper database, the current user is defined in through the parameters place-holder script:
+
+
 16. Find or add the `CurrentUserDefinition`-prefab to your scene.
 17. Enter its parameters for *username*, *rename* and *email* (this data will be stored with the annotations and can later be used for a proper user database table).
-
-## Components
+# Components
 
 The following section gives a quick introduction into the code-structure. The folder-structure within the package follows the namespace of the c# scripts. The package consists of several namespaces, each focusing on a different aspect. 
 
-### ff.nodegraph
+## ff.nodegraph
 
 This MonoBehaviors of this namespace scan a nested structure of GameObjects within a unity-scene, looks for MeshRenderers and use BoundingBoxes to build data representation of the scene that can be used for hit-testing and picking. We decided to implement our own Ray-HitTesting because creating many instances of Unity-colliders had a big performance impact and required manipulation of your scene. By contrast just scanning the scene and saving an interpretation as  data allowed use to use this data for highlighting, picking, and storing precise target-references for annotations.
 
 
-### ff.vr.annotation
+## ff.vr.annotation
 
 The Components in the `ff.annotation` namespace handle the creation, serialisation, and interaction with Annotations. Most elements are combined into prefabs. 
 
 
-### ff.locationmarker
+## ff.locationmarker
 
 The components inside this namespace help to converts Unity Coordinates into real-world WGS84 coordinates. For this you place two or more markers in your unity-scene and add precise geo-location coordinates for these markers. Good candidates are existing real-world remains like columns or base-structures. From this columns, unity-positions can be converted into lat-long. 
 
 This can be very useful for…
+
 
 - showing annotations on a map
 - exporting annotations to show with a HoloLens or other AR devices
 - importing and correctly placing annotations or other data into the scene
 
 
-### InformationPanel, SelectionManager, ISelectable, NodeSelectionMarker
+## InformationPanel, SelectionManager, ISelectable, NodeSelectionMarker
 
 The components in these namespaces are related to showing additional information about the current selection. Currently selections can be  `Node`s inside the NodeGraph, and `AnnotationsGizmos`. There are several methods to change the selection (clicking on objects, clicking into the NodeGraphOutliner, etc.). The SelectionManager handles to current active selection of object implementing the `ISelectable`-interface. Components like the `NodeSelectionMarker`  or the `InfoPanels` subscribe to the SelectionChanged-event to update their content.
 
 
+# 
 
-## Using IDs for creating a network of linked data 
+
+
+----------
+
+
+# Using IDs for creating a network of linked data 
 
 [GUIDs](https://de.wikipedia.org/wiki/Globally_Unique_Identifier) are used to identify **Targets**, **Annotations** and **Nodes.**
 
-### IDs for Nodes
+## IDs for Nodes
 
 The following schema is used for 3d-Models  within Maya, Cinema4D, Unity, etc:  
 
@@ -146,7 +181,7 @@ e.g.:
 - The model is imported into Unity and used within a scene as a *Target*.
 - In case the modeller did not identify all submeshes correctly, you can use the Unity-Helper 
   `vr-annotate/Generate GUIDs for all TargetNodes` to generate the missing GUID suffixes.
-### IDs for Targets and Annotations:
+## IDs for Targets and Annotations:
 
 As defined in [neonion-rest](https://github.com/FUB-HCC/neonion-rest), Targets and Annotations IDs declare their type in a suffix, like 
 `type` + `:` + `GUID`, e.g. `target:234234-234234-234234`.
@@ -154,7 +189,7 @@ As defined in [neonion-rest](https://github.com/FUB-HCC/neonion-rest), Targets a
 **Workflow**
 In Unity all Targets- and Annotations-IDs are created automatically in the right format before serialization.
 
-## De-/Serialization
+# De-/Serialization
 
 At the moment Targets and Annotations are stored on a [local mock server](https://github.com/FUB-HCC/neonion-rest):
 
@@ -170,18 +205,18 @@ Annotations at:
 e.g.
 `**localhost:8301/targets/target:936DA01F-9ABD-4D9D-80C7-02AF85C822A8**`
 `**/annotations/annotation:AB12E3GD-9ABD-4D9D-80C7-KH6TGE8DNB7W**`
-
-
+****
 
 
 They are stored using the following JSON-schemas
 
 
 
-## JSON-Schemas
+----------
+# JSON-Schemas
 
 
-### Notes on the JSON-Schema
+## Notes on the JSON-Schema
 
 Following the [JSON-LD](https://json-ld.org/) format was an important requirements for the implementation (for details please refer to +vr-annotate / Standards and [this comment](/doc/vr-annotate-Discussion-Updates-55GOPr9dfFic1OPSB6k7B#:uid=833873351002048394383899&h2=2017-06-13---Discussing-Data-f)). During the development we invested some time into suggesting a JSON-schema which closely follows the W3C-web annotation standard but makes some changes where necessary. The implementation of the serialization is done in `Annotation.cs`. We started with a light weight template mechanism for quick iterations. For now, the Annotations are stored as JSON-files on disk to `Assets/db/*.json`. Once a database or API is available it should be integrated and the JSON-serialization in `Annotation.cs` should be properly implemented through structs and classes.
 
@@ -189,7 +224,7 @@ The JSON schema should be treated as work in progress and leaves many details wi
 
 
 
-### Annotations:
+## Annotations:
     {
         "@context": "http://www.w3.org/ns/anno.jsonld",
         "id": "annotation:0a1d64db-5b3d-41b8-8a92-14e8493a2fc2",
@@ -257,7 +292,7 @@ The JSON schema should be treated as work in progress and leaves many details wi
 
 
 
-### Targets:
+## Targets:
     {
       "@context": {
         "@vocab":"http://www.w3.org/ns/target.jsonld",
@@ -297,9 +332,8 @@ The JSON schema should be treated as work in progress and leaves many details wi
     }
 
 
-
-## Picking, Raycasts
-
+----------
+# Picking, Raycasts
 ![](https://d2mxuefqeaa7sj.cloudfront.net/s_4189704474AC678D2E263F90FDFBA4024E622E925DF615D1BA9574E1FF0600CA_1505920697055_UnbenanntWithIndex.png)
 
 
@@ -316,45 +350,45 @@ Optimizing …
 - Local Bounding Box: align your submodels to their local axes
 - Mesh Collider: keep mesh size small
 
+ 
 
-
-## Other Requirements
+# Other Requirements
 
 Model must not use “/” in GameObject names for Geometry-nodes inside `NodeGraph`s
 
 
-## FAQ
-### Does the it support the Oculus Rift?
+# FAQ
+## Does the it support the Oculus Rift?
 
 Not yet, but a porting the `InteractiveController`-Script to the Rift should be very easy.
 
 
-### Does it support other platforms like GearVR and HoloLens?
+## Does it support other platforms like GearVR and HoloLens?
 
 Currently the Interaction heavily relies on pointing and clicking with a controller. But adapting the interaction to triggering by gaze should be possible.
 
-## Future work
+# Future work
 
 We suggest the following steps to build on this ground-work
 
-### Review and clarify the JSON-ld schema and integration with other linked data sources
+## Review and clarify the JSON-ld schema and integration with other linked data sources
 - Add proper @context-information
 - Talk to other experts doing a similar thing.
 - Validate the context definition and RDF link structure with tools.
 - Clarify format for historic dates time.
-### Expand the data models
+## Expand the data models
 
 Expand models for **Users** and **AnnotationSeries** to allow cross-referencing and filtering annotations.
 
-### Implement contextual filters for annotations
+## Implement contextual filters for annotations
 
 Currently all annotations are always visible. Eventually these need to be filtered by things like: Tags, users, date-ranges, etc.
 
-### Save additional information about the state of the VR-simulation
+## Save additional information about the state of the VR-simulation
 
 Examples would be time of day, weather conditions, year etc.
 
-### Add further input methods to make annotations
+## Add further input methods to make annotations
 
 Examples could be:
 
@@ -362,8 +396,7 @@ Examples could be:
 - using voice recognition
 - using symbols or icons
 - Sketching in VR
-
-### Export or link annotations into the real world
+## Export or link annotations into the real world
 
 With technology like HoloLens and location-markers it is very feasible to show markers created in VR within their context. You can also port the components to work on the HoloLens to generate annotations.
 
