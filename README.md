@@ -79,7 +79,7 @@ Replace the geometry / annotation target
 1. Install the **vr-annotate-package** into your project
 2. Open a scene or create a new one
 3. Additionally open the scene `vr-annotate-example`  and copy the following groups into your scene:
-~~~~  - [vr-annotate]
+  - [vr-annotate]
   - [geoCoordinates]
   - optionally also copy the adjusted `[CameraRig]` for SteamVR. 
 4. **Alternatively** you can use to original CameraRig-prefab and…
@@ -142,7 +142,6 @@ This can be very useful for…
 The components in these namespaces are related to showing additional information about the current selection. Currently selections can be  `Node`s inside the NodeGraph, and `AnnotationsGizmos`. There are several methods to change the selection (clicking on objects, clicking into the NodeGraphOutliner, etc.). The SelectionManager handles to current active selection of object implementing the `ISelectable`-interface. Components like the `NodeSelectionMarker`  or the `InfoPanels` subscribe to the SelectionChanged-event to update their content.
 
 
-# 
 
 
 
